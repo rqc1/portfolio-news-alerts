@@ -9,6 +9,7 @@ pydantic>=2
 # Database
 motor>=3.6
 pymongo>=4.9
+certifi>=2024.0
 
 # NLP ligero (solo langdetect para detección de idioma)
 langdetect>=1.0

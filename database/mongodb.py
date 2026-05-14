@@ -17,7 +17,13 @@ class MongoDB:
 
     @classmethod
     async def connect(cls) -> None:
-        cls._client = AsyncIOMotorClient(config.MONGO_URI)
+        kwargs = {}
+        try:
+            import certifi
+            kwargs["tlsCAFile"] = certifi.where()
+        except ImportError:
+            pass
+        cls._client = AsyncIOMotorClient(config.MONGO_URI, **kwargs)
         cls._db = cls._client[config.MONGO_DB_NAME]
         await cls._ensure_indexes()
 

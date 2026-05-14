@@ -16,6 +16,9 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
+# Certificados SSL para MongoDB Atlas
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates && rm -rf /var/lib/apt/lists/*
+
 # Copiar paquetes instalados desde builder
 COPY --from=builder /install /usr/local
 

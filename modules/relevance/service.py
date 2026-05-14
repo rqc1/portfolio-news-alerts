@@ -10,7 +10,6 @@ import re
 from functools import lru_cache
 
 import numpy as np
-from sentence_transformers import SentenceTransformer
 
 import config
 from modules.portfolio.models import Portfolio
@@ -23,6 +22,7 @@ _COMMON_WORDS = {"a", "an", "it", "ai", "us", "or", "all", "on", "at", "am", "be
 
 @lru_cache(maxsize=1)
 def _load_embedding_model():
+    from sentence_transformers import SentenceTransformer
     return SentenceTransformer(config.EMBEDDING_MODEL)
 
 

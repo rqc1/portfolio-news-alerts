@@ -19,8 +19,8 @@ WORKDIR /app
 # Copiar paquetes instalados desde builder
 COPY --from=builder /install /usr/local
 
-# Descargar modelo spaCy
-RUN python -m spacy download en_core_web_sm
+# Descargar modelo spaCy solo si está instalado (no en CLOUD_MODE)
+RUN python -c "import spacy; spacy.cli.download('en_core_web_sm')" 2>/dev/null || true
 
 # Copiar código fuente
 COPY config.py main.py ./

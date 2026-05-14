@@ -1,6 +1,3 @@
-# requirements-cloud.txt – Dependencias para deploy en Render (CLOUD_MODE=true)
-# SIN: torch, transformers, spacy, sentence-transformers (~2GB menos)
-
 # Core
 fastapi>=0.115
 uvicorn[standard]>=0.34
@@ -10,20 +7,30 @@ pydantic>=2
 motor>=3.6
 pymongo>=4.9
 
-# NLP ligero (solo langdetect para detección de idioma)
+# NLP
+spacy>=3.8,<3.9
+transformers>=4.47,<4.48
+torch>=2.0
+sentence-transformers>=3.3,<3.4
 langdetect>=1.0
 
 # Data ingestion
 feedparser>=6.0
 httpx>=0.28
 
-# LLM (reemplaza modelos locales)
+# LLM
 openai>=1.58
+
+# Frontend
+streamlit>=1.41
+requests>=2.32
+pandas>=2.2
+plotly>=5.0
 
 # Utilities
 numpy>=1.26
-pandas>=2.2
 python-dotenv>=1.0
+deep-translator>=1.11
 
 # Market data & analytics
 yfinance>=1.3
@@ -31,3 +38,8 @@ quantstats>=0.0.62
 
 # Scheduler
 apscheduler>=3.10,<4
+
+# Testing
+pytest>=8.0
+pytest-asyncio>=0.24
+pytest-cov>=6.0

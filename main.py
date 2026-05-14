@@ -12,7 +12,7 @@ from contextlib import asynccontextmanager
 from typing import Optional
 
 from bson import ObjectId
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, BackgroundTasks, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -446,50 +446,58 @@ async def health():
 # Trigger pipeline (para cron externo: cron-job.org, UptimeRobot, etc.)
 # ---------------------------------------------------------------------------
 @app.post("/api/trigger-pipeline", tags=["System"])
-async def trigger_pipeline(token: str = Query("")):
+async def trigger_pipeline(background_tasks: BackgroundTasks, token: str = Query("")):
     """
-    Ejecuta el pipeline completo: ingestar RSS → procesar alertas.
+    Ejecuta el pipeline completo en background: ingestar RSS → procesar alertas.
+    Devuelve 202 inmediatamente para evitar timeouts de cron-job.org.
     Protegido con un token simple para evitar ejecuciones no autorizadas.
     """
     expected_token = config.CRON_SECRET
     if expected_token and token != expected_token:
         raise HTTPException(status_code=403, detail="Invalid token")
 
-    from modules.ingestion.service import IngestionService
-    from modules.portfolio.service import PortfolioService
+    background_tasks.add_task(_run_pipeline)
+    return {"status": "accepted", "message": "Pipeline started in background"}
 
-    # 1. Ingestar noticias RSS
-    rss_count = await IngestionService.ingest_rss_only()
 
-    # 2. Procesar alertas para todas las carteras
-    all_portfolios = await PortfolioService.get_all_portfolios()
-    total_alerts = 0
+async def _run_pipeline():
+    """Ejecuta el pipeline completo de ingestión y alertas."""
+    import logging
+    logger = logging.getLogger(__name__)
+    try:
+        from modules.ingestion.service import IngestionService
+        from modules.portfolio.service import PortfolioService
 
-    for pdoc in all_portfolios:
-        pid = str(pdoc.pop("_id", ""))
-        portfolio = Portfolio(**pdoc)
-        news_items = await IngestionService.get_recent_news(limit=100)
+        # 1. Ingestar noticias RSS
+        rss_count = await IngestionService.ingest_rss_only()
+        logger.info(f"Pipeline: RSS ingested = {rss_count}")
 
-        for item in news_items:
-            alert = await alert_engine.process_and_store(
-                title=item.get("title", ""),
-                summary=item.get("summary", ""),
-                content=item.get("content", ""),
-                url=item.get("url", ""),
-                source=item.get("source", ""),
-                portfolio=portfolio,
-                portfolio_id=pid,
-                news_id=str(item.get("_id", "")),
-            )
-            if alert and not alert.is_duplicate:
-                total_alerts += 1
+        # 2. Procesar alertas para todas las carteras
+        all_portfolios = await PortfolioService.get_all_portfolios()
+        total_alerts = 0
 
-    return {
-        "status": "ok",
-        "rss_ingested": rss_count,
-        "portfolios_processed": len(all_portfolios),
-        "alerts_generated": total_alerts,
-    }
+        for pdoc in all_portfolios:
+            pid = str(pdoc.pop("_id", ""))
+            portfolio = Portfolio(**pdoc)
+            news_items = await IngestionService.get_recent_news(limit=100)
+
+            for item in news_items:
+                alert = await alert_engine.process_and_store(
+                    title=item.get("title", ""),
+                    summary=item.get("summary", ""),
+                    content=item.get("content", ""),
+                    url=item.get("url", ""),
+                    source=item.get("source", ""),
+                    portfolio=portfolio,
+                    portfolio_id=pid,
+                    news_id=str(item.get("_id", "")),
+                )
+                if alert and not alert.is_duplicate:
+                    total_alerts += 1
+
+        logger.info(f"Pipeline complete: {len(all_portfolios)} portfolios, {total_alerts} alerts")
+    except Exception as e:
+        logger.error(f"Pipeline error: {e}")
 
 
 # ---------------------------------------------------------------------------

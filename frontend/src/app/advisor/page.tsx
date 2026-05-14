@@ -536,7 +536,7 @@ export default function AdvisorPage() {
               onClick={() => setStep((s) => s + 1)}
               disabled={
                 (step === 0 && !selectedPortfolio) ||
-                (currentQuestion && !answers[currentQuestion.id])
+                !!(currentQuestion && !answers[currentQuestion.id])
               }
               className="flex items-center gap-1 rounded-[var(--radius-lg)] bg-[var(--accent)] px-4 py-2 text-[13px] font-bold text-white transition hover:opacity-90 disabled:opacity-30"
             >

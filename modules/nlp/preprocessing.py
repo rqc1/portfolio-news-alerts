@@ -90,6 +90,17 @@ class NLPService:
         self.preprocessor = TextPreprocessor()
         self.entity_extractor = EntityExtractor()
 
+    @staticmethod
+    def _translate_to_en(text: str) -> str:
+        """Traduce texto español a inglés para los modelos NLP (FinBERT, NLI)."""
+        try:
+            from deep_translator import GoogleTranslator
+            # Limitar a 5000 chars (límite de Google Translate gratuito)
+            return GoogleTranslator(source="es", target="en").translate(text[:5000]) or text
+        except Exception:
+            logger.debug("Translation failed, using original text")
+            return text
+
     def process(self, title: str, summary: str, content: str = "") -> dict:
         full_text = f"{title}. {summary}. {content}".strip(". ")
         cleaned = self.preprocessor.clean(full_text)
@@ -97,8 +108,14 @@ class NLPService:
         entities = self.entity_extractor.extract(cleaned)
         org_names = [e["text"] for e in entities if e["label"] == "ORG"]
 
+        # Traducir a inglés si es español (los modelos NLP son solo inglés)
+        cleaned_for_nlp = cleaned
+        if language == "es":
+            cleaned_for_nlp = self._translate_to_en(cleaned)
+
         return {
             "cleaned_text": cleaned,
+            "cleaned_text_en": cleaned_for_nlp,
             "language": language,
             "entities": entities,
             "org_names": org_names,

@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Briefcase, Plus, Link2 } from "lucide-react";
+import { Briefcase, Plus, Link2, Search, Loader2 } from "lucide-react";
 import { useApp } from "@/hooks/use-app";
-import { createPortfolio, addAsset } from "@/lib/api";
+import { createPortfolio, addAsset, lookupTicker } from "@/lib/api";
 import type { Portfolio, Asset } from "@/lib/types";
 import {
   PageHeader,
@@ -222,6 +222,25 @@ function CreatePortfolioForm({ onCreated }: { onCreated: () => void }) {
 
 /* ── Add Asset Form ───────────────────────────────────────────────────── */
 
+/*
+ * TODO: Auto-fill de activos
+ * Cuando el usuario introduce ticker + nombre y pulsa un botón "Buscar",
+ * el sistema debe auto-rellenar: sector, industry, country, ISIN y aliases.
+ *
+ * Implementación prevista:
+ *   1. Nuevo endpoint backend: GET /api/assets/lookup?ticker=AAPL
+ *      - Fuente primaria: Yahoo Finance API (yfinance) — sector, industry, country, currency
+ *      - Fuente secundaria: Alpha Vantage OVERVIEW endpoint (si hay key)
+ *      - Devuelve: { sector, industry, country, isin, aliases }
+ *   2. En este formulario: botón "Auto-completar" al lado del ticker/nombre.
+ *      - Llama al endpoint, rellena los campos automáticamente.
+ *      - El usuario solo ajusta el peso manualmente.
+ *   3. Los campos auto-rellenados siguen siendo editables por si el usuario
+ *      quiere corregir algo.
+ *
+ * El peso en la cartera NO se auto-rellena (decisión del inversor).
+ */
+
 function AddAssetForm({ onAdded }: { onAdded: () => void }) {
   const { activePortfolioId, activePortfolio } = useApp();
   const [form, setForm] = useState({
@@ -233,10 +252,32 @@ function AddAssetForm({ onAdded }: { onAdded: () => void }) {
     aliases: "",
   });
   const [loading, setLoading] = useState(false);
+  const [lookingUp, setLookingUp] = useState(false);
   const [success, setSuccess] = useState("");
+  const [lookupError, setLookupError] = useState("");
 
   function update(field: string, value: string) {
     setForm((prev) => ({ ...prev, [field]: value }));
+  }
+
+  async function handleLookup() {
+    if (!form.ticker.trim()) return;
+    setLookingUp(true);
+    setLookupError("");
+    try {
+      const info = await lookupTicker(form.ticker.trim());
+      setForm((prev) => ({
+        ...prev,
+        name: info.name || prev.name,
+        sector: info.sector || prev.sector,
+        country: info.country || prev.country,
+        aliases: info.aliases.length > 0 ? info.aliases.join(", ") : prev.aliases,
+      }));
+    } catch {
+      setLookupError(`No se encontró el ticker "${form.ticker}"`);
+    } finally {
+      setLookingUp(false);
+    }
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -285,13 +326,26 @@ function AddAssetForm({ onAdded }: { onAdded: () => void }) {
       )}
       <form onSubmit={handleSubmit} className="mt-4 space-y-4">
         <div className="grid gap-4 md:grid-cols-2">
-          <Input
-            label="Ticker"
-            placeholder="AAPL"
-            value={form.ticker}
-            onChange={(e) => update("ticker", e.target.value)}
-            required
-          />
+          <div className="flex gap-2">
+            <div className="flex-1">
+              <Input
+                label="Ticker"
+                placeholder="AAPL"
+                value={form.ticker}
+                onChange={(e) => update("ticker", e.target.value)}
+                required
+              />
+            </div>
+            <button
+              type="button"
+              onClick={handleLookup}
+              disabled={lookingUp || !form.ticker.trim()}
+              className="mt-[22px] flex h-[38px] items-center gap-1.5 rounded-[var(--radius-md)] border border-[var(--accent)]/30 bg-[var(--accent)]/10 px-3 text-[12px] font-semibold text-[var(--accent)] transition hover:bg-[var(--accent)]/20 disabled:opacity-30"
+            >
+              {lookingUp ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Search className="h-3.5 w-3.5" />}
+              Auto-fill
+            </button>
+          </div>
           <Input
             label="Nombre"
             placeholder="Apple Inc."
@@ -300,6 +354,9 @@ function AddAssetForm({ onAdded }: { onAdded: () => void }) {
             required
           />
         </div>
+        {lookupError && (
+          <p className="text-[12px] text-[var(--color-danger)]">{lookupError}</p>
+        )}
         <div className="grid gap-4 md:grid-cols-3">
           <Input
             label="Sector"

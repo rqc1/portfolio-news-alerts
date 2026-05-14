@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "InvestAlert — Inteligencia Financiera",
+  title: "InvestAIlert — Inteligencia Financiera",
   description:
     "Monitorización de noticias financieras, alertas inteligentes por NLP y análisis de impacto sobre carteras de inversión.",
 };

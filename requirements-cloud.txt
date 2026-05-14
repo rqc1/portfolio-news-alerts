@@ -1,0 +1,33 @@
+# requirements-cloud.txt – Dependencias para deploy en Render (CLOUD_MODE=true)
+# SIN: torch, transformers, spacy, sentence-transformers (~2GB menos)
+
+# Core
+fastapi>=0.115
+uvicorn[standard]>=0.34
+pydantic>=2
+
+# Database
+motor>=3.6
+pymongo>=4.9
+
+# NLP ligero (solo langdetect para detección de idioma)
+langdetect>=1.0
+
+# Data ingestion
+feedparser>=6.0
+httpx>=0.28
+
+# LLM (reemplaza modelos locales)
+openai>=1.58
+
+# Utilities
+numpy>=1.26
+pandas>=2.2
+python-dotenv>=1.0
+
+# Market data & analytics
+yfinance>=1.3
+quantstats>=0.0.62
+
+# Scheduler
+apscheduler>=3.10,<4

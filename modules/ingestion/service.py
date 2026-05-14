@@ -36,11 +36,11 @@ class IngestionService:
         }
 
         # RSS genéricos (incluye macro, cyber, supply chain, prensa española)
-        rss_items = fetch_all_rss(config.RSS_FEEDS)
+        rss_items = await fetch_all_rss(config.RSS_FEEDS)
         stats["rss"] = await IngestionService._persist_items(rss_items, stats)
 
         # CNMV
-        cnmv_items = fetch_all_cnmv()
+        cnmv_items = await fetch_all_cnmv()
         stats["cnmv"] = await IngestionService._persist_items(cnmv_items, stats)
 
         # SEC EDGAR
@@ -64,14 +64,14 @@ class IngestionService:
 
     @staticmethod
     async def ingest_rss_only() -> int:
-        items = fetch_all_rss(config.RSS_FEEDS)
+        items = await fetch_all_rss(config.RSS_FEEDS)
         stats = {"duplicates": 0, "errors": 0}
         count = await IngestionService._persist_items(items, stats)
         return count
 
     @staticmethod
     async def ingest_cnmv_only() -> int:
-        items = fetch_all_cnmv()
+        items = await fetch_all_cnmv()
         stats = {"duplicates": 0, "errors": 0}
         count = await IngestionService._persist_items(items, stats)
         return count

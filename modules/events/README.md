@@ -5,7 +5,7 @@
 Clasifica cada noticia en **dos dimensiones ortogonales**:
 
 1. **Sentimiento financiero** — positivo / negativo / neutral — vía FinBERT.
-2. **Tipo de evento** — una de 12 categorías de la taxonomía — vía LLM (con fallback a keywords).
+2. **Tipo de evento** — una de 12 categorías de la taxonomía — vía **zero-shot NLI** (con fallback a keywords).
 
 Esta doble clasificación permite al pipeline distinguir, por ejemplo, entre
 "resultados empresariales positivos" y "resultados empresariales negativos" — misma
@@ -15,7 +15,7 @@ categoría de evento pero impacto financiero opuesto.
 
 | Archivo | Qué contiene |
 |---------|-------------|
-| `classifier.py` | `FinBERTSentiment`, `LLMEventClassifier`, `EventClassificationService` |
+| `classifier.py` | `FinBERTSentiment`, `ZeroShotEventClassifier`, `EventClassificationService` |
 
 ## Componentes
 
@@ -40,22 +40,37 @@ def analyze(text: str) → dict:
 - Trunca a 512 tokens (límite de BERT).
 - Se carga una sola vez y se reutiliza (singleton en memoria).
 
-### `LLMEventClassifier`
+### `ZeroShotEventClassifier`
 
-Envía el texto a **OpenAI GPT-4o-mini** con un prompt estructurado que incluye
-las 12 categorías de la taxonomía y solicita respuesta JSON:
+Usa el modelo NLI [`facebook/bart-large-mnli`](https://huggingface.co/facebook/bart-large-mnli)
+para clasificar el tipo de evento **sin necesidad de API externa**.
 
-```json
-{
-  "event_type": "fusion_adquisicion",
-  "confidence": 0.85,
-  "reasoning": "The article describes a $30B acquisition bid..."
-}
+El clasificador pasa las **12 descripciones en inglés** de la taxonomía como
+hipótesis candidatas al pipeline `zero-shot-classification` de Hugging Face:
+
+```python
+def classify(text: str) → dict:
+    # pipeline("zero-shot-classification", model=NLI_MODEL)
+    # candidate_labels = EVENT_DESCRIPTIONS (12 descripciones en inglés)
+    return {
+        "event_type": "fusion_adquisicion",
+        "confidence": 0.82,
+        "reasoning": "Zero-shot NLI classification"
+    }
 ```
+
+#### Ventajas sobre LLM para esta tarea
+
+| Aspecto | LLM (antes) | NLI (ahora) |
+|---------|-------------|-------------|
+| Latencia | 500-2000 ms (API) | ~200 ms (local) |
+| Coste | $0.001/noticia | Gratuito |
+| Disponibilidad | Depende de API | 100% local |
+| Calidad | Buena | Equivalente para taxonomía cerrada |
 
 #### Fallback por keywords
 
-Si no hay `OPENAI_API_KEY` o la llamada falla, se activa `_fallback_classify()`:
+Si el modelo NLI no está disponible, se activa `_fallback_classify()`:
 diccionario de keywords por categoría. La primera categoría cuyas keywords aparezcan
 en el texto gana.
 
@@ -69,13 +84,13 @@ en el texto gana.
 
 ### `EventClassificationService`
 
-Combina ambos:
+Combina ambos componentes:
 
 ```python
 def classify(text: str) → dict:
     return {
         "sentiment": FinBERTSentiment.analyze(text),
-        "event": LLMEventClassifier.classify(text),   # o fallback
+        "event": ZeroShotEventClassifier.classify(text),   # o fallback keywords
     }
 ```
 
@@ -98,12 +113,12 @@ def classify(text: str) → dict:
 
 ## Dependencias
 
-- `transformers` + `torch` — FinBERT inference
-- `openai` — API para clasificación LLM (opcional)
-- `config.py` — modelo, taxonomía, API key
+- `transformers` + `torch` — FinBERT inference + zero-shot NLI pipeline
+- `config.py` — modelo, taxonomía, NLI_MODEL
 
 ## Relación con otros módulos
 
 ```
 NLP ──▸ Events ──▸ Impact  (tipo de evento + sentimiento determinan dirección y severidad)
+                ──▸ LLM ContextualAnalyzer  (sentimiento se pasa al análisis contextual)
 ```

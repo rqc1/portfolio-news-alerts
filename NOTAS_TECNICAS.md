@@ -19,18 +19,22 @@
 
 | Componente | Prioridad | Descripción |
 |------------|-----------|-------------|
-| **Tests unitarios** | Alta | No hay tests. Crear `tests/` con pytest para cada módulo (especialmente relevance, events, impact) |
+| **Tests unitarios** | ✅ Hecho | 121 tests con pytest cubriendo portfolio, nlp, relevance, events, impact, alerts, llm, ingestion, notifications, scheduler, market, analytics |
 | **Tests de integración** | Alta | Test end-to-end del pipeline completo: noticia → alerta |
-| **Modelo spaCy multilingüe** | Media | Ahora solo se carga `en_core_web_sm`. Falta routing por idioma para cargar `es_core_news_sm` cuando la noticia esté en español (CNMV) |
-| **Scheduler de ingesta** | Media | No hay cron ni scheduler. Las ingestas se lanzan manualmente desde la API o el frontend. Implementar con APScheduler o Celery Beat |
+| **Modelo spaCy multilingüe** | Media | Ahora solo se carga `en_core_web_sm`. Se traduce ES→EN con `deep-translator` antes del pipeline NLP. Falta routing por idioma para cargar `es_core_news_sm` como mejora futura |
+| **Scheduler de ingesta** | ✅ Hecho | Implementado con APScheduler en `modules/scheduler/`. Ingesta RSS+CNMV cada 15min, alertas cada 20min, limpieza diaria. Configurable via env vars |
 | **Logging estructurado** | Media | Ahora se usa `logging` básico. Faltaría configurar rotación de logs, formato JSON y niveles por módulo |
 | **Autenticación API** | Baja (prototipo) | No hay autenticación. Para producción, añadir JWT o API keys |
-| **Caché de embeddings** | Media | Los embeddings de la cartera se recalculan en cada petición. Cachear en MongoDB o Redis |
+| **Caché de embeddings** | Media | Los embeddings de la cartera se recalculan en cada petición. Cachear en MongoDB o Redis. Nota: la deduplicación ahora sí persiste embeddings en MongoDB (`dedup_embeddings` con TTL) |
+| **Caché de resultados LLM** | Media | Las respuestas LLM no se cachean. Para noticias similares, cachear por content_hash ahorraría tokens |
 | **Corpus etiquetado** | Alta | El documento del TFM prevé un dataset anotado manualmente. Falta crear la estructura de anotación y el script de etiquetado |
 | **Evaluación NLP** | Alta | No hay scripts de evaluación (F1, precision, recall, matrices de confusión). Crear `evaluation/` |
 | **Event study financiero** | Alta | No hay módulo de evaluación financiera. Implementar una versión simplificada con ventanas temporales y comparación vs. baselines |
 | **Pipeline de reentrenamiento** | Baja | No hay flujo para reentrenar modelos con datos nuevos |
-| **Docker Compose** | Media | Falta `docker-compose.yml` para levantar MongoDB + API + Streamlit en un solo comando |
+| **Docker Compose** | ✅ Hecho | `Dockerfile` multi-stage + `docker-compose.yml` (MongoDB + API + Frontend) + `frontend/Dockerfile`. Levantar con `docker-compose up --build` |
+| **Datos de mercado (yfinance)** | ✅ Hecho | `modules/market/` — lookup de activos, precios actuales, histórico OHLCV. 4 endpoints API. Auto-fill en frontend |
+| **Métricas de cartera (quantstats)** | ✅ Hecho | `modules/analytics/` — Sharpe, Sortino, VaR, drawdown, alpha/beta, rendimiento por activo. Dashboard con KPIs + gráficos |
+| **Asesor de inversiones** | ✅ Hecho | `modules/advisor/` — Cuestionario MiFID, perfilado de riesgo, informes con LLM (CFA/CAIA/CFP) + fallback determinista |
 
 ### 1.3 Datos Pendientes
 
@@ -51,8 +55,8 @@
 |--------|---------|-------------|---------|
 | **Modelo NER financiero especializado** | Alto | Media | Cambiar spaCy genérico por un NER entrenado en textos financieros (ej. `flair/ner-english-ontonotes-large` o entrenar propio con SENTiVENT) |
 | **Resolución de entidades** | Alto | Alta | Vincular menciones textuales a entidades canónicas (ej. "Apple", "AAPL", "Apple Inc." → misma entidad). Usar Wikidata o un grafo de conocimiento financiero |
-| **Clasificación zero-shot de eventos** | Alto | Baja | En vez del LLM, usar `cross-encoder/nli-deberta-v3-large` con los nombres de la taxonomía como hipótesis (sin coste API) |
-| **Multilingüe nativo** | Medio | Media | Cambiar `all-MiniLM-L6-v2` por `paraphrase-multilingual-MiniLM-L12-v2` para soportar noticias en español sin traducir |
+| **Clasificación zero-shot de eventos** | Alto | Baja | ✅ **IMPLEMENTADO**: `facebook/bart-large-mnli` reemplaza al LLM para esta tarea. Sin coste API, offline, ~200ms |
+| **Multilingüe nativo** | Medio | Media | Cambiar `all-MiniLM-L6-v2` por `paraphrase-multilingual-MiniLM-L12-v2` para soportar noticias en español sin traducir. Actualmente se traduce ES→EN con `deep-translator` |
 | **Summarization** | Medio | Baja | Resumir noticias largas antes de clasificar para mejorar calidad del input a los modelos |
 | **Calibración de probabilidades** | Alto | Media | Aplicar Platt scaling o isotonic regression al score de confianza para que sea interpretable como probabilidad real |
 | **Ventana temporal de contexto** | Medio | Media | Incorporar noticias previas del mismo activo para contextualizar (ej. "segunda alerta sobre AAPL en 48h") |
@@ -63,10 +67,11 @@
 |--------|---------|
 | **Agrupación de alertas** | Cuando múltiples noticias se refieren al mismo evento, agruparlas en un "cluster de evento" con timeline |
 | **Priorización dinámica** | Ajustar umbrales según la hora del día, la volatilidad reciente o el volumen de noticias |
-| **Alertas por email/Telegram** | Notificaciones push además de mostrar en dashboard |
+| **Alertas por email/Telegram** | ✅ Implementado en `modules/notifications/`. Email SMTP (HTML profesional + plaintext) + Webhook HTTP POST (Slack/Discord/Telegram). Se disparan automáticamente al generar una alerta |
 | **Feedback del usuario** | Botones "útil/no útil" en cada alerta para reentrenamiento futuro |
 | **Score compuesto configurable** | Permitir al usuario ajustar los pesos de relevancia vs. severidad vs. confianza |
 | **Modo histórico / backtest** | Ejecutar el pipeline sobre noticias pasadas para evaluar calidad retrospectiva |
+| **Comparativa LLM vs. determinista** | Registrar ambos análisis (LLM y determinista) para cada alerta y comparar calidad en evaluación |
 
 ### 2.3 Mejoras de Arquitectura
 
@@ -83,10 +88,11 @@
 | Mejora | Detalle |
 |--------|---------|
 | **Ablation study** | Medir el impacto individual de cada módulo (¿cuánto aporta la semántica vs. solo reglas?) |
-| **Comparación de baselines** | Baseline 1: solo keywords. Baseline 2: solo FinBERT. Baseline 3: sistema completo |
+| **Comparación de baselines** | Baseline 1: solo keywords. Baseline 2: solo FinBERT. Baseline 3: sistema completo sin LLM. Baseline 4: sistema completo con LLM |
 | **Análisis de falsos positivos** | Documentar alertas erróneas y clasificar el tipo de error |
 | **Event study simplificado** | Medir CAR (Cumulative Abnormal Return) en ventanas [-1, +3] días alrededor de las alertas |
 | **Inter-annotator agreement** | Si el corpus se etiqueta con más de una persona, medir Cohen's kappa |
+| **LLM vs. determinista A/B test** | Comparar calidad de alertas con y sin LLM contextual en el mismo corpus |
 
 ---
 
@@ -141,32 +147,33 @@
 
 **Recomendación para el TFM:** Si finalmente se procesan noticias en español (CNMV), cambiar a `paraphrase-multilingual-MiniLM-L12-v2`. Solo requiere cambiar una línea en `config.py`.
 
-### 3.3 LLM para Clasificación de Eventos
+### 3.3 LLM para Análisis Contextual de Impacto y Explicaciones
 
-**Modelo elegido:** `gpt-4o-mini` (API de OpenAI)
+**Arquitectura:** Cliente multi-proveedor con API compatible OpenAI.
 
-**Por qué:**
-- Capaz de clasificar en categorías complejas con una sola instrucción
-- Entiende contexto financiero sin fine-tuning
-- Barato (~$0.15 / 1M tokens input)
-- Permite explicar la clasificación (campo `reasoning`)
+**Proveedores soportados:**
 
-**Alternativas:**
+| Proveedor | Base URL | Coste | Modelos destacados | Cuándo usarlo |
+|-----------|----------|-------|--------------------|--------------|
+| **GitHub Models** (por defecto) | `models.inference.ai.azure.com` | Gratuito con GitHub Token | Llama 3.1 8B, Mistral, Phi-3 | Desarrollo y prototipado |
+| **HuggingFace Inference** | `api-inference.huggingface.co/v1` | Tier gratuito (rate limited) | Llama 3.1 8B, Mistral 7B | Alternativa gratuita |
+| **OpenAI** | `api.openai.com/v1` | ~$0.15/1M tokens (gpt-4o-mini) | gpt-4o-mini, gpt-4o | Producción, máxima calidad |
+| **Ollama** (local) | `localhost:11434/v1` | Gratuito, sin internet | llama3.1, mistral, phi3 | Offline, sin coste, privacidad |
 
-| Opción | Coste | Calidad | Latencia | Offline |
-|--------|-------|---------|----------|---------|
-| `gpt-4o-mini` (actual) | ~$0.15/1M tok | Alta | 1-3s | No |
-| `gpt-4o` | ~$2.50/1M tok | Muy alta | 2-5s | No |
-| **Fallback por keywords** (implementado) | Gratis | Baja-Media | <1ms | Sí |
-| Zero-shot NLI (`cross-encoder/nli-deberta-v3-large`) | Gratis | Media-Alta | ~100ms | Sí |
-| Fine-tuned BERT sobre corpus propio | Gratis (tras entrenamiento) | Potencialmente alta | ~50ms | Sí |
-| Llama 3 / Mistral (local) | Gratis | Alta | 5-30s (CPU) | Sí |
+**Uso actual en el pipeline:**
+- **Análisis contextual de impacto**: dirección + severidad + confianza contextualizados a la cartera
+- **Generación de explicaciones personalizadas**: texto en español que explica *por qué* la noticia importa para *esta* cartera
+- **Filtro de relevancia de segundo nivel**: para noticias borderline, detecta relevancia indirecta (competidores, proveedores, regulación sectorial)
 
-**Estrategia recomendada para el TFM:**
-1. Desarrollar con el **fallback por keywords** (funciona sin API key)
-2. Evaluar con **zero-shot NLI** como alternativa gratuita y offline
-3. Usar **gpt-4o-mini** como gold standard para comparar
-4. Si hay corpus anotado suficiente, considerar **fine-tuning de un BERT** como contribución técnica
+**Estrategia de fallback:** Si el LLM no está disponible, el sistema funciona al 100% con:
+- Estimación de impacto determinista (priors fijos + heurísticas)
+- Explicaciones con template
+- Sin filtro de relevancia de segundo nivel
+
+**Decisión de diseño clave:** El LLM ya NO se usa para clasificar el tipo de evento (esa tarea
+la resuelve el modelo zero-shot NLI local, sin coste). El LLM se reserva para las tareas
+donde aporta mayor valor diferencial: razonamiento contextual sobre el impacto específico
+en la cartera del usuario.
 
 ### 3.4 spaCy – NER
 
@@ -241,9 +248,9 @@
 
 | Fuente | Tipo | Interés | Dificultad |
 |--------|------|---------|------------|
-| **NewsAPI.org** | API REST (freemium) | Agregador de +150k fuentes, búsqueda por keyword y fecha | Baja (hay SDK Python) |
+| **NewsAPI.org** | API REST (freemium) | Agregador de +150k fuentes, búsqueda por keyword y fecha | Baja (hay SDK Python) | ✅ Implementado |
 | **GNews API** | API REST (gratuita limitada) | Google News programático | Baja |
-| **Alpha Vantage News** | API REST (gratuita) | Noticias con tickers anotados y scores de sentimiento | Baja |
+| **Alpha Vantage News** | API REST (gratuita) | Noticias con tickers anotados y scores de sentimiento | Baja | ✅ Implementado |
 | **Benzinga** | API (de pago) | Noticias financieras de alta calidad con metadata rica | Media |
 | **Twitter/X Financial** | API (de pago) | Señales tempranas pero muy ruidosas | Alta |
 | **Earnings call transcripts** | Web scraping / APIs | Transcripciones de presentaciones de resultados | Media-Alta |
@@ -279,7 +286,10 @@ Para un prototipo académico viable, se recomienda priorizar así:
 | 4 | Crear corpus etiquetado (50-100 noticias) para evaluación | Datos | 🔴 Alta |
 | 5 | Implementar routing multilingüe spaCy (EN/ES) | NLP | 🟡 Media |
 | 6 | Cambiar embeddings a multilingüe | NLP | 🟡 Media |
-| 7 | Escribir tests unitarios para módulos core | Testing | 🟡 Media |
-| 8 | Implementar scheduler automático de ingesta | Arquitectura | 🟡 Media |
+| 7 | ~~Escribir tests unitarios para módulos core~~ | Testing | ✅ Hecho |
+| 8 | ~~Implementar scheduler automático de ingesta~~ | Arquitectura | ✅ Hecho |
 | 9 | Scripts de evaluación NLP (F1, confusion matrix) | Evaluación | 🔴 Alta |
 | 10 | Event study simplificado con datos de precios | Evaluación | 🟡 Media |
+
+> **Para la hoja de ruta completa de producción** (autenticación, Docker, CI/CD, escalabilidad,
+> monetización), ver [`ROADMAP.md`](ROADMAP.md).

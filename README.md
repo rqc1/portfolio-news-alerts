@@ -1,4 +1,4 @@
-# Sistema de Alertas Inteligentes por Noticias para Carteras de Inversión
+# InvestAIlert — Sistema de Alertas Inteligentes por Noticias para Carteras de Inversión
 
 > **TFM** — Máster en Inteligencia Artificial / Ciencia de Datos aplicada a Finanzas (UNIR, 2026)
 
@@ -42,20 +42,21 @@ y explicabilidad de la información que recibe.
 │  Sectores,   │    │  Alpha Vantage│    │  Detection   │    │  Semánticos      │
 │  Geografías  │    └───────────────┘    └──────────────┘    └────────┬─────────┘
 └─────────────┘                                                       │
-                                                                      ▼
-┌─────────────────────────────────────────────────────────────────────────────────┐
-│                            5. CLASIFICACIÓN DE EVENTOS                          │
-│  FinBERT (sentiment) + LLM / keyword fallback (tipo de evento × taxonomía)     │
-└──────────────────────────────────────┬──────────────────────────────────────────┘
-                                       │
-                                       ▼
+                                                    ┌─────────────────┤
+                                                    ▼                 ▼ (borderline)
+┌───────────────────────────────────────────────┐  ┌─────────────────────────────┐
+│           5. CLASIFICACIÓN DE EVENTOS         │  │  4b. LLM RELEVANCE CHECK   │
+│  FinBERT (sentiment) + Zero-shot NLI (tipo)   │  │  Relevancia indirecta:      │
+│  [local, sin coste API]                       │  │  competidores, proveedores, │
+└──────────────────────┬────────────────────────┘  │  regulación sectorial       │
+                       │                           └─────────────────────────────┘
+                       ▼
 ┌──────────────────┐    ┌──────────────────────────────────────────────────────┐
 │  6. ESTIMACIÓN   │───▸│  7. MOTOR DE ALERTAS                                │
-│  DE IMPACTO      │    │  Score compuesto · Deduplicación semántica ·        │
-│  Dirección ·     │    │  Anti-spam · Generación de explicación trazable     │
-│  Severidad ·     │    └──────────────────────────────────────────────────────┘
-│  Confianza       │
-└──────────────────┘
+│  DE IMPACTO      │    │  Análisis contextual LLM (multi-proveedor) ·        │
+│  Determinista +  │    │  Impacto + explicación contextualizada a cartera ·  │
+│  LLM contextual  │    │  Deduplicación semántica · Anti-spam               │
+└──────────────────┘    └──────────────────────────────────────────────────────┘
 ```
 
 Cada módulo tiene su propia documentación detallada en `modules/<módulo>/README.md`.
@@ -67,13 +68,17 @@ Cada módulo tiene su propia documentación detallada en `modules/<módulo>/READ
 | Capa | Tecnología | Rol |
 |------|-----------|-----|
 | **API** | FastAPI + Uvicorn | Backend REST asíncrono |
-| **Frontend** | Streamlit | Dashboard interactivo para gestión y visualización |
+| **Frontend** | Next.js 16 + React 19 / Streamlit (legacy) | Dashboard interactivo para gestión y visualización |
 | **Base de datos** | MongoDB (Motor async) | Almacenamiento de noticias, carteras y alertas |
 | **Sentiment** | FinBERT (`ProsusAI/finbert`) | Análisis de sentimiento financiero |
 | **Embeddings** | Sentence-Transformers (`all-MiniLM-L6-v2`) | Similitud semántica y deduplicación |
 | **NER** | spaCy (`en_core_web_sm`) | Reconocimiento de entidades nombradas |
-| **Clasificación** | OpenAI API (`gpt-4o-mini`) + fallback keywords | Tipo de evento financiero |
+| **Clasificación eventos** | Zero-shot NLI (`facebook/bart-large-mnli`) + fallback keywords | Tipo de evento financiero (local, sin coste API) |
+| **Análisis contextual** | LLM multi-proveedor (GitHub Models / HuggingFace / OpenAI / Ollama) | Impacto contextualizado + explicaciones personalizadas |
+| **Traducción** | deep-translator (`GoogleTranslator`) | Traducción automática ES→EN para noticias CNMV |
 | **Ingesta** | feedparser + httpx | RSS, SEC EDGAR, CNMV, NewsAPI, Alpha Vantage |
+| **Datos mercado** | yfinance ≥1.3 | Precios, históricos, lookup de activos (Yahoo Finance) |
+| **Analytics cartera** | quantstats ≥0.0.62 | Sharpe, Sortino, VaR, drawdown, alpha/beta |
 
 ---
 
@@ -86,6 +91,9 @@ TFE/
 ├── main.py                            # API REST (FastAPI) — punto de entrada del backend
 ├── app.py                             # Dashboard (Streamlit) — interfaz de usuario
 ├── requirements.txt                   # Dependencias Python
+├── Dockerfile                         # Multi-stage build (builder + runtime)
+├── docker-compose.yml                 # MongoDB + API + Frontend en un comando
+├── .dockerignore                      # Exclusiones para Docker build
 ├── .env.example                       # Template de variables de entorno
 │
 ├── database/
@@ -110,26 +118,71 @@ TFE/
 │   │
 │   ├── nlp/                           # Módulo 3 — Preprocesado NLP
 │   │   ├── README.md
-│   │   └── preprocessing.py          #   Limpieza, NER, detección de idioma
+│   │   └── preprocessing.py          #   Limpieza, NER, detección de idioma, traducción ES→EN
 │   │
 │   ├── relevance/                     # Módulo 4 — Relevancia por cartera
 │   │   ├── README.md
-│   │   └── service.py                #   Reglas explícitas + similitud semántica
+│   │   └── service.py                #   Reglas explícitas (word-boundary matching) + similitud semántica
 │   │
 │   ├── events/                        # Módulo 5 — Clasificación de eventos
 │   │   ├── README.md
-│   │   └── classifier.py             #   FinBERT + LLM/keyword fallback
+│   │   └── classifier.py             #   FinBERT + zero-shot NLI + keyword fallback
 │   │
 │   ├── impact/                        # Módulo 6 — Estimación de impacto
 │   │   ├── README.md
-│   │   └── estimator.py              #   Dirección, severidad, confianza
+│   │   └── estimator.py              #   Determinista + merge con análisis LLM contextual
 │   │
-│   └── alerts/                        # Módulo 7 — Motor de alertas
+│   ├── llm/                           # Módulo transversal — LLM multi-proveedor
+│   │   ├── README.md
+│   │   ├── __init__.py
+│   │   ├── providers.py              #   Cliente unificado: OpenAI, GitHub Models, HF, Ollama
+│   │   ├── prompts.py                #   Prompt templates para análisis contextual
+│   │   └── analyzer.py               #   ContextualAnalyzer + RelevanceChecker
+│   │
+│   ├── alerts/                        # Módulo 7 — Motor de alertas
+│   │   ├── README.md
+│   │   ├── engine.py                  #   Pipeline completo + LLM contextual + anti-spam
+│   │   ├── deduplication.py           #   Deduplicación semántica 2 niveles (memoria + MongoDB con TTL)
+│   │   └── explainer.py              #   Explicaciones LLM contextualizadas (+ template fallback)
+│   │
+│   ├── scheduler/                     # Módulo 8 — Scheduler automático
+│   │   └── service.py                 #   APScheduler: ingesta cada 15min, alertas cada 20min, limpieza diaria
+│   │
+│   ├── notifications/                 # Módulo 9 — Notificaciones push
+│   │   └── service.py                 #   Email SMTP (HTML) + Webhook HTTP (Slack/Discord/Telegram)
+│   │
+│   ├── advisor/                       # Módulo — Asesor de inversiones
+│   │   ├── README.md
+│   │   ├── models.py                  #   Enums + modelos: RiskProfile, InvestorProfile, AdvisorReport
+│   │   ├── questionnaire.py           #   10 preguntas MiFID + scoring ponderado
+│   │   ├── analyzer.py                #   Análisis de cartera: HHI, concentración, diversificación
+│   │   └── service.py                 #   Orquestación LLM (CFA/CAIA/CFP) + fallback determinista
+│   │
+│   ├── market/                        # Módulo 10 — Datos de mercado (yfinance)
+│   │   ├── README.md
+│   │   └── service.py                 #   MarketService: lookup, precios, histórico OHLCV
+│   │
+│   └── analytics/                     # Módulo 11 — Métricas de cartera (quantstats)
 │       ├── README.md
-│       ├── engine.py                  #   Pipeline completo + anti-spam
-│       ├── deduplication.py           #   Deduplicación semántica con embeddings
-│       └── explainer.py              #   Generación de explicaciones en lenguaje natural
+│       └── service.py                 #   AnalyticsService: Sharpe, Sortino, VaR, drawdown, alpha/beta
 │
+├── tests/                             # Suite de tests (121 tests, pytest)
+│   ├── conftest.py                    #   Fixtures compartidos
+│   ├── test_portfolio.py              #   Tests de modelos Portfolio/Asset
+│   ├── test_nlp.py                    #   Tests de preprocesado y NER
+│   ├── test_relevance.py              #   Tests de relevancia por cartera
+│   ├── test_events.py                 #   Tests de clasificación de eventos
+│   ├── test_impact.py                 #   Tests de estimación de impacto
+│   ├── test_alerts.py                 #   Tests del motor de alertas
+│   ├── test_llm.py                    #   Tests del cliente LLM
+│   ├── test_ingestion.py              #   Tests de modelos de ingesta
+│   ├── test_notifications.py          #   Tests de notificaciones
+│   ├── test_scheduler.py              #   Tests del scheduler
+│   ├── test_market.py                 #   Tests de datos de mercado (yfinance)
+│   └── test_analytics.py             #   Tests de métricas de cartera (quantstats)
+│
+├── pytest.ini                         # Configuración de pytest
+├── ROADMAP.md                         # Hoja de ruta: Tier 1-4, MVP vendible
 ├── NOTAS_TECNICAS.md                  # Pendientes, mejoras, decisiones de diseño
 ├── TFM_alertas_inversion_estado_de_la_cuestion.pdf
 └── TFM_alertas_inversion_estado_de_la_cuestion.docx
@@ -151,12 +204,16 @@ TFE/
 
 | Servicio | Para qué | Registro gratuito |
 |----------|----------|-------------------|
-| **OpenAI** | Clasificación avanzada de eventos | [platform.openai.com](https://platform.openai.com) |
+| **GitHub Token** | LLM vía GitHub Models (Llama, Mistral, Phi — **recomendado**) | [github.com/settings/tokens](https://github.com/settings/tokens) |
+| **HuggingFace Token** | LLM vía HF Inference API (alternativa gratuita) | [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens) |
+| **OpenAI** | LLM vía API de OpenAI (mayor calidad, de pago) | [platform.openai.com](https://platform.openai.com) |
 | **NewsAPI** | Noticias con texto completo (100 req/día gratis) | [newsapi.org/register](https://newsapi.org/register) |
 | **Alpha Vantage** | Noticias con tickers anotados (25 req/día gratis) | [alphavantage.co](https://www.alphavantage.co/support/#api-key) |
 
-> Sin API keys el sistema funciona correctamente: usa fallback por keywords para eventos
-> y se limita a las fuentes RSS + SEC EDGAR + CNMV (que no requieren autenticación).
+> Sin API keys el sistema funciona correctamente al 100%: usa zero-shot NLI local para
+> clasificación de eventos, estimación de impacto determinista, y explicaciones con template.
+> El LLM es un **enhancement layer** opcional que mejora la contextualización del impacto
+> y las explicaciones, pero no es necesario para el funcionamiento básico.
 
 ---
 
@@ -203,15 +260,44 @@ python main.py
 - Swagger UI: [http://localhost:8000/docs](http://localhost:8000/docs)
 - ReDoc: [http://localhost:8000/redoc](http://localhost:8000/redoc)
 
-### Frontend (Dashboard)
+Al arrancar, el **scheduler automático** comienza a ingestar noticias cada 15 minutos
+y a procesar alertas para todas las carteras cada 20 minutos. Desactivable con
+`SCHEDULER_ENABLED=false`.
+
+### Frontend (Dashboard Next.js)
 
 ```bash
-streamlit run app.py
+cd frontend
+npm install
+npm run dev
 ```
 
-- Dashboard: [http://localhost:8501](http://localhost:8501)
+- Dashboard: [http://localhost:3000](http://localhost:3000)
 
-> Ambos deben estar corriendo simultáneamente (en terminales separadas).
+> Backend y frontend deben estar corriendo simultáneamente (en terminales separadas).
+
+### Docker (todo en un comando)
+
+```bash
+docker-compose up --build
+```
+
+Levanta los 3 servicios:
+- **MongoDB** (mongo:7) en `localhost:27017`
+- **API** (FastAPI) en `localhost:8000`
+- **Frontend** (Next.js) en `localhost:3000`
+
+Los modelos de Hugging Face se cachean en un volumen Docker (`huggingface_cache`)
+para evitar re-descarga entre reinicios. El primer arranque tarda más (~2-5 min)
+mientras se descargan los ~2.1 GB de modelos ML.
+
+### Tests
+
+```bash
+pytest tests/ -v
+```
+
+121 tests cubriendo todos los módulos del pipeline. Ver `ROADMAP.md` para el detalle.
 
 ---
 
@@ -279,6 +365,16 @@ curl "http://localhost:8000/api/alerts?portfolio_id=662f1a2b3c4d5e6f7a8b9c0d&lim
 
 ### 5. Ejemplo de alerta generada
 
+**Con LLM contextual (GitHub Models / HuggingFace / OpenAI):**
+```
+Apple enfrenta una demanda colectiva por prácticas monopolísticas en la App Store
+que podría obligarle a abrir su ecosistema a tiendas de terceros. Esto afecta
+directamente a tu posición en AAPL (25% de tu cartera) y podría reducir los
+márgenes del segmento de servicios, que representa el 22% de los ingresos.
+Confianza: 0.81. Fuente: reuters_business.
+```
+
+**Sin LLM (fallback con template):**
 ```
 Posible alerta bajista de severidad alta para AAPL.
 Evento detectado: Litigio / procedimiento legal.
@@ -370,6 +466,36 @@ El sistema clasifica cada noticia en una de **12 categorías** de evento financi
 | `GET` | `/api/alerts?portfolio_id=X&limit=N` | Listar alertas |
 | `GET` | `/api/alerts/stats?portfolio_id=X` | Estadísticas agregadas |
 
+### Advisor
+
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| `GET` | `/api/advisor/questions` | Cuestionario MiFID (10 preguntas) |
+| `POST` | `/api/advisor/profile` | Calcular perfil de inversor |
+| `POST` | `/api/advisor/report` | Generar informe de asesoramiento |
+| `GET` | `/api/advisor/reports/{portfolio_id}` | Historial de informes |
+
+### Market Data
+
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| `GET` | `/api/market/lookup/{ticker}` | Auto-fill: busca info de un activo |
+| `GET` | `/api/market/price/{ticker}` | Precio actual + variación diaria |
+| `POST` | `/api/market/prices` | Precios en lote |
+| `GET` | `/api/market/history/{ticker}?period=1y` | Histórico OHLCV |
+
+### Analytics
+
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| `GET` | `/api/analytics/{portfolio_id}?period=1y&benchmark=SPY` | Métricas completas de cartera |
+
+### Sistema
+
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| `GET` | `/api/system/status` | Estado del scheduler, próximas ejecuciones, notificaciones |
+
 ---
 
 ## Evaluación Prevista
@@ -403,13 +529,33 @@ El sistema se evalúa en **dos planos** independientes:
 | `MONGO_URI` | Sí | `mongodb://localhost:27017` | Conexión a MongoDB |
 | `MONGO_DB_NAME` | No | `portfolio_alerts` | Nombre de la base de datos |
 | `SEC_USER_AGENT` | Sí* | — | *La SEC exige nombre + email real* |
-| `OPENAI_API_KEY` | No | — | Clasificación avanzada de eventos |
-| `OPENAI_MODEL` | No | `gpt-4o-mini` | Modelo de OpenAI a utilizar |
+| `LLM_PROVIDER` | No | `github` | Proveedor LLM: `github`, `huggingface`, `openai`, `ollama` |
+| `LLM_MODEL` | No | (default del proveedor) | Modelo LLM a usar (ej: `meta-llama-3.1-8b-instruct`) |
+| `LLM_BASE_URL` | No | (auto por proveedor) | Base URL custom del proveedor |
+| `LLM_API_KEY` | No | — | API key directa (alternativa a variables por proveedor) |
+| `GITHUB_TOKEN` | No | — | Token de GitHub para GitHub Models |
+| `HF_TOKEN` | No | — | Token de HuggingFace para Inference API |
+| `OPENAI_API_KEY` | No | — | API key de OpenAI |
+| `NLI_MODEL` | No | `facebook/bart-large-mnli` | Modelo zero-shot NLI para clasificar eventos |
 | `NEWSAPI_KEY` | No | — | Noticias con texto completo |
 | `ALPHAVANTAGE_KEY` | No | — | Noticias con tickers anotados |
 | `FINBERT_MODEL` | No | `ProsusAI/finbert` | Modelo de sentiment |
 | `EMBEDDING_MODEL` | No | `sentence-transformers/all-MiniLM-L6-v2` | Embeddings semánticos |
 | `SPACY_MODEL` | No | `en_core_web_sm` | Modelo NER de spaCy |
+| `SCHEDULER_ENABLED` | No | `true` | Activar/desactivar scheduler automático |
+| `SCHEDULER_INGEST_INTERVAL_MIN` | No | `15` | Intervalo de ingesta RSS+CNMV (minutos) |
+| `SCHEDULER_ALERTS_INTERVAL_MIN` | No | `20` | Intervalo de procesamiento de alertas (minutos) |
+| `SCHEDULER_BATCH_SIZE` | No | `50` | Noticias por batch de alertas |
+| `SCHEDULER_NEWS_RETENTION_DAYS` | No | `30` | Retención de noticias antiguas (días) |
+| `NOTIFICATIONS_ENABLED` | No | `true` | Activar/desactivar notificaciones |
+| `SMTP_HOST` | No | — | Servidor SMTP (ej: `smtp.gmail.com`) |
+| `SMTP_PORT` | No | `587` | Puerto SMTP |
+| `SMTP_USE_TLS` | No | `true` | Usar TLS para SMTP |
+| `SMTP_USER` | No | — | Usuario SMTP |
+| `SMTP_PASSWORD` | No | — | Contraseña SMTP |
+| `SMTP_FROM` | No | — | Dirección remitente de emails |
+| `NOTIFICATION_EMAIL_TO` | No | — | Emails destinatarios (separados por coma) |
+| `NOTIFICATION_WEBHOOK_URL` | No | — | URL webhook (Slack/Discord/Telegram/custom) |
 
 ---
 
@@ -422,9 +568,13 @@ El sistema se evalúa en **dos planos** independientes:
 | [`modules/ingestion/README.md`](modules/ingestion/README.md) | Módulo 2 — Adquisición de noticias |
 | [`modules/nlp/README.md`](modules/nlp/README.md) | Módulo 3 — Preprocesado NLP |
 | [`modules/relevance/README.md`](modules/relevance/README.md) | Módulo 4 — Relevancia por cartera |
-| [`modules/events/README.md`](modules/events/README.md) | Módulo 5 — Clasificación de eventos |
-| [`modules/impact/README.md`](modules/impact/README.md) | Módulo 6 — Estimación de impacto |
+| [`modules/events/README.md`](modules/events/README.md) | Módulo 5 — Clasificación de eventos (NLI + FinBERT) |
+| [`modules/impact/README.md`](modules/impact/README.md) | Módulo 6 — Estimación de impacto (determinista + LLM) |
+| [`modules/llm/README.md`](modules/llm/README.md) | Módulo transversal — LLM multi-proveedor |
 | [`modules/alerts/README.md`](modules/alerts/README.md) | Módulo 7 — Motor de alertas |
+| [`modules/market/README.md`](modules/market/README.md) | Módulo 10 — Datos de mercado (yfinance) |
+| [`modules/analytics/README.md`](modules/analytics/README.md) | Módulo 11 — Métricas de cartera (quantstats) |
+| [`ROADMAP.md`](ROADMAP.md) | Hoja de ruta: de prototipo a producción (Tier 1-4, Tier 2 completado) |
 
 ---
 

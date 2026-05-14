@@ -49,6 +49,10 @@ class MongoDB:
     def events(cls):
         return cls.get_db()["events"]
 
+    @classmethod
+    def dedup_embeddings(cls):
+        return cls.get_db()["dedup_embeddings"]
+
     # --- Indexes ---
     @classmethod
     async def _ensure_indexes(cls) -> None:
@@ -66,6 +70,13 @@ class MongoDB:
 
         # Portfolios
         await cls.portfolios().create_index([("user_id", ASCENDING)])
+
+        # Dedup embeddings (TTL: 30 días)
+        await cls.dedup_embeddings().create_index(
+            [("created_at", ASCENDING)],
+            expireAfterSeconds=30 * 24 * 3600,
+        )
+        await cls.dedup_embeddings().create_index([("alert_id", ASCENDING)])
 
     # --- Generic helpers ---
     @classmethod

@@ -3,6 +3,10 @@ Módulo 6 – Estimación de impacto.
 
 Estima la dirección (alcista/bajista/neutral), severidad y confianza
 del impacto de un evento detectado sobre los activos en cartera.
+
+Dos modos:
+  - Determinista (fallback): priors fijos por tipo de evento + heurísticas.
+  - Contextual (LLM): el análisis LLM sobreescribe con valores contextualizados.
 """
 
 import logging
@@ -101,6 +105,36 @@ class ImpactEstimator:
             "severity_label": _severity_label(severity),
             "confidence": round(confidence, 4),
             "matched_assets": matched_assets,
+        }
+
+    @staticmethod
+    def merge_with_llm(
+        deterministic: dict,
+        llm_analysis: dict | None,
+    ) -> dict:
+        """
+        Combina la estimación determinista con el análisis contextual del LLM.
+
+        Si el LLM proporcionó resultados, estos predominan para dirección,
+        severidad y confianza (son contextualizados a la cartera).
+        Si no hay LLM, devuelve la estimación determinista sin cambios.
+        """
+        if llm_analysis is None:
+            return deterministic
+
+        # El LLM prevalece en dirección, severidad y confianza
+        severity = llm_analysis.get("severity", deterministic["severity"])
+        confidence = llm_analysis.get("confidence", deterministic["confidence"])
+        direction = llm_analysis.get("direction", deterministic["direction"])
+
+        return {
+            "direction": direction,
+            "direction_score": deterministic["direction_score"],  # mantener el determinista como referencia
+            "severity": round(severity, 4),
+            "severity_label": _severity_label(severity),
+            "confidence": round(confidence, 4),
+            "matched_assets": deterministic["matched_assets"],
+            "llm_enhanced": True,
         }
 
 

@@ -5,6 +5,10 @@ Configuración central del sistema de alertas inteligentes para carteras de inve
 import os
 from pathlib import Path
 
+from dotenv import load_dotenv
+
+load_dotenv(override=True)  # Carga .env antes de leer variables (override=sistema)
+
 # ---------------------------------------------------------------------------
 # Rutas
 # ---------------------------------------------------------------------------
@@ -26,10 +30,30 @@ SPACY_MODEL = os.getenv("SPACY_MODEL", "en_core_web_sm")
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "sentence-transformers/all-MiniLM-L6-v2")
 
 # ---------------------------------------------------------------------------
-# LLM (OpenAI / Azure OpenAI) – para clasificación compleja
+# LLM (OpenAI / Azure OpenAI) – legacy, usado por OPENAI_API_KEY resolver
 # ---------------------------------------------------------------------------
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+
+# ---------------------------------------------------------------------------
+# LLM Multi-proveedor – análisis contextual de impacto y explicaciones
+# ---------------------------------------------------------------------------
+# Proveedores: "openai", "github", "huggingface", "ollama"
+LLM_PROVIDER = os.getenv("LLM_PROVIDER", "github")
+LLM_MODEL = os.getenv("LLM_MODEL", "")         # vacío = default del proveedor
+LLM_BASE_URL = os.getenv("LLM_BASE_URL", "")    # vacío = default del proveedor
+LLM_API_KEY = os.getenv("LLM_API_KEY", "")      # vacío = resuelve por proveedor
+
+# GitHub Models (gratuito con GITHUB_TOKEN)
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN", "")
+
+# HuggingFace Inference API (tier gratuito con HF_TOKEN)
+HF_TOKEN = os.getenv("HF_TOKEN", "")
+
+# ---------------------------------------------------------------------------
+# NLI – Zero-shot classification (reemplaza LLM para tipo de evento)
+# ---------------------------------------------------------------------------
+NLI_MODEL = os.getenv("NLI_MODEL", "facebook/bart-large-mnli")
 
 # ---------------------------------------------------------------------------
 # Fuentes de datos
@@ -52,6 +76,17 @@ RSS_FEEDS = {
     "financial_times": "https://www.ft.com/rss/home",
     "seeking_alpha": "https://seekingalpha.com/market_currents.xml",
     "investing_com": "https://www.investing.com/rss/news.rss",
+    "investing_com_stocks": "https://www.investing.com/rss/news_301.rss",
+    "marketwatch": "https://feeds.content.dowjones.io/public/rss/mw_topstories",
+    "cnbc_finance": "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=10000664",
+    "cnbc_tech": "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=19854910",
+    # --- Tecnología y semiconductores ---
+    "techcrunch": "https://techcrunch.com/feed/",
+    "ars_technica": "https://feeds.arstechnica.com/arstechnica/technology-lab",
+    "tomshardware": "https://www.tomshardware.com/feeds/all",
+    "semianalysis_blog": "https://www.semianalysis.com/feed",
+    # --- Oro y materias primas ---
+    "mining_com": "https://www.mining.com/feed/",
     # --- Macroeconomía y bancos centrales ---
     "ecb_press": "https://www.ecb.europa.eu/rss/press.html",
     "fed_press": "https://www.federalreserve.gov/feeds/press_all.xml",
@@ -97,7 +132,8 @@ EVENT_TAXONOMY = [
 # ---------------------------------------------------------------------------
 # Motor de alertas – umbrales
 # ---------------------------------------------------------------------------
-ALERT_RELEVANCE_THRESHOLD = 0.5
+ALERT_RELEVANCE_THRESHOLD = 0.5      # mínimo para pasar (sin LLM)
+ALERT_RELEVANCE_BORDERLINE = 0.3     # entre borderline y threshold → LLM decide
 ALERT_SEVERITY_THRESHOLD = 0.3
 ALERT_DEDUP_SIMILARITY = 0.85  # similitud semántica para considerar duplicado
 ALERT_MAX_PER_HOUR = 20        # anti-spam
@@ -109,6 +145,40 @@ API_HOST = os.getenv("API_HOST", "0.0.0.0")
 API_PORT = int(os.getenv("API_PORT", "8000"))
 
 # ---------------------------------------------------------------------------
+# Scheduler – Ingesta automática
+# ---------------------------------------------------------------------------
+SCHEDULER_ENABLED = os.getenv("SCHEDULER_ENABLED", "true").lower() in ("true", "1", "yes")
+SCHEDULER_INGEST_INTERVAL_MIN = int(os.getenv("SCHEDULER_INGEST_INTERVAL_MIN", "15"))
+SCHEDULER_ALERTS_INTERVAL_MIN = int(os.getenv("SCHEDULER_ALERTS_INTERVAL_MIN", "20"))
+SCHEDULER_BATCH_SIZE = int(os.getenv("SCHEDULER_BATCH_SIZE", "50"))
+SCHEDULER_NEWS_RETENTION_DAYS = int(os.getenv("SCHEDULER_NEWS_RETENTION_DAYS", "30"))
+
+# ---------------------------------------------------------------------------
+# Notificaciones – Email + Webhook
+# ---------------------------------------------------------------------------
+NOTIFICATIONS_ENABLED = os.getenv("NOTIFICATIONS_ENABLED", "true").lower() in ("true", "1", "yes")
+
+# SMTP (email)
+SMTP_HOST = os.getenv("SMTP_HOST", "")
+SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
+SMTP_USE_TLS = os.getenv("SMTP_USE_TLS", "true").lower() in ("true", "1", "yes")
+SMTP_USER = os.getenv("SMTP_USER", "")
+SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "")
+SMTP_FROM = os.getenv("SMTP_FROM", "")
+NOTIFICATION_EMAIL_TO = os.getenv("NOTIFICATION_EMAIL_TO", "")
+
+# Webhook (Slack, Discord, Telegram bot, custom)
+NOTIFICATION_WEBHOOK_URL = os.getenv("NOTIFICATION_WEBHOOK_URL", "")
+
+# ---------------------------------------------------------------------------
 # Streamlit
 # ---------------------------------------------------------------------------
 STREAMLIT_PORT = int(os.getenv("STREAMLIT_PORT", "8501"))
+
+# ---------------------------------------------------------------------------
+# Cloud Mode – Usa LLM en vez de modelos ML locales (ahorra ~2GB RAM)
+# ---------------------------------------------------------------------------
+CLOUD_MODE = os.getenv("CLOUD_MODE", "false").lower() in ("true", "1", "yes")
+
+# Token secreto para proteger el endpoint /api/trigger-pipeline
+CRON_SECRET = os.getenv("CRON_SECRET", "")

@@ -12,6 +12,7 @@ import {
   ChevronDown,
   Wifi,
   WifiOff,
+  UserCheck,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useApp } from "@/hooks/use-app";
@@ -21,6 +22,7 @@ const NAV_ITEMS = [
   { href: "/portfolio", label: "Cartera", icon: Briefcase },
   { href: "/news", label: "Noticias", icon: Newspaper },
   { href: "/alerts-engine", label: "Motor de Alertas", icon: Zap },
+  { href: "/advisor", label: "Asesor Inversiones", icon: UserCheck },
   { href: "/settings", label: "Configuración", icon: Settings },
 ] as const;
 
@@ -43,7 +45,7 @@ export function Sidebar() {
         </div>
         <div>
           <span className="text-[15px] font-bold tracking-tight text-[var(--text-primary)]">
-            InvestAlert
+            Invest<span className="text-[var(--accent)]">AI</span>lert
           </span>
           <span className="block text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">
             Inteligencia Financiera

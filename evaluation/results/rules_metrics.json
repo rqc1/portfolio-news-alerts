@@ -1,0 +1,103 @@
+{
+  "summary": {
+    "dataset_size": 40,
+    "predictions_count": 40,
+    "missing_predictions": 0
+  },
+  "relevance": {
+    "n": 40,
+    "precision": 1.0,
+    "recall": 0.8788,
+    "f1": 0.9355,
+    "accuracy": 0.9,
+    "confusion_matrix": {
+      "tp": 29,
+      "fp": 0,
+      "fn": 4,
+      "tn": 7
+    }
+  },
+  "matched_assets": {
+    "n": 33,
+    "micro_precision": 1.0,
+    "micro_recall": 1.0,
+    "micro_f1": 1.0,
+    "mean_jaccard": 1.0,
+    "exact_match_rate": 1.0
+  },
+  "event_type": {
+    "n": 0,
+    "accuracy": 0.0,
+    "macro": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "weighted": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "per_class": {},
+    "confusion_matrix": {}
+  },
+  "direction": {
+    "n": 0,
+    "accuracy": 0.0,
+    "macro": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "weighted": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "per_class": {
+      "alcista": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 0
+      },
+      "bajista": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 0
+      },
+      "neutral": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 0
+      }
+    },
+    "confusion_matrix": {
+      "alcista": {
+        "alcista": 0,
+        "bajista": 0,
+        "neutral": 0
+      },
+      "bajista": {
+        "alcista": 0,
+        "bajista": 0,
+        "neutral": 0
+      },
+      "neutral": {
+        "alcista": 0,
+        "bajista": 0,
+        "neutral": 0
+      }
+    }
+  },
+  "severity": {
+    "n": 0,
+    "mae": 0.0,
+    "exact_match": 0.0,
+    "off_by_one_or_less": 0.0
+  },
+  "variant_requested": "rules",
+  "variant_effective": "rules"
+}

@@ -13,6 +13,10 @@ import {
   ScatterChart,
   Scatter,
   CartesianGrid,
+  AreaChart,
+  Area,
+  LineChart,
+  Line,
 } from "recharts";
 import type { PieLabelRenderProps } from "recharts";
 
@@ -262,6 +266,74 @@ export function SectorBarChart({
         <YAxis tick={AXIS_STYLE} axisLine={false} tickLine={false} />
         <Tooltip content={<ChartTooltip />} cursor={{ fill: "rgba(99,102,241,0.04)" }} />
         <Bar dataKey="weight" name="Peso" fill="#6366f1" radius={[4, 4, 0, 0]} barSize={28} />
+      </BarChart>
+    </ResponsiveContainer>
+  );
+}
+
+/* ── Cumulative Return Area ───────────────────────────────────────────── */
+
+export function ReturnAreaChart({
+  data,
+}: {
+  data: Array<{ date: string; value: number }>;
+}) {
+  return (
+    <ResponsiveContainer width="100%" height={300}>
+      <AreaChart data={data} margin={{ left: 0, right: 8, top: 4, bottom: 4 }}>
+        <defs>
+          <linearGradient id="returnGradient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3} />
+            <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
+          </linearGradient>
+        </defs>
+        <CartesianGrid stroke={GRID_STROKE} />
+        <XAxis dataKey="date" tick={AXIS_STYLE} axisLine={false} tickLine={false} interval="preserveStartEnd" />
+        <YAxis
+          tick={AXIS_STYLE}
+          axisLine={false}
+          tickLine={false}
+          tickFormatter={(v: number) => `${v.toFixed(1)}%`}
+        />
+        <Tooltip content={<ChartTooltip />} />
+        <Area
+          type="monotone"
+          dataKey="value"
+          name="Retorno %"
+          stroke="#6366f1"
+          fill="url(#returnGradient)"
+          strokeWidth={2}
+        />
+      </AreaChart>
+    </ResponsiveContainer>
+  );
+}
+
+/* ── Asset Performance Bar (horizontal) ───────────────────────────────── */
+
+export function AssetPerformanceChart({
+  data,
+}: {
+  data: Array<{ ticker: string; return_pct: number }>;
+}) {
+  return (
+    <ResponsiveContainer width="100%" height={Math.max(200, data.length * 36)}>
+      <BarChart data={data} layout="vertical" margin={{ left: 8, right: 16, top: 4, bottom: 4 }}>
+        <CartesianGrid horizontal={false} stroke={GRID_STROKE} />
+        <XAxis
+          type="number"
+          tick={AXIS_STYLE}
+          axisLine={false}
+          tickLine={false}
+          tickFormatter={(v: number) => `${v.toFixed(1)}%`}
+        />
+        <YAxis type="category" dataKey="ticker" width={60} tick={AXIS_STYLE} axisLine={false} tickLine={false} />
+        <Tooltip content={<ChartTooltip />} cursor={{ fill: "rgba(99,102,241,0.04)" }} />
+        <Bar dataKey="return_pct" name="Retorno %" radius={[0, 4, 4, 0]} barSize={20}>
+          {data.map((entry, i) => (
+            <Cell key={i} fill={entry.return_pct >= 0 ? "#10b981" : "#ef4444"} />
+          ))}
+        </Bar>
       </BarChart>
     </ResponsiveContainer>
   );

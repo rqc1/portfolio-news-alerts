@@ -2,6 +2,7 @@
 Ingesta de noticias desde feeds RSS de la CNMV.
 """
 
+import asyncio
 import hashlib
 import logging
 from datetime import datetime, timezone
@@ -21,8 +22,8 @@ def _parse_date(entry) -> datetime:
     return datetime.now(timezone.utc)
 
 
-def fetch_cnmv_feed(feed_name: str, feed_url: str) -> list[NewsItem]:
-    """Descarga un feed RSS de la CNMV."""
+def _fetch_cnmv_feed_sync(feed_name: str, feed_url: str) -> list[NewsItem]:
+    """Descarga un feed RSS de la CNMV (bloqueante)."""
     items: list[NewsItem] = []
     try:
         feed = feedparser.parse(feed_url)
@@ -51,12 +52,28 @@ def fetch_cnmv_feed(feed_name: str, feed_url: str) -> list[NewsItem]:
     return items
 
 
-def fetch_all_cnmv() -> list[NewsItem]:
-    """Descarga todos los feeds RSS de la CNMV configurados."""
+# Alias sync para compatibilidad con tests
+fetch_cnmv_feed = _fetch_cnmv_feed_sync
+
+
+async def fetch_cnmv_feed_async(feed_name: str, feed_url: str) -> list[NewsItem]:
+    """Descarga un feed CNMV sin bloquear el event loop."""
+    loop = asyncio.get_running_loop()
+    return await loop.run_in_executor(None, _fetch_cnmv_feed_sync, feed_name, feed_url)
+
+
+async def fetch_all_cnmv() -> list[NewsItem]:
+    """Descarga todos los feeds RSS de la CNMV configurados en paralelo."""
+    tasks = [
+        fetch_cnmv_feed_async(name, url)
+        for name, url in config.CNMV_RSS_FEEDS.items()
+    ]
+    results = await asyncio.gather(*tasks, return_exceptions=True)
     all_items: list[NewsItem] = []
-    for name, url in config.CNMV_RSS_FEEDS.items():
-        logger.info("Fetching CNMV: %s", name)
-        items = fetch_cnmv_feed(name, url)
-        all_items.extend(items)
-        logger.info("  -> %d items from CNMV %s", len(items), name)
+    for name, result in zip(config.CNMV_RSS_FEEDS.keys(), results):
+        if isinstance(result, Exception):
+            logger.exception("Error fetching CNMV %s: %s", name, result)
+        else:
+            all_items.extend(result)
+            logger.info("  -> %d items from CNMV %s", len(result), name)
     return all_items

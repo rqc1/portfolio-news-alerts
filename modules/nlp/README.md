@@ -8,6 +8,7 @@ scoring (relevancia, clasificación, impacto). Realiza tres tareas:
 1. **Limpieza de texto** — elimina HTML, URLs, saltos múltiples, caracteres de control.
 2. **Extracción de entidades nombradas (NER)** — identifica organizaciones, personas, países, cantidades monetarias, etc.
 3. **Detección de idioma** — clasifica si es `en`, `es` u otro.
+4. **Traducción ES→EN** — traduce automáticamente noticias en español (ej. CNMV) para compatibilidad con FinBERT y BART-MNLI.
 
 ## Archivos
 
@@ -55,9 +56,15 @@ class NLPService:
         return {
             "clean_text": TextPreprocessor.clean(text),
             "entities": EntityExtractor.extract(text),
-            "language": langdetect.detect(text)
+            "language": langdetect.detect(text),
+            "cleaned_text_en": translated_text  # solo si idioma == "es"
         }
 ```
+
+Si el idioma detectado es español, traduce el texto limpio a inglés usando
+`deep_translator.GoogleTranslator(source="es", target="en")` (límite: 5000 chars).
+El campo `cleaned_text_en` se pasa al clasificador de eventos para que FinBERT
+y BART-MNLI reciban siempre texto en inglés.
 
 ## Dependencias
 

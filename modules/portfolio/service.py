@@ -59,3 +59,12 @@ class PortfolioService:
     async def delete_portfolio(portfolio_id: str) -> bool:
         result = await MongoDB.portfolios().delete_one({"_id": ObjectId(portfolio_id)})
         return result.deleted_count > 0
+
+    @staticmethod
+    async def get_all_portfolios() -> list[dict]:
+        """Devuelve todas las carteras (para el cron pipeline)."""
+        cursor = MongoDB.portfolios().find({})
+        docs = await cursor.to_list(length=100)
+        for doc in docs:
+            doc["_id"] = str(doc["_id"])
+        return docs

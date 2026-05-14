@@ -6,6 +6,11 @@ import type {
   IngestResult,
   ProcessResult,
   NewsItem,
+  Question,
+  AdvisorReport,
+  AssetLookup,
+  PriceSnapshot,
+  PortfolioAnalyticsResult,
 } from "@/lib/types";
 
 const BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
@@ -159,4 +164,59 @@ export async function processNews(data: {
     method: "POST",
     body: JSON.stringify(data),
   });
+}
+
+/* ── Advisor ──────────────────────────────────────────────────────────── */
+
+export async function getAdvisorQuestions(): Promise<Question[]> {
+  return request<Question[]>("/api/advisor/questions");
+}
+
+export async function generateAdvisorReport(data: {
+  user_id: string;
+  portfolio_id: string;
+  answers: { question_id: string; selected_option_id: string }[];
+}): Promise<AdvisorReport> {
+  return request<AdvisorReport>("/api/advisor/report", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+export async function getAdvisorReports(
+  portfolioId: string,
+  limit = 10,
+): Promise<AdvisorReport[]> {
+  return request<AdvisorReport[]>(
+    `/api/advisor/reports/${portfolioId}${qs({ limit })}`,
+  );
+}
+
+/* ── Market Data ──────────────────────────────────────────────────────── */
+
+export async function lookupTicker(ticker: string): Promise<AssetLookup> {
+  return request<AssetLookup>(`/api/market/lookup/${encodeURIComponent(ticker)}`);
+}
+
+export async function getPrice(ticker: string): Promise<PriceSnapshot> {
+  return request<PriceSnapshot>(`/api/market/price/${encodeURIComponent(ticker)}`);
+}
+
+export async function getPricesBatch(tickers: string[]): Promise<Record<string, PriceSnapshot>> {
+  return request<Record<string, PriceSnapshot>>("/api/market/prices", {
+    method: "POST",
+    body: JSON.stringify(tickers),
+  });
+}
+
+/* ── Portfolio Analytics ──────────────────────────────────────────────── */
+
+export async function getPortfolioAnalytics(
+  portfolioId: string,
+  period = "1y",
+  benchmark = "SPY",
+): Promise<PortfolioAnalyticsResult> {
+  return request<PortfolioAnalyticsResult>(
+    `/api/analytics/${portfolioId}${qs({ period, benchmark })}`,
+  );
 }

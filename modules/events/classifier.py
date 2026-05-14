@@ -3,15 +3,15 @@ Módulo 5 – Clasificación de eventos financieros.
 
 Taxonomía de eventos y clasificación híbrida:
   - FinBERT (sentiment baseline)
-  - LLM (OpenAI API) para clasificación de tipo de evento
+  - Zero-shot NLI (tipo de evento — local, sin coste API)
+  - Fallback por keywords (cuando NLI no está disponible)
 """
 
-import json
 import logging
 from functools import lru_cache
 
 import torch
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
+from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipeline
 
 import config
 
@@ -77,61 +77,58 @@ class FinBERTSentiment:
 
 
 # ---------------------------------------------------------------------------
-# LLM – Clasificación de tipo de evento
+# Zero-shot NLI – Clasificación de tipo de evento (local, sin coste API)
 # ---------------------------------------------------------------------------
-class LLMEventClassifier:
-    """Clasificación de tipo de evento usando OpenAI API."""
+@lru_cache(maxsize=1)
+def _load_nli_pipeline():
+    logger.info("Cargando modelo NLI: %s", config.NLI_MODEL)
+    return pipeline(
+        "zero-shot-classification",
+        model=config.NLI_MODEL,
+        device=-1,  # CPU; cambiar a 0 para GPU
+    )
 
-    SYSTEM_PROMPT = """Eres un analista financiero experto. Tu tarea es clasificar noticias financieras 
-según el tipo de evento que describen. Debes responder SOLO con un JSON válido.
 
-Categorías posibles:
-{categories}
-
-Responde con este formato exacto:
-{{"event_type": "<categoría>", "confidence": <0.0-1.0>, "reasoning": "<explicación breve>"}}"""
+class ZeroShotEventClassifier:
+    """Clasificación de tipo de evento financiero mediante zero-shot NLI."""
 
     def __init__(self):
-        self._client = None
+        self._pipeline = None
 
-    def _get_client(self):
-        if self._client is None:
-            from openai import OpenAI
-            self._client = OpenAI(api_key=config.OPENAI_API_KEY)
-        return self._client
+    def _get_pipeline(self):
+        if self._pipeline is None:
+            self._pipeline = _load_nli_pipeline()
+        return self._pipeline
 
     def classify(self, text: str) -> dict:
-        if not config.OPENAI_API_KEY:
-            return self._fallback_classify(text)
-
-        categories = "\n".join(
-            f"- {k}: {v}" for k, v in EVENT_DESCRIPTIONS.items()
-        )
-        system = self.SYSTEM_PROMPT.format(categories=categories)
-
         try:
-            client = self._get_client()
-            response = client.chat.completions.create(
-                model=config.OPENAI_MODEL,
-                messages=[
-                    {"role": "system", "content": system},
-                    {"role": "user", "content": f"Clasifica esta noticia:\n\n{text[:1000]}"},
-                ],
-                temperature=0.1,
-                max_tokens=200,
+            clf = self._get_pipeline()
+            # Usar las descripciones en inglés como hipótesis (más precisas)
+            candidate_labels = list(EVENT_DESCRIPTIONS.values())
+            label_to_event = {v: k for k, v in EVENT_DESCRIPTIONS.items()}
+
+            result = clf(
+                text[:512],
+                candidate_labels=candidate_labels,
+                multi_label=False,
             )
-            content = response.choices[0].message.content.strip()
-            # Parsear JSON de la respuesta
-            result = json.loads(content)
-            if result.get("event_type") not in EVENT_LABELS:
-                result["event_type"] = "otro"
-            return result
+
+            top_label = result["labels"][0]
+            top_score = result["scores"][0]
+            event_type = label_to_event.get(top_label, "otro")
+
+            return {
+                "event_type": event_type,
+                "confidence": round(top_score, 4),
+                "reasoning": f"Zero-shot NLI: {top_label} (score: {top_score:.3f})",
+            }
 
         except Exception:
-            logger.exception("Error en clasificación LLM, usando fallback")
+            logger.exception("Error en zero-shot NLI, usando fallback por keywords")
             return self._fallback_classify(text)
 
-    def _fallback_classify(self, text: str) -> dict:
+    @staticmethod
+    def _fallback_classify(text: str) -> dict:
         """Clasificación basada en keywords cuando LLM no está disponible."""
         text_lower = text.lower()
         keyword_map = {
@@ -168,11 +165,11 @@ Responde con este formato exacto:
 # Servicio combinado
 # ---------------------------------------------------------------------------
 class EventClassificationService:
-    """Combina FinBERT (sentiment) con LLM (tipo de evento)."""
+    """Combina FinBERT (sentiment) con zero-shot NLI (tipo de evento)."""
 
     def __init__(self):
         self.sentiment_model = FinBERTSentiment()
-        self.event_classifier = LLMEventClassifier()
+        self.event_classifier = ZeroShotEventClassifier()
 
     def classify(self, cleaned_text: str) -> dict:
         # Sentiment con FinBERT

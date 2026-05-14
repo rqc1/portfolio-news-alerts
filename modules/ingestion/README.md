@@ -11,9 +11,9 @@ Actúa como el "sensor" del sistema: sin ingesta, el pipeline no tiene datos que
 | Archivo | Qué contiene |
 |---------|-------------|
 | `models.py` | Schema `NewsItem` — modelo unificado de noticia |
-| `rss_feeds.py` | Parser de feeds RSS (22 feeds en 5 categorías) |
+| `rss_feeds.py` | Parser async de feeds RSS (22 feeds, `asyncio.gather` paralelo) |
 | `sec_edgar.py` | Cliente async para la API de SEC EDGAR |
-| `cnmv.py` | Parser de feeds RSS de la CNMV |
+| `cnmv.py` | Parser async de feeds RSS de la CNMV (`asyncio.gather` paralelo) |
 | `newsapi.py` | Integración con NewsAPI.org (texto completo) |
 | `alphavantage.py` | Integración con Alpha Vantage News Sentiment |
 | `service.py` | `IngestionService` — orquestador de todas las fuentes |

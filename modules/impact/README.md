@@ -4,8 +4,12 @@
 
 Estima la **dirección** (alcista / bajista / neutral), **severidad** (0.0–1.0) y
 **confianza** del impacto potencial de un evento detectado sobre los activos
-afectados de la cartera. Combina priors empíricos por tipo de evento con el
-sentimiento detectado por FinBERT y el score de relevancia del módulo anterior.
+afectados de la cartera.
+
+Opera en **dos modos complementarios**:
+
+1. **Determinista** — Combina priors empíricos por tipo de evento con el sentimiento FinBERT y el score de relevancia. Siempre disponible, sin coste.
+2. **Contextual (LLM)** — El módulo `llm.ContextualAnalyzer` analiza el contexto completo (noticia + cartera) y produce estimaciones más matizadas. Si está disponible, sus resultados se fusionan con los deterministas vía `merge_with_llm()`.
 
 ## Archivos
 
@@ -60,7 +64,7 @@ El score de relevancia del módulo 4 actúa como multiplicador:
 Si la noticia afecta a múltiples activos de la cartera simultáneamente, la
 severidad se amplifica ligeramente (mayor exposición del portfolio).
 
-## Output
+## Output determinista
 
 ```python
 def estimate(event_type, sentiment, relevance_score, matched_assets) → dict:
@@ -73,6 +77,28 @@ def estimate(event_type, sentiment, relevance_score, matched_assets) → dict:
         "matched_assets": list[str]
     }
 ```
+
+## Fusión con LLM (`merge_with_llm`)
+
+Método estático que combina la estimación determinista con el análisis contextual del LLM:
+
+```python
+@staticmethod
+def merge_with_llm(deterministic: dict, llm_analysis: dict | None) → dict:
+    # Si llm_analysis es None → devuelve deterministic sin cambios
+    # Si llm_analysis existe:
+    #   - direction, severity, confidence → del LLM (más contextualizados)
+    #   - direction_score → del determinista (referencia numérica)
+    #   - llm_enhanced: True (flag de trazabilidad)
+```
+
+| Campo | Sin LLM | Con LLM |
+|-------|---------|----------|
+| `direction` | Fórmula determinista | LLM contextual |
+| `severity` | Prior × amplificadores | LLM contextual |
+| `confidence` | Media ponderada | LLM contextual |
+| `direction_score` | Calculado | Calculado (referencia) |
+| `llm_enhanced` | Ausente | `True` |
 
 ### Escala de Severidad
 
@@ -93,11 +119,13 @@ Estimaciones con severidad < 0.3 no generan alerta.
 - `numpy` — cálculos numéricos
 - Entrada: output del módulo Events (tipo + sentimiento)
 - Entrada: output del módulo Relevance (score + activos afectados)
+- Opcional: output del módulo LLM (`ContextualAnalyzer`) para fusión contextual
 
 ## Relación con otros módulos
 
 ```
 Events ────┐
-           ├──▸ Impact ──▸ AlertEngine (si severidad ≥ 0.3)
-Relevance ─┘
+           ├──▸ Impact (determinista) ──┐
+Relevance ─┘                            ├──▸ merge_with_llm() ──▸ AlertEngine
+           LLM ContextualAnalyzer ──────┘
 ```

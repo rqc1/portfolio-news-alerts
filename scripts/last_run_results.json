@@ -1,0 +1,66 @@
+{
+  "timestamp": "2026-05-14T07:32:14.486368+00:00",
+  "news_ingested": 451,
+  "total_news_in_db": 2127,
+  "news_processed": 100,
+  "alerts_generated": 4,
+  "total_alerts_in_db": 7,
+  "portfolio_tickers": [
+    "MSFT",
+    "V",
+    "TLN.MC",
+    "KAP.L",
+    "NVDA",
+    "TSM",
+    "NU",
+    "AMD",
+    "AVGO"
+  ],
+  "alerts": [
+    {
+      "title": "Cerebras’s massive IPO will be a fresh test of investor excitement for AI infrastructure",
+      "severity": "alta",
+      "direction": "alcista",
+      "event_type": "fusion_adquisicion",
+      "matched_assets": [
+        "TSM"
+      ],
+      "confidence": 0.8,
+      "url": "https://www.marketwatch.com/story/cerebrass-ipo-will-be-fresh-a-test-of-investor-excitement-for-ai-infrastructure-3499a2a5?mod=mw_rss_topstories"
+    },
+    {
+      "title": "Microsoft feared being too dependent on OpenAI, Musk-Altman trial testimony reveals",
+      "severity": "alta",
+      "direction": "bajista",
+      "event_type": "regulacion",
+      "matched_assets": [
+        "MSFT",
+        "V"
+      ],
+      "confidence": 0.8,
+      "url": "https://www.cnbc.com/2026/05/13/microsoft-feared-openai-reliance-musk-altman-trial-testimony-reveals.html"
+    },
+    {
+      "title": "AI-driven cyberattacks will start to be the 'new norm' in months, Palo Alto warns",
+      "severity": "alta",
+      "direction": "bajista",
+      "event_type": "ciberincidente",
+      "matched_assets": [
+        "TSM"
+      ],
+      "confidence": 0.8,
+      "url": "https://www.cnbc.com/2026/05/13/palo-alto-ai-cyberattacks-mythos-gpt.html"
+    },
+    {
+      "title": "Ioneer, Lithium Americas defend Nevada projects as Amnesty flags Indigenous consent gap",
+      "severity": "alta",
+      "direction": "bajista",
+      "event_type": "regulacion",
+      "matched_assets": [
+        "AMD"
+      ],
+      "confidence": 0.8,
+      "url": "https://www.mining.com/ioneer-lithium-americas-defend-nevada-projects-as-amnesty-flags-indigenous-consent-gap/"
+    }
+  ]
+}

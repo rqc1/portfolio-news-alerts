@@ -4,6 +4,8 @@ API REST – FastAPI.
 Endpoints para gestionar carteras, ingestar noticias y consultar alertas.
 """
 
+import asyncio
+import concurrent.futures
 import logging
 import sys
 from contextlib import asynccontextmanager
@@ -23,6 +25,12 @@ from modules.portfolio.models import Portfolio, Asset
 from modules.portfolio.service import PortfolioService
 from modules.ingestion.service import IngestionService
 from modules.alerts.engine import AlertEngine
+from modules.scheduler.service import start_scheduler, stop_scheduler, get_scheduler_status
+from modules.notifications.service import NotificationService
+from modules.advisor.service import AdvisorService
+from modules.advisor.models import QuestionnaireAnswer
+from modules.market.service import MarketService
+from modules.analytics.service import AnalyticsService
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -31,18 +39,42 @@ logger = logging.getLogger(__name__)
 alert_engine: Optional[AlertEngine] = None
 
 
+def _preload_models():
+    """Carga todos los modelos ML en memoria (bloqueante, ejecutar en thread)."""
+    from modules.nlp.preprocessing import _load_spacy
+    from modules.events.classifier import _load_finbert, _load_nli_pipeline
+    from modules.relevance.service import _load_embedding_model
+    logger.info("Preloading ML models...")
+    _load_spacy()
+    _load_finbert()
+    _load_nli_pipeline()
+    _load_embedding_model()
+    logger.info("All ML models loaded")
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global alert_engine
     await MongoDB.connect()
+
+    # En cloud mode no cargamos modelos ML locales (ahorra ~2GB RAM)
+    if not config.CLOUD_MODE:
+        loop = asyncio.get_running_loop()
+        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
+            await loop.run_in_executor(pool, _preload_models)
+    else:
+        logger.info("CLOUD_MODE=true: skipping local ML model preload (using LLM instead)")
+
     alert_engine = AlertEngine()
-    logger.info("System initialized: MongoDB connected, AlertEngine ready")
+    start_scheduler(alert_engine)
+    logger.info("System initialized: MongoDB connected, AlertEngine ready, Scheduler started")
     yield
+    stop_scheduler()
     await MongoDB.close()
 
 
 app = FastAPI(
-    title="Portfolio News Alert System",
+    title="InvestAIlert API",
     description="Sistema inteligente de alertas por noticias para carteras de inversión",
     version="0.1.0",
     lifespan=lifespan,
@@ -84,6 +116,17 @@ class ProcessNewsRequest(BaseModel):
     url: str = ""
     source: str = "manual"
     portfolio_id: str
+
+
+class AdvisorAnswerItem(BaseModel):
+    question_id: str
+    selected_option_id: str
+
+
+class AdvisorSubmission(BaseModel):
+    user_id: str
+    portfolio_id: str
+    answers: list[AdvisorAnswerItem]
 
 
 # ---------------------------------------------------------------------------
@@ -276,6 +319,122 @@ async def alert_stats(portfolio_id: str = Query("")):
 
 
 # ---------------------------------------------------------------------------
+# Endpoints – Advisor (Asesor de inversiones)
+# ---------------------------------------------------------------------------
+@app.get("/api/advisor/questions", tags=["Advisor"])
+async def get_advisor_questions():
+    """Devuelve el cuestionario completo para perfilar al inversor."""
+    questions = AdvisorService.get_questions()
+    return [q.model_dump() for q in questions]
+
+
+@app.post("/api/advisor/profile", tags=["Advisor"])
+async def compute_investor_profile(req: AdvisorSubmission):
+    """Calcula el perfil del inversor a partir de las respuestas del cuestionario."""
+    answers = [QuestionnaireAnswer(question_id=a.question_id,
+                                   selected_option_id=a.selected_option_id)
+               for a in req.answers]
+    profile = AdvisorService.compute_profile(req.user_id, req.portfolio_id, answers)
+    return profile.model_dump()
+
+
+@app.post("/api/advisor/report", tags=["Advisor"])
+async def generate_advisor_report(req: AdvisorSubmission):
+    """Genera un informe completo: perfil + análisis + recomendaciones."""
+    # Verificar que la cartera existe
+    portfolio_doc = await PortfolioService.get_portfolio(req.portfolio_id)
+    if portfolio_doc is None:
+        raise HTTPException(status_code=404, detail="Portfolio not found")
+    portfolio_doc.pop("_id", None)
+    portfolio = Portfolio(**portfolio_doc)
+
+    # Calcular perfil
+    answers = [QuestionnaireAnswer(question_id=a.question_id,
+                                   selected_option_id=a.selected_option_id)
+               for a in req.answers]
+    profile = AdvisorService.compute_profile(req.user_id, req.portfolio_id, answers)
+
+    # Generar informe
+    report = await AdvisorService.generate_report(profile, portfolio)
+
+    # Guardar en MongoDB
+    report_id = await AdvisorService.save_report(report)
+
+    result = report.model_dump()
+    result["_id"] = report_id
+    return result
+
+
+@app.get("/api/advisor/reports/{portfolio_id}", tags=["Advisor"])
+async def list_advisor_reports(portfolio_id: str, limit: int = Query(10, ge=1, le=50)):
+    """Obtiene los informes de asesoramiento previos de una cartera."""
+    reports = await AdvisorService.get_reports_by_portfolio(portfolio_id, limit=limit)
+    return reports
+
+
+# ---------------------------------------------------------------------------
+# Endpoints – Market Data (yfinance)
+# ---------------------------------------------------------------------------
+@app.get("/api/market/lookup/{ticker}", tags=["Market"])
+async def lookup_ticker(ticker: str):
+    """Busca información de un activo por ticker (auto-fill)."""
+    result = MarketService.lookup_ticker(ticker)
+    if result is None:
+        raise HTTPException(status_code=404, detail=f"Ticker '{ticker}' not found")
+    return result.model_dump()
+
+
+@app.get("/api/market/price/{ticker}", tags=["Market"])
+async def get_price(ticker: str):
+    """Obtiene precio actual y variación diaria de un ticker."""
+    snap = MarketService.get_price(ticker)
+    if snap is None:
+        raise HTTPException(status_code=404, detail=f"Price not available for '{ticker}'")
+    return snap.model_dump()
+
+
+@app.post("/api/market/prices", tags=["Market"])
+async def get_prices_batch(tickers: list[str]):
+    """Obtiene precios para múltiples tickers."""
+    results = MarketService.get_prices_batch(tickers)
+    return {k: v.model_dump() for k, v in results.items()}
+
+
+@app.get("/api/market/history/{ticker}", tags=["Market"])
+async def get_history(ticker: str, period: str = Query("1y")):
+    """Obtiene histórico de precios OHLCV."""
+    data = MarketService.get_history(ticker, period=period)
+    return {"ticker": ticker, "period": period, "data": data}
+
+
+# ---------------------------------------------------------------------------
+# Endpoints – Portfolio Analytics (quantstats)
+# ---------------------------------------------------------------------------
+@app.get("/api/analytics/{portfolio_id}", tags=["Analytics"])
+async def get_portfolio_analytics(
+    portfolio_id: str,
+    period: str = Query("1y"),
+    benchmark: str = Query("SPY"),
+):
+    """Calcula métricas de rendimiento y riesgo de una cartera."""
+    portfolio_doc = await PortfolioService.get_portfolio(portfolio_id)
+    if portfolio_doc is None:
+        raise HTTPException(status_code=404, detail="Portfolio not found")
+    portfolio_doc.pop("_id", None)
+    portfolio = Portfolio(**portfolio_doc)
+
+    tickers = portfolio.get_tickers()
+    weights = [a.weight for a in portfolio.assets]
+    if not tickers or not any(w > 0 for w in weights):
+        raise HTTPException(status_code=400, detail="Portfolio has no assets with weights")
+
+    result = AnalyticsService.compute_metrics(tickers, weights, period=period, benchmark=benchmark)
+    if result is None:
+        raise HTTPException(status_code=404, detail="Could not compute analytics (no market data)")
+    return result.model_dump()
+
+
+# ---------------------------------------------------------------------------
 # Health
 # ---------------------------------------------------------------------------
 @app.get("/health")
@@ -283,7 +442,74 @@ async def health():
     return {"status": "ok"}
 
 
+# ---------------------------------------------------------------------------
+# Trigger pipeline (para cron externo: cron-job.org, UptimeRobot, etc.)
+# ---------------------------------------------------------------------------
+@app.post("/api/trigger-pipeline", tags=["System"])
+async def trigger_pipeline(token: str = Query("")):
+    """
+    Ejecuta el pipeline completo: ingestar RSS → procesar alertas.
+    Protegido con un token simple para evitar ejecuciones no autorizadas.
+    """
+    expected_token = config.CRON_SECRET
+    if expected_token and token != expected_token:
+        raise HTTPException(status_code=403, detail="Invalid token")
+
+    from modules.ingestion.service import IngestionService
+    from modules.portfolio.service import PortfolioService
+
+    # 1. Ingestar noticias RSS
+    rss_count = await IngestionService.ingest_rss_only()
+
+    # 2. Procesar alertas para todas las carteras
+    all_portfolios = await PortfolioService.get_all_portfolios()
+    total_alerts = 0
+
+    for pdoc in all_portfolios:
+        pid = str(pdoc.pop("_id", ""))
+        portfolio = Portfolio(**pdoc)
+        news_items = await IngestionService.get_recent_news(limit=100)
+
+        for item in news_items:
+            alert = await alert_engine.process_and_store(
+                title=item.get("title", ""),
+                summary=item.get("summary", ""),
+                content=item.get("content", ""),
+                url=item.get("url", ""),
+                source=item.get("source", ""),
+                portfolio=portfolio,
+                portfolio_id=pid,
+                news_id=str(item.get("_id", "")),
+            )
+            if alert and not alert.is_duplicate:
+                total_alerts += 1
+
+    return {
+        "status": "ok",
+        "rss_ingested": rss_count,
+        "portfolios_processed": len(all_portfolios),
+        "alerts_generated": total_alerts,
+    }
+
+
+# ---------------------------------------------------------------------------
+# System status (scheduler + notifications)
+# ---------------------------------------------------------------------------
+@app.get("/api/system/status", tags=["System"])
+async def system_status():
+    return {
+        "scheduler": get_scheduler_status(),
+        "notifications": NotificationService.get_status(),
+    }
+
+
 if __name__ == "__main__":
+    import os
     import uvicorn
 
-    uvicorn.run("main:app", host=config.API_HOST, port=config.API_PORT, reload=True)
+    uvicorn.run(
+        "main:app",
+        host=config.API_HOST,
+        port=config.API_PORT,
+        reload=os.getenv("UVICORN_RELOAD", "false").lower() == "true",
+    )

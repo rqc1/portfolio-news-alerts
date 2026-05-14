@@ -2,6 +2,7 @@
 Ingesta de noticias desde feeds RSS genéricos.
 """
 
+import asyncio
 import hashlib
 import logging
 from datetime import datetime, timezone
@@ -24,8 +25,8 @@ def _content_hash(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
-def fetch_rss_feed(feed_url: str, source_name: str) -> list[NewsItem]:
-    """Descarga y parsea un feed RSS, devolviendo una lista de NewsItem."""
+def _fetch_rss_feed_sync(feed_url: str, source_name: str) -> list[NewsItem]:
+    """Descarga y parsea un feed RSS (bloqueante)."""
     items: list[NewsItem] = []
     try:
         feed = feedparser.parse(feed_url)
@@ -61,12 +62,28 @@ def fetch_rss_feed(feed_url: str, source_name: str) -> list[NewsItem]:
     return items
 
 
-def fetch_all_rss(feeds: dict[str, str]) -> list[NewsItem]:
-    """Descarga todos los feeds RSS configurados."""
+# Alias sync para compatibilidad con tests
+fetch_rss_feed = _fetch_rss_feed_sync
+
+
+async def fetch_rss_feed_async(feed_url: str, source_name: str) -> list[NewsItem]:
+    """Descarga un feed RSS sin bloquear el event loop."""
+    loop = asyncio.get_running_loop()
+    return await loop.run_in_executor(None, _fetch_rss_feed_sync, feed_url, source_name)
+
+
+async def fetch_all_rss(feeds: dict[str, str]) -> list[NewsItem]:
+    """Descarga todos los feeds RSS configurados en paralelo."""
+    tasks = [
+        fetch_rss_feed_async(url, name)
+        for name, url in feeds.items()
+    ]
+    results = await asyncio.gather(*tasks, return_exceptions=True)
     all_items: list[NewsItem] = []
-    for name, url in feeds.items():
-        logger.info("Fetching RSS: %s", name)
-        items = fetch_rss_feed(url, source_name=name)
-        all_items.extend(items)
-        logger.info("  -> %d items from %s", len(items), name)
+    for name, result in zip(feeds.keys(), results):
+        if isinstance(result, Exception):
+            logger.exception("Error fetching RSS %s: %s", name, result)
+        else:
+            all_items.extend(result)
+            logger.info("  -> %d items from %s", len(result), name)
     return all_items

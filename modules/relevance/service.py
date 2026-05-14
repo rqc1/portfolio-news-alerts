@@ -6,6 +6,7 @@ Calcula un score continuo de relevancia contextual noticia ↔ cartera.
 """
 
 import logging
+import re
 from functools import lru_cache
 
 import numpy as np
@@ -15,6 +16,9 @@ import config
 from modules.portfolio.models import Portfolio
 
 logger = logging.getLogger(__name__)
+
+# Tickers o nombres cortos que son palabras comunes en inglés/español
+_COMMON_WORDS = {"a", "an", "it", "ai", "us", "or", "all", "on", "at", "am", "be", "do", "go", "no", "so"}
 
 
 @lru_cache(maxsize=1)
@@ -30,6 +34,18 @@ def _cosine_similarity(a: np.ndarray, b: np.ndarray) -> float:
     return float(dot / norm)
 
 
+def _is_name_match(name: str, text_lower: str) -> bool:
+    """Match con word boundaries para evitar falsos positivos con nombres cortos."""
+    if not name:
+        return False
+    name_lower = name.lower()
+    # Nombres de ≤3 caracteres o que son palabras comunes requieren word-boundary match
+    if len(name_lower) <= 3 or name_lower in _COMMON_WORDS:
+        pattern = r'\b' + re.escape(name_lower) + r'\b'
+        return bool(re.search(pattern, text_lower))
+    return name_lower in text_lower
+
+
 class RuleBasedRelevance:
     """Capa 1: reglas explícitas de matching directo."""
 
@@ -43,11 +59,11 @@ class RuleBasedRelevance:
         direct_score = 0.0
 
         for asset in portfolio.assets:
-            names_to_check = [asset.ticker.lower(), asset.name.lower()]
-            names_to_check.extend([a.lower() for a in asset.aliases])
+            names_to_check = [asset.ticker, asset.name]
+            names_to_check.extend(asset.aliases)
 
             for name in names_to_check:
-                if name and name in text_lower:
+                if _is_name_match(name, text_lower):
                     matched_assets.append(asset.ticker)
                     direct_score = max(direct_score, 0.9)
                     break
@@ -72,7 +88,7 @@ class RuleBasedRelevance:
         portfolio_countries = portfolio.get_countries()
         country_match = False
         for country in portfolio_countries:
-            if country.lower() in text_lower:
+            if _is_name_match(country, text_lower):
                 country_match = True
                 direct_score = max(direct_score, 0.3)
 

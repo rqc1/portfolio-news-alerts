@@ -1,0 +1,314 @@
+{
+  "summary": {
+    "dataset_size": 40,
+    "predictions_count": 40,
+    "missing_predictions": 0
+  },
+  "relevance": {
+    "n": 40,
+    "precision": 1.0,
+    "recall": 0.8788,
+    "f1": 0.9355,
+    "accuracy": 0.9,
+    "confusion_matrix": {
+      "tp": 29,
+      "fp": 0,
+      "fn": 4,
+      "tn": 7
+    }
+  },
+  "matched_assets": {
+    "n": 33,
+    "micro_precision": 0.8286,
+    "micro_recall": 1.0,
+    "micro_f1": 0.9062,
+    "mean_jaccard": 0.9394,
+    "exact_match_rate": 0.9394
+  },
+  "event_type": {
+    "n": 29,
+    "accuracy": 0.8276,
+    "macro": {
+      "precision": 0.8697,
+      "recall": 0.8333,
+      "f1": 0.8096
+    },
+    "weighted": {
+      "precision": 0.8908,
+      "recall": 0.8276,
+      "f1": 0.8232
+    },
+    "per_class": {
+      "cadena_suministro": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6667,
+        "support": 2
+      },
+      "cambio_directivo": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 3
+      },
+      "ciberincidente": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 3
+      },
+      "dividendo_recompra": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6667,
+        "support": 2
+      },
+      "fusion_adquisicion": {
+        "precision": 0.6,
+        "recall": 1.0,
+        "f1": 0.75,
+        "support": 3
+      },
+      "guidance_profit_warning": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 1
+      },
+      "incidencia_operativa": {
+        "precision": 0.6667,
+        "recall": 1.0,
+        "f1": 0.8,
+        "support": 2
+      },
+      "litigio": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6667,
+        "support": 2
+      },
+      "otro": {
+        "precision": 0.5,
+        "recall": 1.0,
+        "f1": 0.6667,
+        "support": 1
+      },
+      "regulacion": {
+        "precision": 0.8,
+        "recall": 1.0,
+        "f1": 0.8889,
+        "support": 4
+      },
+      "resultados_empresariales": {
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1": 0.8,
+        "support": 6
+      }
+    },
+    "confusion_matrix": {
+      "cadena_suministro": {
+        "cadena_suministro": 1,
+        "cambio_directivo": 0,
+        "ciberincidente": 0,
+        "dividendo_recompra": 0,
+        "fusion_adquisicion": 0,
+        "guidance_profit_warning": 0,
+        "incidencia_operativa": 1,
+        "litigio": 0,
+        "otro": 0,
+        "regulacion": 0,
+        "resultados_empresariales": 0
+      },
+      "cambio_directivo": {
+        "cadena_suministro": 0,
+        "cambio_directivo": 3,
+        "ciberincidente": 0,
+        "dividendo_recompra": 0,
+        "fusion_adquisicion": 0,
+        "guidance_profit_warning": 0,
+        "incidencia_operativa": 0,
+        "litigio": 0,
+        "otro": 0,
+        "regulacion": 0,
+        "resultados_empresariales": 0
+      },
+      "ciberincidente": {
+        "cadena_suministro": 0,
+        "cambio_directivo": 0,
+        "ciberincidente": 3,
+        "dividendo_recompra": 0,
+        "fusion_adquisicion": 0,
+        "guidance_profit_warning": 0,
+        "incidencia_operativa": 0,
+        "litigio": 0,
+        "otro": 0,
+        "regulacion": 0,
+        "resultados_empresariales": 0
+      },
+      "dividendo_recompra": {
+        "cadena_suministro": 0,
+        "cambio_directivo": 0,
+        "ciberincidente": 0,
+        "dividendo_recompra": 1,
+        "fusion_adquisicion": 0,
+        "guidance_profit_warning": 0,
+        "incidencia_operativa": 0,
+        "litigio": 0,
+        "otro": 1,
+        "regulacion": 0,
+        "resultados_empresariales": 0
+      },
+      "fusion_adquisicion": {
+        "cadena_suministro": 0,
+        "cambio_directivo": 0,
+        "ciberincidente": 0,
+        "dividendo_recompra": 0,
+        "fusion_adquisicion": 3,
+        "guidance_profit_warning": 0,
+        "incidencia_operativa": 0,
+        "litigio": 0,
+        "otro": 0,
+        "regulacion": 0,
+        "resultados_empresariales": 0
+      },
+      "guidance_profit_warning": {
+        "cadena_suministro": 0,
+        "cambio_directivo": 0,
+        "ciberincidente": 0,
+        "dividendo_recompra": 0,
+        "fusion_adquisicion": 0,
+        "guidance_profit_warning": 1,
+        "incidencia_operativa": 0,
+        "litigio": 0,
+        "otro": 0,
+        "regulacion": 0,
+        "resultados_empresariales": 0
+      },
+      "incidencia_operativa": {
+        "cadena_suministro": 0,
+        "cambio_directivo": 0,
+        "ciberincidente": 0,
+        "dividendo_recompra": 0,
+        "fusion_adquisicion": 0,
+        "guidance_profit_warning": 0,
+        "incidencia_operativa": 2,
+        "litigio": 0,
+        "otro": 0,
+        "regulacion": 0,
+        "resultados_empresariales": 0
+      },
+      "litigio": {
+        "cadena_suministro": 0,
+        "cambio_directivo": 0,
+        "ciberincidente": 0,
+        "dividendo_recompra": 0,
+        "fusion_adquisicion": 0,
+        "guidance_profit_warning": 0,
+        "incidencia_operativa": 0,
+        "litigio": 1,
+        "otro": 0,
+        "regulacion": 1,
+        "resultados_empresariales": 0
+      },
+      "otro": {
+        "cadena_suministro": 0,
+        "cambio_directivo": 0,
+        "ciberincidente": 0,
+        "dividendo_recompra": 0,
+        "fusion_adquisicion": 0,
+        "guidance_profit_warning": 0,
+        "incidencia_operativa": 0,
+        "litigio": 0,
+        "otro": 1,
+        "regulacion": 0,
+        "resultados_empresariales": 0
+      },
+      "regulacion": {
+        "cadena_suministro": 0,
+        "cambio_directivo": 0,
+        "ciberincidente": 0,
+        "dividendo_recompra": 0,
+        "fusion_adquisicion": 0,
+        "guidance_profit_warning": 0,
+        "incidencia_operativa": 0,
+        "litigio": 0,
+        "otro": 0,
+        "regulacion": 4,
+        "resultados_empresariales": 0
+      },
+      "resultados_empresariales": {
+        "cadena_suministro": 0,
+        "cambio_directivo": 0,
+        "ciberincidente": 0,
+        "dividendo_recompra": 0,
+        "fusion_adquisicion": 2,
+        "guidance_profit_warning": 0,
+        "incidencia_operativa": 0,
+        "litigio": 0,
+        "otro": 0,
+        "regulacion": 0,
+        "resultados_empresariales": 4
+      }
+    }
+  },
+  "direction": {
+    "n": 29,
+    "accuracy": 0.8966,
+    "macro": {
+      "precision": 0.9474,
+      "recall": 0.8426,
+      "f1": 0.8821
+    },
+    "weighted": {
+      "precision": 0.9129,
+      "recall": 0.8966,
+      "f1": 0.8942
+    },
+    "per_class": {
+      "alcista": {
+        "precision": 1.0,
+        "recall": 0.7778,
+        "f1": 0.875,
+        "support": 9
+      },
+      "bajista": {
+        "precision": 0.8421,
+        "recall": 1.0,
+        "f1": 0.9143,
+        "support": 16
+      },
+      "neutral": {
+        "precision": 1.0,
+        "recall": 0.75,
+        "f1": 0.8571,
+        "support": 4
+      }
+    },
+    "confusion_matrix": {
+      "alcista": {
+        "alcista": 7,
+        "bajista": 2,
+        "neutral": 0
+      },
+      "bajista": {
+        "alcista": 0,
+        "bajista": 16,
+        "neutral": 0
+      },
+      "neutral": {
+        "alcista": 0,
+        "bajista": 1,
+        "neutral": 3
+      }
+    }
+  },
+  "severity": {
+    "n": 29,
+    "mae": 1.0345,
+    "exact_match": 0.2414,
+    "off_by_one_or_less": 0.7241
+  },
+  "variant_requested": "full",
+  "variant_effective": "full"
+}

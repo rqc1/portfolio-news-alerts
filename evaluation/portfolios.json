@@ -1,0 +1,31 @@
+[
+  {
+    "portfolio_id": "tech_us",
+    "name": "Tecnológicas US",
+    "assets": [
+      {"ticker": "AAPL", "name": "Apple Inc.", "sector": "Technology", "industry": "Consumer Electronics", "country": "US", "weight": 0.25, "aliases": ["Apple"]},
+      {"ticker": "MSFT", "name": "Microsoft Corporation", "sector": "Technology", "industry": "Software", "country": "US", "weight": 0.25, "aliases": ["Microsoft"]},
+      {"ticker": "NVDA", "name": "NVIDIA Corporation", "sector": "Technology", "industry": "Semiconductors", "country": "US", "weight": 0.25, "aliases": ["Nvidia"]},
+      {"ticker": "TSLA", "name": "Tesla Inc.", "sector": "Consumer Discretionary", "industry": "Electric Vehicles", "country": "US", "weight": 0.25, "aliases": ["Tesla"]}
+    ]
+  },
+  {
+    "portfolio_id": "iberico_diversificado",
+    "name": "Ibérico Diversificado",
+    "assets": [
+      {"ticker": "SAN.MC", "name": "Banco Santander", "sector": "Financials", "industry": "Banking", "country": "Spain", "weight": 0.3, "aliases": ["Santander"]},
+      {"ticker": "BBVA.MC", "name": "Banco Bilbao Vizcaya Argentaria", "sector": "Financials", "industry": "Banking", "country": "Spain", "weight": 0.2, "aliases": ["BBVA"]},
+      {"ticker": "ITX.MC", "name": "Industria de Diseno Textil", "sector": "Consumer Discretionary", "industry": "Apparel Retail", "country": "Spain", "weight": 0.25, "aliases": ["Inditex", "Zara"]},
+      {"ticker": "IBE.MC", "name": "Iberdrola", "sector": "Utilities", "industry": "Electric Utilities", "country": "Spain", "weight": 0.25, "aliases": ["Iberdrola"]}
+    ]
+  },
+  {
+    "portfolio_id": "energia_global",
+    "name": "Energía Global",
+    "assets": [
+      {"ticker": "XOM", "name": "Exxon Mobil Corporation", "sector": "Energy", "industry": "Oil & Gas", "country": "US", "weight": 0.4, "aliases": ["Exxon", "ExxonMobil"]},
+      {"ticker": "SHEL", "name": "Shell plc", "sector": "Energy", "industry": "Oil & Gas", "country": "UK", "weight": 0.3, "aliases": ["Shell"]},
+      {"ticker": "REP.MC", "name": "Repsol", "sector": "Energy", "industry": "Oil & Gas", "country": "Spain", "weight": 0.3, "aliases": ["Repsol"]}
+    ]
+  }
+]

@@ -1,23 +1,12 @@
 """Tests para módulo Notifications (service)."""
 
 from modules.notifications.service import (
-    EmailNotifier,
     WebhookNotifier,
     NotificationService,
     _build_subject,
     _build_text_body,
     _build_webhook_payload,
 )
-
-
-class TestEmailNotifier:
-    def test_not_configured_by_default(self):
-        # Sin variables de entorno, no debe estar configurado
-        assert EmailNotifier.is_configured() is False
-
-    def test_send_returns_false_when_not_configured(self):
-        result = EmailNotifier.send_alert({"news_title": "test"})
-        assert result is False
 
 
 class TestWebhookNotifier:

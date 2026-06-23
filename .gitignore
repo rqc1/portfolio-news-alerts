@@ -43,3 +43,16 @@ models/
 
 # Jupyter
 .ipynb_checkpoints/
+
+# TFM / academic deliverables (not part of the deployed app)
+TFM_*.docx
+TFM_*.pdf
+plantilla_individual.docx
+ANALISIS_RESULTADOS.md
+RESULTADOS_EXPERIMENTALES.md
+generar_tfm_plantilla.py
+_gen_figs.py
+figuras/
+
+# Deployment notes contain secrets - never publish
+DEPLOY_CLOUD.md

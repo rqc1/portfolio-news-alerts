@@ -128,13 +128,46 @@ class TestMergeWithLLM:
             "confidence": 0.9,
         }
         result = ImpactEstimator.merge_with_llm(deterministic, llm)
-        # LLM should override direction, severity, confidence
+        # Dirección: el LLM tiene confianza alta (0.9 >= 0.6) -> se acepta.
         assert result["direction"] == "alcista"
-        assert result["severity"] == 0.3
-        assert result["confidence"] == 0.9
-        # But keep deterministic direction_score as reference
+        # Severidad: clamp a ±0.2 del ancla determinista (0.7) -> mínimo 0.5.
+        assert result["severity"] == 0.5
+        assert result["llm_severity_raw"] == 0.3
+        # Confianza: media de determinista y LLM (no sobrescritura).
+        assert result["confidence"] == 0.85
+        # Mantener direction_score determinista como referencia.
         assert result["direction_score"] == -0.5
         assert result["llm_enhanced"] is True
+
+    def test_merge_llm_low_confidence_keeps_deterministic_direction(self):
+        deterministic = {
+            "direction": "bajista",
+            "direction_score": -0.5,
+            "severity": 0.7,
+            "severity_label": "alta",
+            "confidence": 0.8,
+            "matched_assets": ["AAPL"],
+        }
+        llm = {"direction": "alcista", "severity": 0.65, "confidence": 0.4}
+        result = ImpactEstimator.merge_with_llm(deterministic, llm)
+        # Confianza LLM baja (0.4 < 0.6) y discrepa -> prevalece determinista.
+        assert result["direction"] == "bajista"
+        # Severidad LLM dentro de la banda -> se respeta.
+        assert result["severity"] == 0.65
+
+    def test_merge_llm_severity_clamped_upward(self):
+        deterministic = {
+            "direction": "alcista",
+            "direction_score": 0.5,
+            "severity": 0.4,
+            "severity_label": "media",
+            "confidence": 0.7,
+            "matched_assets": ["AAPL"],
+        }
+        llm = {"direction": "alcista", "severity": 0.95, "confidence": 0.8}
+        result = ImpactEstimator.merge_with_llm(deterministic, llm)
+        # Clamp superior a 0.4 + 0.2 = 0.6.
+        assert result["severity"] == 0.6
 
 
 class TestSeverityLabel:

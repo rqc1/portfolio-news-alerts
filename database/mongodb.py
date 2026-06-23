@@ -59,6 +59,18 @@ class MongoDB:
     def dedup_embeddings(cls):
         return cls.get_db()["dedup_embeddings"]
 
+    @classmethod
+    def alert_feedback(cls):
+        return cls.get_db()["alert_feedback"]
+
+    @classmethod
+    def backtest_results(cls):
+        return cls.get_db()["backtest_results"]
+
+    @classmethod
+    def users(cls):
+        return cls.get_db()["users"]
+
     # --- Indexes ---
     @classmethod
     async def _ensure_indexes(cls) -> None:
@@ -83,6 +95,20 @@ class MongoDB:
             expireAfterSeconds=30 * 24 * 3600,
         )
         await cls.dedup_embeddings().create_index([("alert_id", ASCENDING)])
+
+        # Feedback de alertas (un voto por alerta y usuario)
+        await cls.alert_feedback().create_index(
+            [("alert_id", ASCENDING), ("user_id", ASCENDING)],
+            unique=True,
+        )
+        await cls.alert_feedback().create_index([("portfolio_id", ASCENDING)])
+
+        # Resultados de backtesting
+        await cls.backtest_results().create_index([("alert_id", ASCENDING)])
+        await cls.backtest_results().create_index([("created_at", DESCENDING)])
+
+        # Usuarios (autenticación)
+        await cls.users().create_index([("email", ASCENDING)], unique=True)
 
     # --- Generic helpers ---
     @classmethod

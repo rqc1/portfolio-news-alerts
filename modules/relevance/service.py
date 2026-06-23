@@ -13,6 +13,7 @@ import numpy as np
 
 import config
 from modules.portfolio.models import Portfolio
+from modules.nlp.entity_resolver import EntityResolver, normalize_company_name
 
 logger = logging.getLogger(__name__)
 
@@ -47,34 +48,57 @@ def _is_name_match(name: str, text_lower: str) -> bool:
 
 
 class RuleBasedRelevance:
-    """Capa 1: reglas explícitas de matching directo."""
+    """Capa 1: reglas explícitas de matching directo.
 
-    @staticmethod
+    Usa un `EntityResolver` que normaliza nombres a forma canónica (eliminando
+    sufijos societarios, acentos y puntuación) y aplica guardas de ambigüedad,
+    en lugar del matching por substring ingenuo. Esto reduce tanto los falsos
+    negativos por variantes del nombre («Apple Inc.» vs «Apple») como los
+    falsos positivos por tickers cortos que coinciden con palabras comunes.
+    """
+
+    # Caché de resolvers por firma de cartera (construirlos es barato pero
+    # recurrente en el pipeline).
+    _resolver_cache: dict[str, EntityResolver] = {}
+
+    @classmethod
+    def _get_resolver(cls, portfolio: Portfolio) -> EntityResolver:
+        sig = str(hash(tuple(
+            (a.ticker, a.name, tuple(a.aliases)) for a in portfolio.assets
+        )))
+        resolver = cls._resolver_cache.get(sig)
+        if resolver is None:
+            resolver = EntityResolver.from_portfolio(portfolio)
+            if len(cls._resolver_cache) > 64:
+                cls._resolver_cache.clear()
+            cls._resolver_cache[sig] = resolver
+        return resolver
+
+    @classmethod
     def compute(
+        cls,
         text_lower: str,
         org_names: list[str],
         portfolio: Portfolio,
     ) -> dict:
-        matched_assets = []
+        matched_assets: list[str] = []
         direct_score = 0.0
 
-        for asset in portfolio.assets:
-            names_to_check = [asset.ticker, asset.name]
-            names_to_check.extend(asset.aliases)
+        # --- Resolución canónica de entidades sobre el texto completo ---
+        resolver = cls._get_resolver(portfolio)
+        resolved = resolver.resolve(text_lower)
+        for r in resolved:
+            if r["ticker"] not in matched_assets:
+                matched_assets.append(r["ticker"])
+            direct_score = max(direct_score, r["score"])
 
-            for name in names_to_check:
-                if _is_name_match(name, text_lower):
-                    matched_assets.append(asset.ticker)
-                    direct_score = max(direct_score, 0.9)
-                    break
-
-            # Check NER-extracted orgs against asset names
-            for org in org_names:
-                org_lower = org.lower()
-                if org_lower in asset.name.lower() or asset.name.lower() in org_lower:
-                    if asset.ticker not in matched_assets:
-                        matched_assets.append(asset.ticker)
-                        direct_score = max(direct_score, 0.8)
+        # --- Resolución canónica de las organizaciones extraídas por NER ---
+        if org_names:
+            org_text = " . ".join(org_names)
+            for r in resolver.resolve(org_text):
+                if r["ticker"] not in matched_assets:
+                    matched_assets.append(r["ticker"])
+                direct_score = max(direct_score, min(r["score"], 0.85))
 
         # Sector-level matching
         portfolio_sectors = portfolio.get_sectors()
@@ -101,38 +125,103 @@ class RuleBasedRelevance:
 
 
 class SemanticRelevance:
-    """Capa 2: similitud semántica con embeddings."""
+    """Capa 2: similitud semántica con embeddings.
+
+    Mejoras frente a la versión ingenua (un único embedding de toda la
+    cartera concatenada):
+
+      - Embedding POR ACTIVO: cada activo se describe y embebe por separado,
+        de modo que una noticia muy relevante para un único valor no queda
+        diluida por el resto de la cartera.
+      - MAX-POOLING: el score de relevancia semántica es la máxima similitud
+        coseno noticia ↔ activo (señal "¿es relevante para ALGÚN activo?"),
+        complementada con la media como señal de relevancia transversal.
+      - CACHÉ de embeddings de cartera: los embeddings por activo se cachean
+        por firma de cartera, evitando recodificar en cada noticia.
+      - Sin truncado arbitrario a 512 caracteres: se usa una ventana
+        representativa y se delega el truncado a nivel de token en el modelo.
+    """
+
+    # Ventana de caracteres de la noticia a codificar. El modelo trunca
+    # internamente a nivel de token (max_seq_length); este límite evita
+    # codificar textos patológicamente largos.
+    _NEWS_CHAR_LIMIT = 1200
 
     def __init__(self):
         self.model = _load_embedding_model()
+        # Caché: firma de cartera -> (lista de tickers, matriz de embeddings).
+        self._portfolio_cache: dict[str, tuple[list[str], np.ndarray]] = {}
+
+    @staticmethod
+    def _asset_description(asset) -> str:
+        parts = [asset.name, asset.ticker]
+        if asset.sector:
+            parts.append(asset.sector)
+        if asset.industry:
+            parts.append(asset.industry)
+        if asset.country:
+            parts.append(asset.country)
+        return ", ".join(p for p in parts if p)
+
+    @staticmethod
+    def _portfolio_signature(portfolio: Portfolio) -> str:
+        items = tuple(
+            (a.ticker, a.name, a.sector or "", a.industry or "", a.country or "")
+            for a in portfolio.assets
+        )
+        return str(hash(items))
+
+    def _portfolio_embeddings(self, portfolio: Portfolio) -> tuple[list[str], np.ndarray]:
+        sig = self._portfolio_signature(portfolio)
+        cached = self._portfolio_cache.get(sig)
+        if cached is not None:
+            return cached
+        tickers = [a.ticker for a in portfolio.assets]
+        descriptions = [self._asset_description(a) for a in portfolio.assets]
+        if not descriptions:
+            embeddings = np.zeros((0, 0), dtype="float32")
+        else:
+            embeddings = self.model.encode(
+                descriptions, normalize_embeddings=True, show_progress_bar=False
+            )
+            embeddings = np.asarray(embeddings, dtype="float32")
+        result = (tickers, embeddings)
+        # Acotar el tamaño de la caché.
+        if len(self._portfolio_cache) > 64:
+            self._portfolio_cache.clear()
+        self._portfolio_cache[sig] = result
+        return result
 
     def compute(self, news_text: str, portfolio: Portfolio) -> dict:
-        # Crear descripción semántica de la cartera
-        portfolio_desc_parts = []
-        for asset in portfolio.assets:
-            parts = [asset.name, asset.ticker]
-            if asset.sector:
-                parts.append(asset.sector)
-            if asset.industry:
-                parts.append(asset.industry)
-            if asset.country:
-                parts.append(asset.country)
-            portfolio_desc_parts.append(", ".join(parts))
+        tickers, asset_embeddings = self._portfolio_embeddings(portfolio)
+        if asset_embeddings.size == 0:
+            return {
+                "semantic_score": 0.0,
+                "semantic_mean_score": 0.0,
+                "best_asset": None,
+                "portfolio_description": "",
+            }
 
-        portfolio_text = ". ".join(portfolio_desc_parts)
+        news_chunk = news_text[: self._NEWS_CHAR_LIMIT]
+        emb_news = self.model.encode(
+            news_chunk, normalize_embeddings=True, show_progress_bar=False
+        )
+        emb_news = np.asarray(emb_news, dtype="float32")
 
-        # Truncar para embedding
-        news_truncated = news_text[:512]
-        portfolio_truncated = portfolio_text[:512]
-
-        emb_news = self.model.encode(news_truncated)
-        emb_portfolio = self.model.encode(portfolio_truncated)
-
-        similarity = _cosine_similarity(emb_news, emb_portfolio)
+        # Embeddings normalizados -> coseno = producto escalar.
+        sims = asset_embeddings @ emb_news
+        best_idx = int(np.argmax(sims))
+        max_sim = float(sims[best_idx])
+        mean_sim = float(np.mean(sims))
 
         return {
-            "semantic_score": float(similarity),
-            "portfolio_description": portfolio_text[:200],
+            # Max-pooling: relevante si lo es para ALGÚN activo.
+            "semantic_score": max(max_sim, 0.0),
+            "semantic_mean_score": max(mean_sim, 0.0),
+            "best_asset": tickers[best_idx],
+            "portfolio_description": self._asset_description(
+                portfolio.assets[best_idx]
+            )[:200],
         }
 
 
@@ -176,6 +265,8 @@ class RelevanceService:
             "matched_assets": rule_result["matched_assets"],
             "direct_score": round(direct, 4),
             "semantic_score": round(semantic, 4),
+            "semantic_mean_score": round(semantic_result.get("semantic_mean_score", 0.0), 4),
+            "best_semantic_asset": semantic_result.get("best_asset"),
             "sector_match": rule_result["sector_match"],
             "country_match": rule_result["country_match"],
         }

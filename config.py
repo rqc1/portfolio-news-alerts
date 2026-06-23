@@ -182,3 +182,45 @@ CLOUD_MODE = os.getenv("CLOUD_MODE", "false").lower() in ("true", "1", "yes")
 
 # Token secreto para proteger el endpoint /api/trigger-pipeline
 CRON_SECRET = os.getenv("CRON_SECRET", "")
+
+# Ruta del calibrador de severidad empírico (regresión isotónica score→|CAR|).
+# Se ajusta con AlertBacktestService.fit_calibrator y lo carga el estimador.
+SEVERITY_CALIBRATOR_PATH = os.getenv(
+    "SEVERITY_CALIBRATOR_PATH",
+    str(BASE_DIR / "data" / "severity_calibrator.json"),
+)
+
+# ---------------------------------------------------------------------------
+# Capa de producción: seguridad, CORS, autenticación, observabilidad
+# ---------------------------------------------------------------------------
+# CORS: lista de orígenes permitidos separados por comas. "*" permite todos
+# (solo recomendable en desarrollo). En producción, fijar el dominio del front.
+CORS_ORIGINS = [
+    o.strip()
+    for o in os.getenv("CORS_ORIGINS", "*").split(",")
+    if o.strip()
+]
+
+# Autenticación JWT. AUTH_ENABLED=false mantiene la API abierta (compatibilidad
+# y desarrollo); =true exige token Bearer en los endpoints protegidos.
+AUTH_ENABLED = os.getenv("AUTH_ENABLED", "false").lower() in ("true", "1", "yes")
+JWT_SECRET = os.getenv("JWT_SECRET", "dev-insecure-secret-change-me")
+JWT_ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
+JWT_EXPIRE_MINUTES = int(os.getenv("JWT_EXPIRE_MINUTES", "1440"))  # 24 h
+
+# Rate limiting (slowapi). Formato slowapi: "N/period" (p.ej. "100/minute").
+RATE_LIMIT_DEFAULT = os.getenv("RATE_LIMIT_DEFAULT", "120/minute")
+RATE_LIMIT_AUTH = os.getenv("RATE_LIMIT_AUTH", "10/minute")
+RATE_LIMIT_ENABLED = os.getenv("RATE_LIMIT_ENABLED", "true").lower() in ("true", "1", "yes")
+
+# Logging estructurado JSON (recomendado en producción para agregadores).
+LOG_JSON = os.getenv("LOG_JSON", "false").lower() in ("true", "1", "yes")
+LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
+
+# Métricas Prometheus en /metrics.
+METRICS_ENABLED = os.getenv("METRICS_ENABLED", "true").lower() in ("true", "1", "yes")
+
+# Coste estimado del LLM por 1K tokens (USD), para el tracking de coste.
+LLM_COST_PER_1K_PROMPT = float(os.getenv("LLM_COST_PER_1K_PROMPT", "0.0"))
+LLM_COST_PER_1K_COMPLETION = float(os.getenv("LLM_COST_PER_1K_COMPLETION", "0.0"))
+

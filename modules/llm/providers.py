@@ -33,7 +33,7 @@ PROVIDER_CONFIGS = {
     "github": {
         "base_url": "https://models.inference.ai.azure.com",
         "api_key_env": "GITHUB_TOKEN",
-        "default_model": "meta-llama-3.1-8b-instruct",
+        "default_model": "gpt-4o-mini",
     },
     "huggingface": {
         "base_url": "https://api-inference.huggingface.co/v1",
@@ -108,7 +108,34 @@ class LLMClient:
             temperature=temperature,
             max_tokens=max_tokens,
         )
+        self._track_usage(response)
         return response.choices[0].message.content.strip()
+
+    def _track_usage(self, response) -> None:
+        """Registra tokens y coste estimado en las métricas Prometheus.
+
+        Nunca debe romper la llamada principal: cualquier error se ignora.
+        """
+        try:
+            from modules.security.metrics import record_llm
+
+            usage = getattr(response, "usage", None)
+            prompt_tokens = int(getattr(usage, "prompt_tokens", 0) or 0)
+            completion_tokens = int(getattr(usage, "completion_tokens", 0) or 0)
+            cost = (
+                prompt_tokens / 1000.0 * config.LLM_COST_PER_1K_PROMPT
+                + completion_tokens / 1000.0 * config.LLM_COST_PER_1K_COMPLETION
+            )
+            record_llm(
+                provider=self.provider,
+                model=self.model or "",
+                prompt_tokens=prompt_tokens,
+                completion_tokens=completion_tokens,
+                cost_usd=cost,
+                status="ok",
+            )
+        except Exception:  # noqa: BLE001
+            logger.debug("No se pudieron registrar métricas LLM", exc_info=True)
 
     def is_available(self) -> bool:
         """Comprueba si el proveedor está configurado (tiene API key o es local)."""

@@ -1,0 +1,331 @@
+﻿{
+  "report": {
+    "title": "Comparación Multi-Modelo LLM para Análisis Contextual de Noticias Financieras",
+    "date": "2026-06-03",
+    "version": "2.0",
+    "description": "Evaluación comparativa de 7 modelos LLM disponibles en GitHub Models (free tier) para el análisis contextual de noticias financieras relevantes a una cartera de inversión. Segunda ejecución tras descartar Phi-4 y Phi-4-reasoning por fallos sistemáticos.",
+    "methodology": "Cada noticia pasa por el pipeline NLP local (FinBERT sentiment, spaCy NER, sentence-transformers dedup, BART-MNLI zero-shot) y luego se envía a cada modelo LLM para análisis contextual. Se mide: tipo de evento, dirección de mercado, severidad, confianza y latencia.",
+    "changelog": [
+      {"version": "1.0", "date": "2026-05-28", "changes": "Primera ejecución con 9 modelos. Phi-4 descartado por timeout, Phi-4-reasoning por JSON inválido. Ejecución interrumpida por error MongoDB."},
+      {"version": "2.0", "date": "2026-06-03", "changes": "Segunda ejecución limpia con 7 modelos. Phi-4 y Phi-4-reasoning eliminados del script. Fix MongoDB (db() → get_db()). DeepSeek-V3/R1 operativos en 8/10 noticias. Ejecución completa sin errores (exit code 0, 580.1s)."}
+    ]
+  },
+  "configuration": {
+    "portfolio": {
+      "name": "Mi Cartera",
+      "assets": ["MSFT", "V", "TLN.MC", "KAP.L", "NVDA", "TSM", "NU", "AMD", "AVGO"],
+      "portfolio_id": "69f2027828b140aeb16398e3",
+      "user_id": "ruben"
+    },
+    "api": {
+      "endpoint": "https://models.inference.ai.azure.com",
+      "auth": "GITHUB_TOKEN (free tier)",
+      "rate_limits": "Aprox. 10-15 RPM global, con backoff automático del SDK OpenAI. Tras ~5-6 llamadas secuenciales, aparecen 429 con retry-after de 16-28s."
+    },
+    "news_sample": {
+      "total_news": 100,
+      "relevance_threshold": 0.6,
+      "relevant_analyzed": 10,
+      "source": "MongoDB collection 'news' (RSS/newsapi)"
+    },
+    "timeouts": {
+      "standard_models": 45,
+      "reasoning_models": 90
+    },
+    "execution": {
+      "total_time_seconds": 580.1,
+      "date": "2026-06-03T06:47:15Z",
+      "exit_code": 0
+    }
+  },
+  "models_evaluated": {
+    "active": [
+      {"model_id": "gpt-4o-mini", "display_name": "GPT-4o-mini (GitHub)", "provider": "OpenAI via GitHub Models", "category": "standard", "status": "OPERATIVO"},
+      {"model_id": "gpt-4o", "display_name": "GPT-4o (GitHub)", "provider": "OpenAI via GitHub Models", "category": "standard", "status": "OPERATIVO"},
+      {"model_id": "meta-llama-3.1-8b-instruct", "display_name": "Llama-3.1-8B (GitHub)", "provider": "Meta via GitHub Models", "category": "standard", "parameters": "8B", "status": "OPERATIVO"},
+      {"model_id": "Llama-3.3-70B-Instruct", "display_name": "Llama-3.3-70B (GitHub)", "provider": "Meta via GitHub Models", "category": "standard", "parameters": "70B", "status": "OPERATIVO"},
+      {"model_id": "Meta-Llama-3.1-405B-Instruct", "display_name": "Llama-3.1-405B (GitHub)", "provider": "Meta via GitHub Models", "category": "standard", "parameters": "405B", "status": "OPERATIVO"},
+      {"model_id": "DeepSeek-V3-0324", "display_name": "DeepSeek-V3 (GitHub)", "provider": "DeepSeek (China) via GitHub Models", "category": "standard", "parameters": "671B MoE", "status": "OPERATIVO"},
+      {"model_id": "DeepSeek-R1", "display_name": "DeepSeek-R1 (GitHub)", "provider": "DeepSeek (China) via GitHub Models", "category": "reasoning", "parameters": "671B MoE", "status": "OPERATIVO", "notes": "Genera tags <think>...</think> que se eliminan antes de parsear JSON"}
+    ],
+    "descartados": [
+      {"model_id": "Phi-4", "reason": "Timeout sistemático (45s) en 75% de las noticias. Descartado en v1.0.", "status": "DESCARTADO"},
+      {"model_id": "Phi-4-reasoning", "reason": "JSON parse failed en 100% de las noticias. Descartado en v1.0.", "status": "DESCARTADO"},
+      {"model_id": "Mistral-Nemo", "reason": "unknown_model - No disponible en GitHub Models free tier", "status": "NO DISPONIBLE"},
+      {"model_id": "Mistral-large", "reason": "unknown_model - No disponible en GitHub Models free tier", "status": "NO DISPONIBLE"},
+      {"model_id": "o4-mini", "reason": "unavailable_model - No accesible en free tier", "status": "NO DISPONIBLE"}
+    ]
+  },
+  "results_per_news": [
+    {
+      "news_index": 21,
+      "title": "Wall Street Wants to See $78.8 Billion in Revenues from Nvidia on May 20. Can It Pass the Test?",
+      "relevance": 0.710, "assets": ["NVDA"],
+      "models": {
+        "GPT-4o-mini": {"event": "resultados_empresariales", "direction": "neutral", "severity": 0.3, "confidence": 0.7, "latency_s": 4.8},
+        "GPT-4o": {"event": "resultados_empresariales", "direction": "alcista", "severity": 0.8, "confidence": 0.85, "latency_s": 2.8},
+        "Llama-3.1-8B": {"event": "resultados_empresariales", "direction": "bajista", "severity": 0.6, "confidence": 0.85, "latency_s": 1.9},
+        "Llama-3.3-70B": {"event": null, "direction": null, "severity": null, "confidence": null, "latency_s": 0.55, "error": "JSON parse failed"},
+        "Llama-3.1-405B": {"event": "resultados_empresariales", "direction": "bajista", "severity": 0.6, "confidence": 0.8, "latency_s": 6.9},
+        "DeepSeek-V3": {"event": "resultados_empresariales", "direction": "neutral", "severity": 0.3, "confidence": 0.8, "latency_s": 2.7},
+        "DeepSeek-R1": {"event": "resultados_empresariales", "direction": "neutral", "severity": 0.35, "confidence": 0.65, "latency_s": 6.8}
+      },
+      "consensus": {"event": "resultados_empresariales (6/6)", "direction": "neutral 3, bajista 2, alcista 1"}
+    },
+    {
+      "news_index": 37,
+      "title": "Xi tells Musk, Tim Cook and other CEOs on Trump's trip: China will 'open wider'",
+      "relevance": 0.719, "assets": ["NVDA"],
+      "models": {
+        "GPT-4o-mini": {"event": "otro", "direction": "alcista", "severity": 0.6, "confidence": 0.8, "latency_s": 3.5},
+        "GPT-4o": {"event": "macroeconomia", "direction": "alcista", "severity": 0.6, "confidence": 0.85, "latency_s": 3.4},
+        "Llama-3.1-8B": {"event": "regulacion", "direction": "neutral", "severity": 0.2, "confidence": 0.8, "latency_s": 1.8},
+        "Llama-3.3-70B": {"event": "otro", "direction": "alcista", "severity": 0.6, "confidence": 0.8, "latency_s": 2.7},
+        "Llama-3.1-405B": {"event": "macroeconomia", "direction": "alcista", "severity": 0.6, "confidence": 0.8, "latency_s": 6.1},
+        "DeepSeek-V3": {"event": "macroeconomia", "direction": "alcista", "severity": 0.6, "confidence": 0.8, "latency_s": 24.7},
+        "DeepSeek-R1": {"event": "macroeconomia", "direction": "alcista", "severity": 0.45, "confidence": 0.75, "latency_s": 6.6}
+      },
+      "consensus": {"event": "macroeconomia 4, otro 2, regulacion 1", "direction": "alcista 6/7 (86%)"}
+    },
+    {
+      "news_index": 48,
+      "title": "Stock Market Today: Dow Rises On Cisco, Nvidia, Boeing Amid Trump-Xi Summit (Live Coverage)",
+      "relevance": 0.738, "assets": ["NVDA"],
+      "models": {
+        "GPT-4o-mini": {"event": "otro", "direction": "alcista", "severity": 0.6, "confidence": 0.8, "latency_s": 3.0},
+        "GPT-4o": {"event": "macroeconomia", "direction": "alcista", "severity": 0.6, "confidence": 0.8, "latency_s": 2.8},
+        "Llama-3.1-8B": {"event": "macroeconomia", "direction": "alcista", "severity": 0.6, "confidence": 0.8, "latency_s": 1.5},
+        "Llama-3.3-70B": {"event": "resultados_empresariales", "direction": "alcista", "severity": 0.6, "confidence": 0.8, "latency_s": 2.9},
+        "Llama-3.1-405B": {"event": "macroeconomia", "direction": "alcista", "severity": 0.6, "confidence": 0.8, "latency_s": 6.3},
+        "DeepSeek-V3": {"event": "macroeconomia", "direction": "alcista", "severity": 0.6, "confidence": 0.7, "latency_s": 27.8},
+        "DeepSeek-R1": {"event": "macroeconomia", "direction": "alcista", "severity": 0.45, "confidence": 0.65, "latency_s": 12.6}
+      },
+      "consensus": {"event": "macroeconomia 5/7", "direction": "alcista 7/7 (100%)"}
+    },
+    {
+      "news_index": 51,
+      "title": "NV Energy cutting Lake Tahoe power supply for AI data centers",
+      "relevance": 0.610, "assets": ["TSM"],
+      "models": {
+        "GPT-4o-mini": {"event": "cadena_suministro", "direction": "bajista", "severity": 0.5, "confidence": 0.7, "latency_s": 3.9},
+        "GPT-4o": {"event": "incidencia_operativa", "direction": "bajista", "severity": 0.4, "confidence": 0.75, "latency_s": 2.6},
+        "Llama-3.1-8B": {"event": "incidencia_operativa", "direction": "bajista", "severity": 0.6, "confidence": 0.9, "latency_s": 1.5},
+        "Llama-3.3-70B": {"event": "incidencia_operativa", "direction": "bajista", "severity": 0.4, "confidence": 0.8, "latency_s": 3.7},
+        "Llama-3.1-405B": {"event": "cadena_suministro", "direction": "bajista", "severity": 0.6, "confidence": 0.8, "latency_s": 7.9},
+        "DeepSeek-V3": {"event": "incidencia_operativa", "direction": "bajista", "severity": 0.4, "confidence": 0.7, "latency_s": 22.2},
+        "DeepSeek-R1": {"event": "incidencia_operativa", "direction": "bajista", "severity": 0.35, "confidence": 0.65, "latency_s": 10.3}
+      },
+      "consensus": {"event": "incidencia_operativa 5, cadena_suministro 2", "direction": "bajista 7/7 (100%)"}
+    },
+    {
+      "news_index": 57,
+      "title": "KongTuke hackers now use Microsoft Teams for corporate breaches",
+      "relevance": 0.723, "assets": ["MSFT"],
+      "models": {
+        "GPT-4o-mini": {"event": "ciberincidente", "direction": "bajista", "severity": 0.5, "confidence": 0.7, "latency_s": 3.0},
+        "GPT-4o": {"event": "ciberincidente", "direction": "bajista", "severity": 0.5, "confidence": 0.8, "latency_s": 2.6},
+        "Llama-3.1-8B": {"event": "ciberincidente", "direction": "bajista", "severity": 0.6, "confidence": 0.9, "latency_s": 1.7},
+        "Llama-3.3-70B": {"event": "ciberincidente", "direction": "bajista", "severity": 0.6, "confidence": 0.8, "latency_s": 3.4},
+        "Llama-3.1-405B": {"event": "ciberincidente", "direction": "bajista", "severity": 0.6, "confidence": 0.8, "latency_s": 8.3},
+        "DeepSeek-V3": {"event": "ciberincidente", "direction": "bajista", "severity": 0.4, "confidence": 0.7, "latency_s": 22.6},
+        "DeepSeek-R1": {"event": "ciberincidente", "direction": "neutral", "severity": 0.2, "confidence": 0.7, "latency_s": 9.4}
+      },
+      "consensus": {"event": "ciberincidente 7/7 (100%)", "direction": "bajista 6/7 (86%)"}
+    },
+    {
+      "news_index": 69,
+      "title": "JPMorgan's bet on early-stage companies pays off in leading global tech investment bank",
+      "relevance": 0.308, "assets": [],
+      "models": {
+        "GPT-4o-mini": {"event": "otro", "direction": "neutral", "severity": 0.2, "confidence": 0.7, "latency_s": 3.5},
+        "GPT-4o": {"event": "otro", "direction": "neutral", "severity": 0.2, "confidence": 0.8, "latency_s": 2.7},
+        "Llama-3.1-8B": {"event": "otro", "direction": "alcista", "severity": 0.4, "confidence": 0.8, "latency_s": 1.5},
+        "Llama-3.3-70B": {"event": "otro", "direction": "neutral", "severity": 0.2, "confidence": 0.8, "latency_s": 3.9},
+        "Llama-3.1-405B": {"event": "otro", "direction": "neutral", "severity": 0.2, "confidence": 0.8, "latency_s": 7.9},
+        "DeepSeek-V3": {"event": "otro", "direction": "neutral", "severity": 0.1, "confidence": 0.8, "latency_s": 23.0},
+        "DeepSeek-R1": {"event": "otro", "direction": "alcista", "severity": 0.3, "confidence": 0.8, "latency_s": 8.7}
+      },
+      "consensus": {"event": "otro 7/7 (100%)", "direction": "neutral 5/7 (71%)"}
+    },
+    {
+      "news_index": 77,
+      "title": "Freshworks unveils AI agent studio at annual conference",
+      "relevance": 0.597, "assets": ["TSM"],
+      "models": {
+        "GPT-4o-mini": {"event": "otro", "direction": "neutral", "severity": 0.2, "confidence": 0.7, "latency_s": 3.1},
+        "GPT-4o": {"event": "otro", "direction": "neutral", "severity": 0.2, "confidence": 0.8, "latency_s": 2.9},
+        "Llama-3.1-8B": {"event": "otro", "direction": "neutral", "severity": 0.2, "confidence": 0.8, "latency_s": 1.6},
+        "Llama-3.3-70B": {"event": "otro", "direction": "neutral", "severity": 0.2, "confidence": 0.8, "latency_s": 3.0},
+        "Llama-3.1-405B": {"event": "otro", "direction": "bajista", "severity": 0.4, "confidence": 0.8, "latency_s": 5.0},
+        "DeepSeek-V3": {"event": "otro", "direction": "neutral", "severity": 0.1, "confidence": 0.9, "latency_s": 27.1},
+        "DeepSeek-R1": {"event": "otro", "direction": "neutral", "severity": 0.15, "confidence": 0.75, "latency_s": 8.9}
+      },
+      "consensus": {"event": "otro 7/7 (100%)", "direction": "neutral 6/7 (86%)"}
+    },
+    {
+      "news_index": 79,
+      "title": "UK regulator launches probe into Microsoft's business software ecosystem",
+      "relevance": 0.718, "assets": ["MSFT"],
+      "models": {
+        "GPT-4o-mini": {"event": "regulacion", "direction": "bajista", "severity": 0.7, "confidence": 0.8, "latency_s": 4.3},
+        "GPT-4o": {"event": "regulacion", "direction": "bajista", "severity": 0.6, "confidence": 0.85, "latency_s": 2.8},
+        "Llama-3.1-8B": {"event": "regulacion", "direction": "bajista", "severity": 0.6, "confidence": 0.8, "latency_s": 1.4},
+        "Llama-3.3-70B": {"event": "regulacion", "direction": "bajista", "severity": 0.6, "confidence": 0.8, "latency_s": 2.9},
+        "Llama-3.1-405B": {"event": "regulacion", "direction": "bajista", "severity": 0.6, "confidence": 0.8, "latency_s": 6.1},
+        "DeepSeek-V3": {"event": "regulacion", "direction": "bajista", "severity": 0.6, "confidence": 0.8, "latency_s": 25.7},
+        "DeepSeek-R1": {"event": "regulacion", "direction": "bajista", "severity": 0.4, "confidence": 0.8, "latency_s": 8.6}
+      },
+      "consensus": {"event": "regulacion 7/7 (100%)", "direction": "bajista 7/7 (100%)"}
+    },
+    {
+      "news_index": 94,
+      "title": "Fully-functional RTX 3070 16GB gets frankensteined into existence by harvesting dead GPUs",
+      "relevance": 0.681, "assets": ["NVDA", "AMD"],
+      "models": {
+        "GPT-4o-mini": {"event": "otro", "direction": "neutral", "severity": 0.2, "confidence": 0.7, "latency_s": 3.7},
+        "GPT-4o": {"event": "otro", "direction": "neutral", "severity": 0.2, "confidence": 0.85, "latency_s": 2.4},
+        "Llama-3.1-8B": {"event": "otro", "direction": "neutral", "severity": 0.2, "confidence": 0.8, "latency_s": 1.9},
+        "Llama-3.3-70B": {"event": "otro", "direction": "neutral", "severity": 0.2, "confidence": 0.8, "latency_s": 3.4},
+        "Llama-3.1-405B": {"event": "otro", "direction": "neutral", "severity": 0.2, "confidence": 0.8, "latency_s": 7.2},
+        "DeepSeek-V3": {"event": null, "direction": null, "severity": null, "confidence": null, "latency_s": 17.99, "error": "429 Rate limit"},
+        "DeepSeek-R1": {"event": null, "direction": null, "severity": null, "confidence": null, "latency_s": 3.27, "error": "429 Rate limit"}
+      },
+      "consensus": {"event": "otro 5/5 (100%)", "direction": "neutral 5/5 (100%)"}
+    },
+    {
+      "news_index": 98,
+      "title": "Leading-edge foundry roadmaps for TSMC, Intel and Samsung — outlining the path to 1.4nm",
+      "relevance": 0.745, "assets": ["TSM"],
+      "models": {
+        "GPT-4o-mini": {"event": "otro", "direction": "neutral", "severity": 0.3, "confidence": 0.7, "latency_s": 3.1},
+        "GPT-4o": {"event": "otro", "direction": "neutral", "severity": 0.2, "confidence": 0.8, "latency_s": 2.8},
+        "Llama-3.1-8B": {"event": "otro", "direction": "neutral", "severity": 0.2, "confidence": 0.8, "latency_s": 1.8},
+        "Llama-3.3-70B": {"event": "otro", "direction": "alcista", "severity": 0.6, "confidence": 0.8, "latency_s": 2.8},
+        "Llama-3.1-405B": {"event": "otro", "direction": "alcista", "severity": 0.6, "confidence": 0.8, "latency_s": 6.9},
+        "DeepSeek-V3": {"event": null, "direction": null, "severity": null, "confidence": null, "latency_s": 29.51, "error": "429 Rate limit"},
+        "DeepSeek-R1": {"event": null, "direction": null, "severity": null, "confidence": null, "latency_s": 3.36, "error": "429 Rate limit"}
+      },
+      "consensus": {"event": "otro 5/5 (100%)", "direction": "neutral 3, alcista 2"}
+    }
+  ],
+  "model_summaries": {
+    "GPT-4o-mini (GitHub)": {
+      "total": 10, "errors": 0, "success_rate": "100%",
+      "avg_severity": 0.41, "avg_confidence": 0.73, "avg_latency_s": 3.5,
+      "directions": {"alcista": 2, "bajista": 3, "neutral": 5},
+      "event_distribution": {"otro": 6, "resultados_empresariales": 1, "cadena_suministro": 1, "ciberincidente": 1, "regulacion": 1}
+    },
+    "GPT-4o (GitHub)": {
+      "total": 10, "errors": 0, "success_rate": "100%",
+      "avg_severity": 0.43, "avg_confidence": 0.815, "avg_latency_s": 2.8,
+      "directions": {"alcista": 3, "bajista": 3, "neutral": 4},
+      "event_distribution": {"otro": 4, "macroeconomia": 2, "resultados_empresariales": 1, "incidencia_operativa": 1, "ciberincidente": 1, "regulacion": 1}
+    },
+    "Llama-3.1-8B (GitHub)": {
+      "total": 10, "errors": 0, "success_rate": "100%",
+      "avg_severity": 0.42, "avg_confidence": 0.825, "avg_latency_s": 1.7,
+      "directions": {"alcista": 2, "bajista": 4, "neutral": 4},
+      "event_distribution": {"otro": 4, "regulacion": 2, "resultados_empresariales": 1, "macroeconomia": 1, "incidencia_operativa": 1, "ciberincidente": 1}
+    },
+    "Llama-3.3-70B (GitHub)": {
+      "total": 10, "errors": 1, "success_rate": "90%",
+      "avg_severity": 0.444, "avg_confidence": 0.80, "avg_latency_s": 3.0,
+      "directions": {"alcista": 3, "bajista": 3, "neutral": 3},
+      "event_distribution": {"otro": 5, "resultados_empresariales": 1, "incidencia_operativa": 1, "ciberincidente": 1, "regulacion": 1}
+    },
+    "Llama-3.1-405B (GitHub)": {
+      "total": 10, "errors": 0, "success_rate": "100%",
+      "avg_severity": 0.50, "avg_confidence": 0.80, "avg_latency_s": 6.5,
+      "directions": {"alcista": 3, "bajista": 5, "neutral": 2},
+      "event_distribution": {"otro": 4, "macroeconomia": 2, "resultados_empresariales": 1, "cadena_suministro": 1, "ciberincidente": 1, "regulacion": 1}
+    },
+    "DeepSeek-V3 (GitHub)": {
+      "total": 10, "errors": 2, "success_rate": "80%",
+      "avg_severity": 0.388, "avg_confidence": 0.775, "avg_latency_s": 22.3,
+      "directions": {"alcista": 2, "bajista": 3, "neutral": 3},
+      "event_distribution": {"macroeconomia": 2, "otro": 2, "resultados_empresariales": 1, "incidencia_operativa": 1, "ciberincidente": 1, "regulacion": 1},
+      "notes": "2 errores por 429 rate limit en las 2 últimas noticias. Latencia alta por retries del backoff."
+    },
+    "DeepSeek-R1 (GitHub)": {
+      "total": 10, "errors": 2, "success_rate": "80%",
+      "avg_severity": 0.331, "avg_confidence": 0.719, "avg_latency_s": 8.5,
+      "directions": {"alcista": 3, "bajista": 2, "neutral": 3},
+      "event_distribution": {"macroeconomia": 2, "otro": 2, "resultados_empresariales": 1, "incidencia_operativa": 1, "ciberincidente": 1, "regulacion": 1},
+      "notes": "Modelo reasoning. 2 errores por 429 rate limit. Severidad y confianza conservadoras."
+    }
+  },
+  "agreement_metrics": {
+    "same_family_pairs": {
+      "GPT-4o vs GPT-4o-mini": {"n": 10, "event_agreement": 0.70, "direction_agreement": 0.90, "severity_mae": 0.08},
+      "Llama-3.1-405B vs Llama-3.1-8B": {"n": 10, "event_agreement": 0.80, "direction_agreement": 0.60, "severity_mae": 0.12},
+      "DeepSeek-R1 vs DeepSeek-V3": {"n": 8, "event_agreement": 1.00, "direction_agreement": 0.75, "severity_mae": 0.131}
+    },
+    "cross_family_highlights": {
+      "DeepSeek-V3 vs GPT-4o": {"n": 8, "event_agreement": 1.00, "direction_agreement": 0.875, "severity_mae": 0.10, "note": "Mejor par cross-family"},
+      "DeepSeek-V3 vs GPT-4o-mini": {"n": 8, "event_agreement": 0.625, "direction_agreement": 1.00, "severity_mae": 0.0625},
+      "Llama-3.1-405B vs Llama-3.3-70B": {"n": 9, "event_agreement": 0.667, "direction_agreement": 0.889, "severity_mae": 0.044, "note": "Menor MAE severidad"}
+    },
+    "all_pairs": {
+      "DeepSeek-R1 vs DeepSeek-V3": {"n": 8, "event": 1.0, "direction": 0.75, "severity_mae": 0.131},
+      "DeepSeek-R1 vs GPT-4o": {"n": 8, "event": 1.0, "direction": 0.625, "severity_mae": 0.181},
+      "DeepSeek-R1 vs GPT-4o-mini": {"n": 8, "event": 0.625, "direction": 0.75, "severity_mae": 0.156},
+      "DeepSeek-R1 vs Llama-3.1-405B": {"n": 8, "event": 0.875, "direction": 0.5, "severity_mae": 0.219},
+      "DeepSeek-R1 vs Llama-3.1-8B": {"n": 8, "event": 0.875, "direction": 0.625, "severity_mae": 0.206},
+      "DeepSeek-R1 vs Llama-3.3-70B": {"n": 7, "event": 0.714, "direction": 0.714, "severity_mae": 0.157},
+      "DeepSeek-V3 vs GPT-4o": {"n": 8, "event": 1.0, "direction": 0.875, "severity_mae": 0.10},
+      "DeepSeek-V3 vs GPT-4o-mini": {"n": 8, "event": 0.625, "direction": 1.0, "severity_mae": 0.0625},
+      "DeepSeek-V3 vs Llama-3.1-405B": {"n": 8, "event": 0.875, "direction": 0.75, "severity_mae": 0.138},
+      "DeepSeek-V3 vs Llama-3.1-8B": {"n": 8, "event": 0.875, "direction": 0.625, "severity_mae": 0.188},
+      "DeepSeek-V3 vs Llama-3.3-70B": {"n": 7, "event": 0.714, "direction": 1.0, "severity_mae": 0.057},
+      "GPT-4o vs GPT-4o-mini": {"n": 10, "event": 0.7, "direction": 0.9, "severity_mae": 0.08},
+      "GPT-4o vs Llama-3.1-405B": {"n": 10, "event": 0.9, "direction": 0.7, "severity_mae": 0.11},
+      "GPT-4o vs Llama-3.1-8B": {"n": 10, "event": 0.9, "direction": 0.7, "severity_mae": 0.11},
+      "GPT-4o vs Llama-3.3-70B": {"n": 9, "event": 0.778, "direction": 0.889, "severity_mae": 0.056},
+      "GPT-4o-mini vs Llama-3.1-405B": {"n": 10, "event": 0.8, "direction": 0.7, "severity_mae": 0.11},
+      "GPT-4o-mini vs Llama-3.1-8B": {"n": 10, "event": 0.7, "direction": 0.7, "severity_mae": 0.13},
+      "GPT-4o-mini vs Llama-3.3-70B": {"n": 9, "event": 0.778, "direction": 0.889, "severity_mae": 0.067},
+      "Llama-3.1-405B vs Llama-3.1-8B": {"n": 10, "event": 0.8, "direction": 0.6, "severity_mae": 0.12},
+      "Llama-3.1-405B vs Llama-3.3-70B": {"n": 9, "event": 0.667, "direction": 0.889, "severity_mae": 0.044},
+      "Llama-3.1-8B vs Llama-3.3-70B": {"n": 9, "event": 0.778, "direction": 0.667, "severity_mae": 0.133}
+    }
+  },
+  "consensus_analysis": {
+    "high_consensus": [
+      {"news": "KongTuke hackers (MSFT)", "event_consensus": "100% ciberincidente", "direction_consensus": "86% bajista"},
+      {"news": "UK regulator probes Microsoft", "event_consensus": "100% regulacion", "direction_consensus": "100% bajista"},
+      {"news": "Dow Rises Cisco/Nvidia/Boeing", "event_consensus": "71% macroeconomia", "direction_consensus": "100% alcista"},
+      {"news": "NV Energy power cut", "event_consensus": "71% incidencia_operativa", "direction_consensus": "100% bajista"}
+    ],
+    "low_consensus": [
+      {"news": "Wall Street Nvidia revenues", "direction_variance": "neutral 3, bajista 2, alcista 1", "note": "Noticia anticipatoria genera divergencia"},
+      {"news": "Xi tells CEOs", "event_variance": "macroeconomia 4, otro 2, regulacion 1", "note": "Noticia geopolítica difícil de categorizar"}
+    ]
+  },
+  "ranking": [
+    {"rank": 1, "model": "GPT-4o", "reason": "0 errores, mayor confianza (0.815), rápido (2.8s), clasificación diversa y precisa."},
+    {"rank": 2, "model": "Llama-3.1-8B", "reason": "0 errores, menor latencia (1.7s), confianza alta (0.825). Excelente velocidad/calidad."},
+    {"rank": 3, "model": "Llama-3.1-405B", "reason": "0 errores, clasificación más precisa de eventos. Más lento (6.5s)."},
+    {"rank": 4, "model": "Llama-3.3-70B", "reason": "1 error JSON parse (10%), buen equilibrio general, menor MAE severidad con 405B."},
+    {"rank": 5, "model": "GPT-4o-mini", "reason": "0 errores, fiable pero confianza baja (0.73). Abusa de 'otro'. Más lento que GPT-4o."},
+    {"rank": 6, "model": "DeepSeek-V3", "reason": "80% success (2 errores 429). Cuando funciona, calidad excelente — 100% acuerdo evento con GPT-4o."},
+    {"rank": 7, "model": "DeepSeek-R1", "reason": "80% success (2 errores 429). Reasoning con severidad/confianza conservadoras."}
+  ],
+  "conclusions": {
+    "best_overall": "GPT-4o — Mayor precisión, velocidad consistente (2.8s), confianza 0.815, 0 errores",
+    "best_speed": "Llama-3.1-8B — 1.7s promedio, 0 errores, ideal para pipeline en tiempo real",
+    "best_depth": "Llama-3.1-405B — Clasificación de eventos más precisa (macroeconomia, cadena_suministro), 0 errores",
+    "best_value": "DeepSeek-V3 — Cuando funciona, acuerdo 100% evento con GPT-4o. Penalizado por rate limits.",
+    "best_reasoning": "DeepSeek-R1 — Modelo de razonamiento, análisis reflexivo, severidad conservadora",
+    "descartados": "Phi-4 (timeouts) y Phi-4-reasoning (no genera JSON válido) eliminados del script",
+    "recommendation_for_production": "Usar GPT-4o como modelo principal con Llama-3.1-8B como fallback rápido",
+    "key_findings": [
+      "Los 7 modelos alcanzan >80% de éxito en generación de JSON estructurado",
+      "El acuerdo en dirección supera el 85% en noticias con señal clara (ciberincidentes, regulación)",
+      "Las noticias anticipatorias generan mayor divergencia entre modelos",
+      "Los modelos chinos (DeepSeek) son plenamente competitivos pero sufren rate limiting",
+      "DeepSeek-V3 tiene acuerdo perfecto (100%) en tipo de evento con GPT-4o",
+      "La latencia varía de 1.7s (Llama-8B) a 22s (DeepSeek-V3 con retries)"
+    ],
+    "rate_limiting_notes": "El free tier de GitHub Models impone ~10-15 RPM global. DeepSeek-V3/R1 más afectados por ir al final de la secuencia."
+  }
+}

@@ -106,9 +106,73 @@ Cada ejemplo incluye:
 - **Tamaño** (40): suficiente para detectar tendencias y falsos positivos
   evidentes, insuficiente para conclusiones estadísticamente robustas. Ampliar
   a ≥200 ejemplos para resultados publicables.
-- **Etiquetador único**: sin medida de inter-annotator agreement (Cohen's κ).
 - **Sintético en parte**: las noticias están redactadas (no extraídas de la
   ingesta real) para garantizar cobertura uniforme de la taxonomía.
+
+---
+
+## Fiabilidad del etiquetado: acuerdo inter-anotador (IAA)
+
+Para sostener la validez del ground truth, un subconjunto de **25 noticias**
+(`dataset_annotator2.jsonl`) fue re-anotado de forma **independiente** por un
+segundo anotador siguiendo la misma guía. El acuerdo se mide con
+`evaluation/agreement.py` (implementación pura, sin sklearn):
+
+```bash
+python -m evaluation.run_agreement
+# → evaluation/results/agreement.json
+```
+
+Métricas por dimensión (sobre los 25 ítems comunes):
+
+| Dimensión | % acuerdo | Estadístico | Valor | Interpretación |
+|-----------|:---------:|-------------|:-----:|----------------|
+| `is_relevant` | 0.96 | κ de Cohen | **0.86** | casi perfecto |
+| `event_type` | 1.00 | κ de Cohen | **1.00** | casi perfecto |
+| `direction` | 0.92 | κ de Cohen | **0.88** | casi perfecto |
+| `severity_label` | 0.56 | κ ponderado (cuadrático) | **0.82** | casi perfecto |
+| `severity_label` | 0.56 | α de Krippendorff (ordinal) | **0.91** | casi perfecto |
+
+Notas metodológicas:
+
+- **Severidad**: el acuerdo exacto es bajo (0.56) porque es la dimensión más
+  subjetiva, pero los desacuerdos son casi siempre **entre categorías
+  adyacentes** (alta vs muy_alta). Por eso se reporta κ **ponderado** y α
+  **ordinal**, que penalizan menos los desacuerdos cercanos y revelan un
+  acuerdo sustancial (0.82–0.91). Reportar solo κ nominal infravaloraría la
+  fiabilidad real de una variable ordinal.
+- **Escala de interpretación**: Landis & Koch (1977) — <0.20 leve, 0.21–0.40
+  aceptable, 0.41–0.60 moderado, 0.61–0.80 sustancial, 0.81–1.00 casi perfecto.
+
+### Guía de anotación
+
+Reglas aplicadas por ambos anotadores (resumen operativo):
+
+1. **`is_relevant`**: marcar `true` si la noticia afecta —directa o
+   indirectamente por sector/cadena de suministro— a algún activo de la
+   `portfolio_id` indicada. Noticias de deporte, clima o ciencia sin vínculo
+   económico → `false`.
+2. **`matched_assets`**: incluir solo tickers de la cartera con vínculo
+   **explícito o causal claro**. Una mención de un proveedor (TSMC→AAPL) o un
+   competidor relevante (Google quantum→NVDA) justifica el ticker afectado,
+   no el de la empresa citada si no está en cartera.
+3. **`event_type`**: asignar el tipo dominante de la taxonomía
+   `EVENT_TAXONOMY`. Ante ambigüedad, priorizar el evento con mayor impacto
+   potencial sobre el precio.
+4. **`direction`**: `alcista`/`bajista`/`neutral` según el efecto esperado
+   sobre el activo (no sobre el sentimiento del texto). Reestructuraciones,
+   OPAs y cambios directivos sin sesgo claro → `neutral`.
+5. **`severity_label`** (ordinal): calibrar por la magnitud esperada del
+   movimiento de precio: `muy_baja` (<0.5%), `baja` (0.5–1.5%),
+   `media` (1.5–3%), `alta` (3–6%), `muy_alta` (>6%). Estas bandas se
+   alinean con `modules/impact/calibration.py`.
+
+### Limitaciones residuales
+
+- **Tamaño** (40 total / 25 doble-anotados): suficiente para estimar IAA y
+  detectar tendencias, insuficiente para conclusiones estadísticamente
+  robustas. Ampliar a ≥200 ejemplos y ≥3 anotadores (habilita κ de Fleiss,
+  ya implementado en `agreement.py`) para resultados publicables.
 
 ---
 
@@ -138,6 +202,46 @@ empíricamente la arquitectura híbrida.
 2. Si la noticia es para una cartera nueva, defínela en `portfolios.json`.
 3. Asegura coherencia: si `is_relevant=false`, deja `matched_assets=[]`,
    `event_type="otro"`, `direction="neutral"`, `severity_label="muy_baja"`.
+
+---
+
+## Comparación Multi-Modelo LLM
+
+Además del ablation study (que evalúa las 4 variantes del pipeline NLP),
+se ejecutó una **comparación de 7 modelos LLM** para el módulo de análisis
+contextual (`modules/llm/analyzer.py`).
+
+### Script
+
+```bash
+python scripts/compare_models.py
+```
+
+### Modelos evaluados (v2.0, 2026-06-03)
+
+| Modelo | Proveedor | Errores | Confianza | Latencia | Ranking |
+|--------|-----------|---------|-----------|----------|---------|
+| GPT-4o | OpenAI (GitHub) | 0/10 | 0.815 | 2.8s | **#1** |
+| Llama-3.1-8B | Meta (GitHub) | 0/10 | 0.825 | 1.7s | #2 |
+| Llama-3.1-405B | Meta (GitHub) | 0/10 | 0.800 | 6.5s | #3 |
+| Llama-3.3-70B | Meta (GitHub) | 1/10 | 0.800 | 3.0s | #4 |
+| GPT-4o-mini | OpenAI (GitHub) | 0/10 | 0.730 | 3.5s | #5 |
+| DeepSeek-V3 | DeepSeek (GitHub) | 2/10 | 0.775 | 22.3s | #6 |
+| DeepSeek-R1 | DeepSeek (GitHub) | 2/10 | 0.719 | 8.5s | #7 |
+
+**Descartados**: Phi-4 (timeout 75%), Phi-4-reasoning (JSON inválido 100%).
+
+### Hallazgos clave
+
+- **Acuerdo en dirección >85%** en noticias con señal clara (ciberincidentes, regulación).
+- **DeepSeek-V3** tiene acuerdo perfecto (100%) en tipo de evento con GPT-4o.
+- Las noticias anticipatorias (resultados pendientes) generan mayor divergencia.
+- Los errores de DeepSeek son por **rate limiting 429** del free tier, no por calidad.
+
+### Artefactos
+
+- `scripts/model_comparison_results.json` — datos crudos con explicaciones LLM completas
+- `evaluation/results/model_comparison_report.json` — informe estructurado v2.0
 4. Los tests `tests/test_evaluation.py::test_dataset_labels_consistency` y
    `test_load_portfolios` verifican estas invariantes automáticamente.
 

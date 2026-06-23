@@ -1,0 +1,971 @@
+{
+  "timestamp": "2026-06-23T14:04:13.537023+00:00",
+  "portfolio": "Mi Cartera",
+  "tickers": [
+    "MSFT",
+    "V",
+    "TLN.MC",
+    "KAP.L",
+    "NVDA",
+    "TSM",
+    "NU",
+    "AMD",
+    "AVGO"
+  ],
+  "models_compared": [
+    "GPT-4o-mini (GitHub)",
+    "GPT-4o (GitHub)",
+    "Llama-3.3-70B (GitHub)",
+    "DeepSeek-V3 (GitHub)",
+    "DeepSeek-R1 (GitHub)"
+  ],
+  "total_news": 100,
+  "relevant_news": 12,
+  "elapsed_seconds": 692.2,
+  "agreement_metrics": {
+    "DeepSeek-R1 (GitHub) vs DeepSeek-V3 (GitHub)": {
+      "n": 7,
+      "event_agreement": 0.714,
+      "direction_agreement": 0.714,
+      "severity_mae": 0.1
+    },
+    "DeepSeek-R1 (GitHub) vs GPT-4o (GitHub)": {
+      "n": 7,
+      "event_agreement": 0.571,
+      "direction_agreement": 0.571,
+      "severity_mae": 0.0857
+    },
+    "DeepSeek-R1 (GitHub) vs GPT-4o-mini (GitHub)": {
+      "n": 7,
+      "event_agreement": 0.714,
+      "direction_agreement": 0.714,
+      "severity_mae": 0.0857
+    },
+    "DeepSeek-R1 (GitHub) vs Llama-3.3-70B (GitHub)": {
+      "n": 7,
+      "event_agreement": 0.714,
+      "direction_agreement": 0.714,
+      "severity_mae": 0.0714
+    },
+    "DeepSeek-V3 (GitHub) vs GPT-4o (GitHub)": {
+      "n": 7,
+      "event_agreement": 0.571,
+      "direction_agreement": 0.714,
+      "severity_mae": 0.1143
+    },
+    "DeepSeek-V3 (GitHub) vs GPT-4o-mini (GitHub)": {
+      "n": 7,
+      "event_agreement": 0.714,
+      "direction_agreement": 0.571,
+      "severity_mae": 0.1429
+    },
+    "DeepSeek-V3 (GitHub) vs Llama-3.3-70B (GitHub)": {
+      "n": 7,
+      "event_agreement": 1.0,
+      "direction_agreement": 0.571,
+      "severity_mae": 0.0714
+    },
+    "GPT-4o (GitHub) vs GPT-4o-mini (GitHub)": {
+      "n": 12,
+      "event_agreement": 0.667,
+      "direction_agreement": 0.75,
+      "severity_mae": 0.05
+    },
+    "GPT-4o (GitHub) vs Llama-3.3-70B (GitHub)": {
+      "n": 12,
+      "event_agreement": 0.417,
+      "direction_agreement": 0.833,
+      "severity_mae": 0.1
+    },
+    "GPT-4o-mini (GitHub) vs Llama-3.3-70B (GitHub)": {
+      "n": 12,
+      "event_agreement": 0.667,
+      "direction_agreement": 0.917,
+      "severity_mae": 0.1
+    }
+  },
+  "model_summaries": {
+    "GPT-4o-mini (GitHub)": {
+      "total": 12,
+      "errors": 0,
+      "avg_severity": 0.375,
+      "avg_confidence": 0.7458,
+      "directions": {
+        "alcista": 2,
+        "bajista": 4,
+        "neutral": 6
+      },
+      "event_distribution": {
+        "otro": 10,
+        "cadena_suministro": 1,
+        "fusion_adquisicion": 1
+      }
+    },
+    "GPT-4o (GitHub)": {
+      "total": 12,
+      "errors": 0,
+      "avg_severity": 0.375,
+      "avg_confidence": 0.8275,
+      "directions": {
+        "alcista": 2,
+        "bajista": 4,
+        "neutral": 6
+      },
+      "event_distribution": {
+        "otro": 7,
+        "fusion_adquisicion": 4,
+        "incidencia_operativa": 1
+      }
+    },
+    "Llama-3.3-70B (GitHub)": {
+      "total": 12,
+      "errors": 0,
+      "avg_severity": 0.3417,
+      "avg_confidence": 0.7917,
+      "directions": {
+        "alcista": 3,
+        "bajista": 4,
+        "neutral": 5
+      },
+      "event_distribution": {
+        "otro": 10,
+        "resultados_empresariales": 2
+      }
+    },
+    "DeepSeek-V3 (GitHub)": {
+      "total": 12,
+      "errors": 5,
+      "avg_severity": 0.3571,
+      "avg_confidence": 0.8071,
+      "directions": {
+        "alcista": 1,
+        "bajista": 2,
+        "neutral": 4
+      },
+      "event_distribution": {
+        "otro": 6,
+        "resultados_empresariales": 1
+      }
+    },
+    "DeepSeek-R1 (GitHub)": {
+      "total": 12,
+      "errors": 5,
+      "avg_severity": 0.4286,
+      "avg_confidence": 0.7357,
+      "directions": {
+        "alcista": 3,
+        "bajista": 2,
+        "neutral": 2
+      },
+      "event_distribution": {
+        "otro": 4,
+        "resultados_empresariales": 2,
+        "cadena_suministro": 1
+      }
+    }
+  },
+  "results": [
+    {
+      "news_id": "6a3a8e83525f8856037d2a97",
+      "title": "Nvidia announces liquid cooling system that runs ‘hotter than a hot tub’ — promises to reduce electricity consumption and cut water use by up to 100%, but sustainability challenges remain",
+      "source": "tomshardware",
+      "url": "https://www.tomshardware.com/tech-industry/data-centers/nvidia-announces-liquid-cooling-system-that-runs-hotter-than-a-hot-tub-promises-to-reduce-electricity-consumption-and-cut-water-use-by-up-to-100-percent-but-sustainability-challenges-remain",
+      "relevance_score": 0.7576,
+      "matched_assets": [
+        "NVDA"
+      ],
+      "nlp_sentiment": {
+        "sentiment": "positive",
+        "confidence": 0.869,
+        "probabilities": {
+          "positive": 0.869,
+          "negative": 0.0113,
+          "neutral": 0.1196
+        }
+      },
+      "nlp_event_type": "otro",
+      "deterministic_impact": {
+        "direction": "alcista",
+        "severity": 0.306,
+        "severity_label": "baja"
+      },
+      "model_results": {
+        "GPT-4o-mini (GitHub)": {
+          "event_type": "otro",
+          "direction": "alcista",
+          "severity": 0.7,
+          "confidence": 0.8,
+          "explanation": "La noticia sobre el nuevo sistema de refrigeración de Nvidia es positiva para la cartera, ya que Nvidia representa un 12% de la misma. La innovación en la reducción del consumo eléctrico y del uso de agua puede mejorar la eficiencia operativa y la sostenibilidad de sus productos, lo que podría traducirse en un aumento de la demanda y, por ende, en un crecimiento de ingresos. Sin embargo, los desafíos de sostenibilidad mencionados podrían limitar el impacto a largo plazo.",
+          "reasoning": "La noticia es relevante para Nvidia, que tiene un peso significativo en la cartera, y sugiere un avance tecnológico que podría beneficiar a la empresa y, por extensión, a los inversores.",
+          "latency_s": 4.47
+        },
+        "GPT-4o (GitHub)": {
+          "event_type": "otro",
+          "direction": "alcista",
+          "severity": 0.6,
+          "confidence": 0.85,
+          "explanation": "La noticia sobre el nuevo sistema de refrigeración líquida de Nvidia es positiva para la acción de NVDA, que representa un 12% de la cartera. Este avance tecnológico refuerza su liderazgo en innovación dentro del sector de semiconductores, lo que podría traducirse en una ventaja competitiva frente a rivales como AMD y TSM, también presentes en la cartera. Sin embargo, el impacto en estos competidores es limitado, ya que el anuncio no afecta directamente a sus productos actuales.",
+          "reasoning": "El desarrollo de un sistema de refrigeración más eficiente puede reducir costos operativos y mejorar la sostenibilidad, lo que es atractivo para los inversores. Dado que Nvidia tiene un peso significativo en la cartera, el impacto es moderadamente alcista. La confianza es alta debido al liderazgo de Nvidia en el sector y la relevancia de la noticia.",
+          "latency_s": 2.82
+        },
+        "Llama-3.3-70B (GitHub)": {
+          "event_type": "otro",
+          "direction": "alcista",
+          "severity": 0.6,
+          "confidence": 0.8,
+          "explanation": "La noticia sobre el sistema de enfriamiento líquido de Nvidia, que promete reducir el consumo de electricidad y agua, puede tener un impacto positivo en el valor de las acciones de NVDA, lo que a su vez puede beneficiar a esta cartera debido al peso significativo de NVDA en la misma.",
+          "reasoning": "Innovación tecnológica con beneficios ambientales y de costos",
+          "latency_s": 2.97
+        },
+        "DeepSeek-V3 (GitHub)": {
+          "event_type": "otro",
+          "direction": "alcista",
+          "severity": 0.6,
+          "confidence": 0.8,
+          "explanation": "La noticia sobre el nuevo sistema de refrigeración líquida de Nvidia es positiva para la cartera, especialmente para NVDA, que representa el 12% de la misma. Este avance tecnológico podría mejorar la eficiencia energética y reducir costos, lo que podría impulsar la valoración de la empresa. Además, dado que la cartera también incluye otras empresas de tecnología como AMD y AVGO, podría haber un efecto indirecto positivo en el sector de semiconductores en general.",
+          "reasoning": "El anuncio de Nvidia es relevante para su posición en la cartera y tiene implicaciones positivas para el sector de semiconductores, lo que justifica una dirección alcista y una severidad moderada.",
+          "latency_s": 3.21
+        },
+        "DeepSeek-R1 (GitHub)": {
+          "event_type": "otro",
+          "direction": "alcista",
+          "severity": 0.6,
+          "confidence": 0.85,
+          "explanation": "El anuncio de Nvidia (12% de la cartera) sobre su sistema de refrigeración podría fortalecer su posición en semiconductores para centros de datos, beneficiando su ventaja competitiva. Sin embargo, el impacto en otros holdings tecnológicos (AMD, AVGO, TSM) es indirecto y limitado, mientras que los activos de otros sectores (V, TLN.MC, KAP.L, NU) no se ven afectados directamente.",
+          "reasoning": "Impacto directo positivo en NVDA por innovación en eficiencia energética, relevante para su segmento. Efecto neutro/menor en competidores semiconductores (AMD/AVGO/TSM) al no mencionar desplazamiento de mercado. Cartera concentrada en tech (56%) con NVDA como mayor posición.",
+          "latency_s": 9.55
+        }
+      }
+    },
+    {
+      "news_id": "6a3a8e7e525f8856037d2a11",
+      "title": "Gorilla Technology surges after $2.5B AI compute infrastructure contract",
+      "source": "seeking_alpha",
+      "url": "https://seekingalpha.com/news/4606107-gorilla-technology-surges-after-25b-ai-compute-infrastructure-contract?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
+      "relevance_score": 0.3883,
+      "matched_assets": [],
+      "nlp_sentiment": {
+        "sentiment": "positive",
+        "confidence": 0.9223,
+        "probabilities": {
+          "positive": 0.9223,
+          "negative": 0.0272,
+          "neutral": 0.0505
+        }
+      },
+      "nlp_event_type": "otro",
+      "deterministic_impact": {
+        "direction": "alcista",
+        "severity": 0.2694,
+        "severity_label": "baja"
+      },
+      "model_results": {
+        "GPT-4o-mini (GitHub)": {
+          "event_type": "otro",
+          "direction": "alcista",
+          "severity": 0.4,
+          "confidence": 0.7,
+          "explanation": "La noticia sobre el contrato de $2.5B de Gorilla Technology en infraestructura de computación AI puede tener un impacto positivo indirecto en la cartera, especialmente en las acciones de NVIDIA, AMD y Broadcom, que son actores clave en el sector de semiconductores y tecnología. Este tipo de contratos puede aumentar la demanda de sus productos y servicios, lo que podría traducirse en un crecimiento en sus ingresos y beneficios a largo plazo.",
+          "reasoning": "Aunque Gorilla Technology no está directamente en la cartera, el crecimiento en la infraestructura de AI puede beneficiar a las empresas de semiconductores que suministran tecnología a este sector.",
+          "latency_s": 3.69
+        },
+        "GPT-4o (GitHub)": {
+          "event_type": "fusion_adquisicion",
+          "direction": "bajista",
+          "severity": 0.4,
+          "confidence": 0.8,
+          "explanation": "El contrato de $2.5B de Gorilla Technology para infraestructura de computación en IA podría aumentar la competencia en el sector tecnológico, especialmente en áreas relacionadas con la inteligencia artificial y la computación avanzada. Esto podría presionar a empresas como NVIDIA, AMD y Broadcom, que tienen una fuerte exposición al mercado de semiconductores y hardware para IA, al enfrentar un nuevo jugador con un contrato significativo. Aunque el impacto directo es limitado, la noticia podría generar preocupaciones sobre la cuota de mercado a largo plazo.",
+          "reasoning": "La noticia no menciona directamente a las empresas de la cartera, pero la entrada de un competidor con un contrato relevante en el ámbito de la IA puede afectar indirectamente a los actores establecidos en el sector tecnológico. La severidad es moderada debido a la incertidumbre sobre el impacto real de Gorilla Technology en el mercado.",
+          "latency_s": 3.13
+        },
+        "Llama-3.3-70B (GitHub)": {
+          "event_type": "otro",
+          "direction": "alcista",
+          "severity": 0.2,
+          "confidence": 0.8,
+          "explanation": "La noticia sobre el contrato de $2.5B de Gorilla Technology para infraestructura de cómputo de inteligencia artificial puede tener un impacto indirecto positivo en la cartera, especialmente en los activos de tecnología como NVDA, AMD, AVGO y TSM, que se benefician del crecimiento de la demanda de soluciones de inteligencia artificial y cómputo de alto rendimiento.",
+          "reasoning": "Impacto indirecto en el sector tecnológico",
+          "latency_s": 2.37
+        },
+        "DeepSeek-V3 (GitHub)": {
+          "event_type": "otro",
+          "direction": "neutral",
+          "severity": 0.1,
+          "confidence": 0.8,
+          "explanation": "La noticia sobre Gorilla Technology no tiene un impacto directo en los activos de la cartera, ya que ninguno de ellos está directamente relacionado con la empresa mencionada. Aunque el sector tecnológico podría verse indirectamente afectado por el aumento de competencia en infraestructura de IA, el impacto en esta cartera es mínimo debido a la diversificación y la falta de exposición directa.",
+          "reasoning": "No hay activos directos afectados; impacto indirecto en el sector tecnológico es bajo y no específico para esta cartera.",
+          "latency_s": 33.91
+        },
+        "DeepSeek-R1 (GitHub)": {
+          "event_type": "resultados_empresariales",
+          "direction": "alcista",
+          "severity": 0.35,
+          "confidence": 0.75,
+          "explanation": "El contrato de infraestructura AI de Gorilla podría beneficiar indirectamente a los semiconductores (NVDA, AMD, AVGO, TSM) al reforzar la demanda de hardware especializado, aunque el impacto directo es limitado al no ser proveedores directos mencionados.",
+          "reasoning": "Contrato AI impulsa narrativa tecnológica, beneficiando a proveedores de semiconductores clave en cartera. Exposición indirecta moderada con alta correlación sectorial.",
+          "latency_s": 8.54
+        }
+      }
+    },
+    {
+      "news_id": "6a3a8e81525f8856037d2a51",
+      "title": "Meta announces new smart glasses starting at $299, as Zuckerberg keeps pushing wearables",
+      "source": "cnbc_tech",
+      "url": "https://www.cnbc.com/2026/06/23/meta-glasses-are-new-smart-glasses-starting-at-299.html",
+      "relevance_score": 0.6573,
+      "matched_assets": [
+        "AMD"
+      ],
+      "nlp_sentiment": {
+        "sentiment": "positive",
+        "confidence": 0.6888,
+        "probabilities": {
+          "positive": 0.6888,
+          "negative": 0.0092,
+          "neutral": 0.302
+        }
+      },
+      "nlp_event_type": "otro",
+      "deterministic_impact": {
+        "direction": "alcista",
+        "severity": 0.2692,
+        "severity_label": "baja"
+      },
+      "model_results": {
+        "GPT-4o-mini (GitHub)": {
+          "event_type": "otro",
+          "direction": "bajista",
+          "severity": 0.4,
+          "confidence": 0.7,
+          "explanation": "La introducción de las nuevas gafas inteligentes de Meta podría intensificar la competencia en el sector de tecnología, especialmente en el ámbito de los dispositivos portátiles. Esto podría afectar negativamente a empresas como AMD, que dependen de la innovación en semiconductores para mantenerse competitivas. Aunque la noticia es positiva para Meta, su impacto en la cartera es bajista debido a la presión competitiva que podría generar en el mercado de semiconductores.",
+          "reasoning": "La noticia resalta un avance significativo de Meta en un área donde AMD también podría estar involucrada indirectamente, lo que puede llevar a una mayor competencia y presión sobre los márgenes de beneficio en el sector tecnológico.",
+          "latency_s": 4.49
+        },
+        "GPT-4o (GitHub)": {
+          "event_type": "otro",
+          "direction": "neutral",
+          "severity": 0.2,
+          "confidence": 0.8,
+          "explanation": "El anuncio de Meta sobre sus nuevas gafas inteligentes no tiene un impacto directo significativo en esta cartera. Aunque AMD podría beneficiarse indirectamente si Meta incrementa la demanda de chips avanzados para sus dispositivos, el efecto es especulativo y a largo plazo. Por ahora, el impacto en la cartera es limitado.",
+          "reasoning": "La noticia está relacionada con un producto de Meta y no menciona directamente a AMD ni a otros activos de la cartera. Sin embargo, AMD podría ser un proveedor potencial de hardware para Meta, lo que justifica una leve relevancia.",
+          "latency_s": 2.52
+        },
+        "Llama-3.3-70B (GitHub)": {
+          "event_type": "otro",
+          "direction": "bajista",
+          "severity": 0.4,
+          "confidence": 0.7,
+          "explanation": "La noticia sobre los nuevos smart glasses de Meta puede tener un impacto indirecto en la cartera, especialmente en AMD, ya que Meta es un competidor en el mercado de tecnología y wearables, lo que podría afectar las ventas y el crecimiento de AMD en este sector. Sin embargo, el impacto es moderado debido a que AMD tiene una diversificación en diferentes áreas de tecnología.",
+          "reasoning": "Competencia en el mercado de wearables y tecnología",
+          "latency_s": 3.2
+        },
+        "DeepSeek-V3 (GitHub)": {
+          "event_type": "otro",
+          "direction": "neutral",
+          "severity": 0.2,
+          "confidence": 0.8,
+          "explanation": "La noticia sobre los nuevos lentes inteligentes de Meta no tiene un impacto directo en la cartera del inversor, ya que ninguna de las empresas en la cartera está directamente involucrada en este lanzamiento. Aunque AMD está en el sector tecnológico, su enfoque principal no está en wearables, por lo que el impacto es mínimo.",
+          "reasoning": "La cartera no tiene exposición significativa a empresas directamente afectadas por el lanzamiento de Meta, y el impacto en AMD es marginal.",
+          "latency_s": 34.37
+        },
+        "DeepSeek-R1 (GitHub)": {
+          "event_type": "otro",
+          "direction": "alcista",
+          "severity": 0.3,
+          "confidence": 0.7,
+          "explanation": "El lanzamiento de Meta podría beneficiar indirectamente a AMD (11% de la cartera) como proveedor de componentes para wearables, aunque el impacto inmediato es limitado. El resto de la cartera (semiconductores NVDA, TSM, AVGO) podría verse levemente favorecida por el impulso al sector tecnológico, mientras que los activos financieros y de otros sectores no se ven afectados.",
+          "reasoning": "Meta's wearable push signals growth in tech hardware, benefiting semiconductor suppliers. AMD's direct exposure and sector-wide optimism justify mild bullishness, but low severity due to early-stage product and portfolio diversification.",
+          "latency_s": 8.6
+        }
+      }
+    },
+    {
+      "news_id": "6a3a8e92525f8856037d2bee",
+      "title": "CSX officially opens $495 Baltimore intermodal rail tunnel project",
+      "source": "freightwaves",
+      "url": "https://www.freightwaves.com/news/csx-officially-opens-495-baltimore-intermodal-rail-tunnel-project",
+      "relevance_score": 0.3641,
+      "matched_assets": [],
+      "nlp_sentiment": {
+        "sentiment": "positive",
+        "confidence": 0.8665,
+        "probabilities": {
+          "positive": 0.8665,
+          "negative": 0.0098,
+          "neutral": 0.1237
+        }
+      },
+      "nlp_event_type": "otro",
+      "deterministic_impact": {
+        "direction": "alcista",
+        "severity": 0.267,
+        "severity_label": "baja"
+      },
+      "model_results": {
+        "GPT-4o-mini (GitHub)": {
+          "event_type": "cadena_suministro",
+          "direction": "neutral",
+          "severity": 0.2,
+          "confidence": 0.7,
+          "explanation": "La apertura del túnel intermodal de CSX en Baltimore es un desarrollo positivo para el sector ferroviario y la logística, pero no tiene un impacto directo en los activos de esta cartera, que están más centrados en tecnología y servicios financieros. Sin embargo, podría beneficiar indirectamente a empresas como Talgo S.A. en el sector ferroviario, aunque el efecto es limitado y no afecta significativamente a la mayoría de los activos en la cartera.",
+          "reasoning": "El evento es positivo para el sector logístico, pero la relevancia para la cartera es baja debido a la falta de exposición directa a CSX o al sector ferroviario en general.",
+          "latency_s": 3.92
+        },
+        "GPT-4o (GitHub)": {
+          "event_type": "incidencia_operativa",
+          "direction": "neutral",
+          "severity": 0.2,
+          "confidence": 0.8,
+          "explanation": "La noticia sobre la apertura del túnel intermodal de CSX en Baltimore tiene un impacto limitado en esta cartera, ya que no hay exposición directa a CSX ni a empresas del sector ferroviario de EE. UU. Sin embargo, podría haber un efecto positivo marginal en Talgo (TLN.MC), dado que opera en la industria ferroviaria, aunque su enfoque principal está en Europa y no en EE. UU.",
+          "reasoning": "El evento tiene una relevancia indirecta para Talgo debido a su participación en la industria ferroviaria, pero la geografía y el enfoque de negocio limitan el impacto. No hay efectos materiales para los otros activos de la cartera.",
+          "latency_s": 3.04
+        },
+        "Llama-3.3-70B (GitHub)": {
+          "event_type": "otro",
+          "direction": "neutral",
+          "severity": 0.2,
+          "confidence": 0.8,
+          "explanation": "La noticia sobre la apertura del túnel ferroviario de Baltimore no tiene un impacto directo en las empresas de la cartera, ya que ninguna de ellas está directamente relacionada con CSX o el sector ferroviario. Sin embargo, el aumento en la capacidad de tráfico de contenedores y la mejora en la infraestructura podrían tener efectos indirectos positivos en la economía en general, lo que podría beneficiar a las empresas de la cartera a largo plazo.",
+          "reasoning": "La cartera está compuesta por empresas de tecnología, servicios financieros y semiconductores, sin una conexión directa con el sector ferroviario o la infraestructura de transporte.",
+          "latency_s": 4.45
+        },
+        "DeepSeek-V3 (GitHub)": {
+          "event_type": "otro",
+          "direction": "neutral",
+          "severity": 0.1,
+          "confidence": 0.8,
+          "explanation": "La noticia sobre la apertura del túnel ferroviario de CSX en Baltimore no tiene un impacto directo en los activos de la cartera, ya que no hay empresas relacionadas con el sector ferroviario o logístico en la misma. Aunque el proyecto podría beneficiar a la economía regional, su efecto en las empresas tecnológicas y financieras de la cartera es marginal.",
+          "reasoning": "La cartera está compuesta principalmente por empresas de tecnología y servicios financieros, sin exposición directa al sector ferroviario o logístico. Por lo tanto, el impacto es mínimo y neutral.",
+          "latency_s": 27.95
+        },
+        "DeepSeek-R1 (GitHub)": {
+          "event_type": "cadena_suministro",
+          "direction": "neutral",
+          "severity": 0.2,
+          "confidence": 0.4,
+          "explanation": "La mejora en infraestructura ferroviaria de CSX podría beneficiar marginalmente a Talgo (11% de la cartera) al reforzar inversiones en el sector, pero su enfoque en trenes de alta velocidad (vs. transporte de carga de CSX) y localización geográfica (España vs. EEUU) limitan el impacto directo. Para el resto de la cartera (tecnología y servicios financieros), el efecto es remoto salvo por posibles externalidades positivas en actividad económica regional.",
+          "reasoning": "TLN.MC opera en sector relacionado pero con modelo de negocio/geografía divergente. Otros activos no tienen exposición significativa a logística portuaria o transporte intermodal en I-95. Impacto indirecto mínimo en cadena de suministro global de semiconductores o fintech.",
+          "latency_s": 10.37
+        }
+      }
+    },
+    {
+      "news_id": "6a3a8e7b525f8856037d29d7",
+      "title": "Nvidia, Micron, Alphabet lead tech sell-off as AI trade cools",
+      "source": "yahoo_finance",
+      "url": "https://finance.yahoo.com/markets/stocks/article/nvidia-micron-alphabet-lead-tech-sell-off-as-ai-trade-cools-125946422.html",
+      "relevance_score": 0.8077,
+      "matched_assets": [
+        "NVDA"
+      ],
+      "nlp_sentiment": {
+        "sentiment": "negative",
+        "confidence": 0.7034,
+        "probabilities": {
+          "positive": 0.1306,
+          "negative": 0.7034,
+          "neutral": 0.166
+        }
+      },
+      "nlp_event_type": "otro",
+      "deterministic_impact": {
+        "direction": "bajista",
+        "severity": 0.2827,
+        "severity_label": "baja"
+      },
+      "model_results": {
+        "GPT-4o-mini (GitHub)": {
+          "event_type": "otro",
+          "direction": "bajista",
+          "severity": 0.7,
+          "confidence": 0.8,
+          "explanation": "La noticia sobre la venta masiva en el sector tecnológico, liderada por Nvidia, impacta negativamente a la cartera, especialmente debido a la alta exposición a Nvidia (12.0%) y otros semiconductores como AMD y TSM. La disminución del interés en el comercio de IA puede afectar las expectativas de crecimiento y los precios de las acciones de estas empresas, lo que podría traducirse en una caída en el valor de la cartera.",
+          "reasoning": "La noticia es relevante y afecta directamente a Nvidia, que tiene un peso significativo en la cartera, lo que justifica un impacto bajista y severo.",
+          "latency_s": 3.48
+        },
+        "GPT-4o (GitHub)": {
+          "event_type": "otro",
+          "direction": "bajista",
+          "severity": 0.7,
+          "confidence": 0.85,
+          "explanation": "La noticia sobre la caída de las acciones de Nvidia y otras empresas tecnológicas debido al enfriamiento del interés en el comercio relacionado con la IA tiene un impacto bajista en esta cartera. Nvidia representa un 12% del peso de la cartera, siendo el activo con mayor exposición, y su desempeño puede influir significativamente en el rendimiento general. Además, otros activos tecnológicos como AMD, TSM y AVGO, que también están expuestos al sector de semiconductores y la narrativa de la IA, podrían verse afectados indirectamente.",
+          "reasoning": "El enfriamiento del interés en la IA afecta directamente a Nvidia, que lidera el sector, y potencialmente a otras empresas tecnológicas relacionadas en la cartera. La alta exposición al sector tecnológico amplifica el impacto negativo.",
+          "latency_s": 2.67
+        },
+        "Llama-3.3-70B (GitHub)": {
+          "event_type": "otro",
+          "direction": "bajista",
+          "severity": 0.6,
+          "confidence": 0.8,
+          "explanation": "La noticia sobre la caída de las acciones de Nvidia, Micron y Alphabet debido al enfriamiento del comercio de inteligencia artificial puede tener un impacto negativo en la cartera del inversor, especialmente considerando el peso significativo de NVDA en la cartera. Esto podría afectar negativamente el valor de la cartera.",
+          "reasoning": "El peso de NVDA en la cartera es del 12%, lo que hace que la noticia tenga un impacto directo en el valor de la cartera.",
+          "latency_s": 3.48
+        },
+        "DeepSeek-V3 (GitHub)": {
+          "event_type": "otro",
+          "direction": "bajista",
+          "severity": 0.6,
+          "confidence": 0.8,
+          "explanation": "La noticia sobre el enfriamiento del sector tecnológico, especialmente en acciones relacionadas con IA como Nvidia, podría generar un impacto negativo en la cartera debido a la exposición significativa a empresas de tecnología y semiconductores como NVDA, AMD, AVGO y TSM. Aunque Microsoft no está directamente mencionada, su sector podría verse afectado indirectamente por el sentimiento negativo.",
+          "reasoning": "La cartera tiene un alto peso en tecnología y semiconductores, sectores sensibles a cambios en el sentimiento del mercado, especialmente en IA.",
+          "latency_s": 32.68
+        },
+        "DeepSeek-R1 (GitHub)": {
+          "event_type": "otro",
+          "direction": "bajista",
+          "severity": 0.75,
+          "confidence": 0.85,
+          "explanation": "La venta masiva en acciones tecnológicas relacionadas con IA impacta directamente al 45% de la cartera (NVDA 12%, TSM 11%, AMD 11%, AVGO 11%), todas expuestas al sector de semiconductores clave para la IA. Microsoft (11%) podría verse indirectamente afectado por correlación sectorial, mientras Visa, Talgo y Nu tienen menor exposición.",
+          "reasoning": "Alto peso en semiconductores (45% cartera) vinculados a IA. NVDA líder en ventas, efecto contagio sectorial. Confianza alta por exposición directa y relevancia previa 0.81.",
+          "latency_s": 9.7
+        }
+      }
+    },
+    {
+      "news_id": "6a3a8e7c525f8856037d29e4",
+      "title": "Stock Market Today: Tech Futures Plunge As Micron, Nvidia, Sandisk Dive (Live Coverage)",
+      "source": "yahoo_finance",
+      "url": "https://www.investors.com/market-trend/stock-market-today/dow-jones-sp500-nasdaq-micron-nvidia-sandisk/?src=A00220&yptr=yahoo",
+      "relevance_score": 0.793,
+      "matched_assets": [
+        "NVDA"
+      ],
+      "nlp_sentiment": {
+        "sentiment": "negative",
+        "confidence": 0.9564,
+        "probabilities": {
+          "positive": 0.0079,
+          "negative": 0.9564,
+          "neutral": 0.0358
+        }
+      },
+      "nlp_event_type": "guidance_profit_warning",
+      "deterministic_impact": {
+        "direction": "bajista",
+        "severity": 0.7738,
+        "severity_label": "alta"
+      },
+      "model_results": {
+        "GPT-4o-mini (GitHub)": {
+          "event_type": "otro",
+          "direction": "bajista",
+          "severity": 0.7,
+          "confidence": 0.85,
+          "explanation": "La caída en los futuros tecnológicos, especialmente con la fuerte baja de Nvidia, impacta directamente en la cartera, ya que Nvidia representa el 12% de la misma. Esto puede generar una presión bajista en el precio de las acciones de Nvidia y, por ende, afectar negativamente el rendimiento de la cartera. Además, la tendencia negativa en el sector tecnológico puede influir en la percepción del mercado sobre otras acciones tecnológicas en la cartera, como Microsoft, AMD y Broadcom.",
+          "reasoning": "La noticia indica un descenso significativo en el sector tecnológico, lo que afecta directamente a Nvidia y, por extensión, a otras acciones tecnológicas en la cartera. La severidad se considera alta debido a la exposición directa a Nvidia y la correlación con el sentimiento del mercado hacia el sector.",
+          "latency_s": 4.25
+        },
+        "GPT-4o (GitHub)": {
+          "event_type": "otro",
+          "direction": "bajista",
+          "severity": 0.8,
+          "confidence": 0.9,
+          "explanation": "La noticia destaca una caída significativa en los futuros tecnológicos, con un impacto directo en NVIDIA, que representa el 12% de la cartera. Esto podría generar una presión bajista considerable en el valor de la cartera, especialmente dado el peso de otros activos del sector de semiconductores como AMD, TSM y AVGO, que podrían verse afectados indirectamente por el sentimiento negativo hacia el sector.",
+          "reasoning": "El impacto directo en NVIDIA, combinado con el peso significativo de otros activos tecnológicos en la cartera, sugiere un efecto bajista relevante. La alta confianza en el análisis se debe a la especificidad de la noticia y su relevancia para los activos de la cartera.",
+          "latency_s": 3.14
+        },
+        "Llama-3.3-70B (GitHub)": {
+          "event_type": "resultados_empresariales",
+          "direction": "bajista",
+          "severity": 0.6,
+          "confidence": 0.9,
+          "explanation": "La noticia sobre el descenso de las acciones de Micron, Nvidia y Sandisk puede tener un impacto negativo en la cartera del inversor, especialmente debido a la presencia de NVDA, que es una de las acciones más pesadas en la cartera. Esto podría llevar a una disminución en el valor total de la cartera.",
+          "reasoning": "El descenso de las acciones de empresas tecnológicas como Nvidia puede influir en la percepción general del sector tecnológico, afectando a otras acciones de la cartera en ese sector.",
+          "latency_s": 3.59
+        },
+        "DeepSeek-V3 (GitHub)": {
+          "event_type": "resultados_empresariales",
+          "direction": "bajista",
+          "severity": 0.7,
+          "confidence": 0.85,
+          "explanation": "La noticia indica una caída significativa en los futuros de las acciones tecnológicas, especialmente en NVDA, que representa el 12% de la cartera. Esto podría generar un impacto negativo en el valor de la cartera debido a la exposición significativa al sector tecnológico y de semiconductores.",
+          "reasoning": "La caída en los futuros de NVDA y otras empresas tecnológicas sugiere un sentimiento negativo en el sector, lo que afectaría directamente a la cartera dada su alta concentración en tecnología y semiconductores.",
+          "latency_s": 33.32
+        },
+        "DeepSeek-R1 (GitHub)": {
+          "event_type": "resultados_empresariales",
+          "direction": "bajista",
+          "severity": 0.65,
+          "confidence": 0.85,
+          "explanation": "La caída de futuros tecnológicos impacta directamente a NVDA (12% de la cartera) y arrastra al sector de semiconductores (TSM, AMD, AVGO suman 33% adicional). Microsoft (11%) podría verse afectado por correlación sectorial, mientras los componentes financieros (V, NU) y no-tecnológicos (TLN.MC, KAP.L) amortiguan parcialmente el impacto.",
+          "reasoning": "NVDA es mencionado directamente y representa el mayor peso. Los semiconductores (56% de la cartera) son altamente sensibles a noticias sectoriales. La confianza es alta por el match directo y la exposición concentrada en tech.",
+          "latency_s": 11.03
+        }
+      }
+    },
+    {
+      "news_id": "6a3a8e84525f8856037d2a9b",
+      "title": "China's LineShine supercomputer dethrones US' El Capitan, secures first place in Top 500 list — first machine in the rankings to sustain more than 2 ExaFLOPS of double-precision performance using only CPUs",
+      "source": "tomshardware",
+      "url": "https://www.tomshardware.com/tech-industry/supercomputers/chinas-lineshine-supercomputer-dethrones-us-el-capitan-secures-first-place-in-top-500-list-first-machine-in-the-rankings-to-sustain-more-than-2-exaflops-of-double-precision-performance-using-only-cpus",
+      "relevance_score": 0.3004,
+      "matched_assets": [],
+      "nlp_sentiment": {
+        "sentiment": "positive",
+        "confidence": 0.9051,
+        "probabilities": {
+          "positive": 0.9051,
+          "negative": 0.0106,
+          "neutral": 0.0843
+        }
+      },
+      "nlp_event_type": "otro",
+      "deterministic_impact": {
+        "direction": "alcista",
+        "severity": 0.2607,
+        "severity_label": "baja"
+      },
+      "model_results": {
+        "GPT-4o-mini (GitHub)": {
+          "event_type": "otro",
+          "direction": "bajista",
+          "severity": 0.4,
+          "confidence": 0.7,
+          "explanation": "La noticia sobre el superordenador LineShine de China, que ha superado al El Capitan de EE. UU., puede generar preocupación en el sector tecnológico estadounidense, especialmente para empresas como NVIDIA, AMD y Broadcom, que dependen de la competitividad en el ámbito de los semiconductores. Esto podría afectar la percepción del mercado sobre la capacidad de innovación y liderazgo tecnológico de EE. UU., impactando negativamente en las acciones de estas compañías. Sin embargo, el impacto no es inmediato ni devastador, lo que justifica una severidad moderada.",
+          "reasoning": "La noticia resalta la competencia creciente de China en tecnología, lo que puede influir en la confianza de los inversores en empresas tecnológicas estadounidenses, aunque el impacto no es tan severo como para provocar una caída drástica en los precios de las acciones.",
+          "latency_s": 4.49
+        },
+        "GPT-4o (GitHub)": {
+          "event_type": "otro",
+          "direction": "bajista",
+          "severity": 0.4,
+          "confidence": 0.8,
+          "explanation": "El anuncio del superordenador LineShine de China, que supera al estadounidense El Capitan en rendimiento, podría ser considerado un desarrollo negativo para los fabricantes de semiconductores en esta cartera, como NVIDIA, AMD y Broadcom. Esto se debe a que refuerza la percepción de que China está avanzando rápidamente en tecnología de alto rendimiento, lo que podría intensificar la competencia y reducir la ventaja competitiva de las empresas estadounidenses en este segmento. Sin embargo, el impacto es moderado, ya que no hay una afectación directa a los productos o ingresos de estas empresas en el corto plazo.",
+          "reasoning": "Aunque no hay un impacto directo en los activos de la cartera, la noticia tiene implicaciones estratégicas para el sector de semiconductores, donde varias empresas de la cartera tienen una exposición significativa. La creciente competencia tecnológica de China podría influir en las perspectivas de mercado a mediano y largo plazo.",
+          "latency_s": 2.98
+        },
+        "Llama-3.3-70B (GitHub)": {
+          "event_type": "otro",
+          "direction": "bajista",
+          "severity": 0.2,
+          "confidence": 0.6,
+          "explanation": "La noticia sobre el supercomputador chino LineShine desplazando al estadounidense El Capitan en rendimiento puede tener un impacto indirecto en la cartera, especialmente en las acciones de empresas tecnológicas como NVDA, AMD y AVGO, que podrían verse afectadas por el avance tecnológico de la competencia china en el sector de semiconductores y supercomputación.",
+          "reasoning": "El avance tecnológico de China en supercomputación puede aumentar la competencia para las empresas estadounidenses en el sector tecnológico, lo que podría afectar negativamente a las acciones de NVDA, AMD y AVGO en la cartera.",
+          "latency_s": 4.98
+        },
+        "DeepSeek-V3 (GitHub)": {
+          "event_type": "otro",
+          "direction": "neutral",
+          "severity": 0.2,
+          "confidence": 0.8,
+          "explanation": "La noticia sobre el supercomputador chino LineShine no tiene un impacto directo en los activos de la cartera, ya que ninguno está directamente relacionado con la supercomputación o competencia en este ámbito. Aunque NVDA, AMD y AVGO operan en el sector de semiconductores, su exposición a este evento es mínima.",
+          "reasoning": "La noticia es relevante para el sector tecnológico pero no afecta directamente a los activos de la cartera. La competencia en supercomputación no impacta significativamente a los semiconductores o software en el corto plazo.",
+          "latency_s": 25.61
+        },
+        "DeepSeek-R1 (GitHub)": {
+          "event_type": "otro",
+          "direction": "neutral",
+          "severity": 0.15,
+          "confidence": 0.75,
+          "explanation": "El avance tecnológico chino en supercomputación podría generar preocupación competitiva indirecta para las empresas de semiconductores estadounidenses (NVDA, AMD, AVGO, TSM), pero el detalle sobre su bajo rendimiento en precisión mixta (donde destacan las GPU de NVIDIA/AMD) mitiga el impacto. Microsoft y otros componentes de la cartera no tienen exposición directa a este nicho de HPC.",
+          "reasoning": "El logro chino en CPUs podría presionar geopolíticamente a EE.UU., pero las limitaciones técnicas mencionadas refuerzan la ventaja actual de las soluciones GPU/accelerator donde dominan NVDA/AMD. Impacto indirecto y difuso en el sector.",
+          "latency_s": 9.0
+        }
+      }
+    },
+    {
+      "news_id": "6a3a8e7c525f8856037d29ee",
+      "title": "What Makes Microsoft (MSFT) a Strong Position Amid Challenges?",
+      "source": "yahoo_finance",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/makes-microsoft-msft-strong-position-124902924.html",
+      "relevance_score": 0.8552,
+      "matched_assets": [
+        "MSFT"
+      ],
+      "nlp_sentiment": {
+        "sentiment": "neutral",
+        "confidence": 0.7757,
+        "probabilities": {
+          "positive": 0.2138,
+          "negative": 0.0105,
+          "neutral": 0.7757
+        }
+      },
+      "nlp_event_type": "otro",
+      "deterministic_impact": {
+        "direction": "neutral",
+        "severity": 0.287,
+        "severity_label": "baja"
+      },
+      "model_results": {
+        "GPT-4o-mini (GitHub)": {
+          "event_type": "otro",
+          "direction": "neutral",
+          "severity": 0.2,
+          "confidence": 0.7,
+          "explanation": "La noticia sobre Microsoft destaca su posición fuerte en medio de desafíos, lo que sugiere estabilidad, pero no necesariamente un impulso significativo en el valor de la acción. Dado que la cartera tiene un peso considerable en Microsoft (11.0%), esta estabilidad podría ser vista como un factor positivo, aunque no se prevén cambios drásticos en el corto plazo.",
+          "reasoning": "El sentimiento neutral y la falta de un evento financiero específico que indique un cambio en la valoración de MSFT sugieren que el impacto en la cartera será limitado.",
+          "latency_s": 3.45
+        },
+        "GPT-4o (GitHub)": {
+          "event_type": "otro",
+          "direction": "alcista",
+          "severity": 0.4,
+          "confidence": 0.78,
+          "explanation": "La noticia destaca la fortaleza de Microsoft (MSFT) frente a desafíos, lo que puede reforzar la confianza de los inversores en la acción. Dado que MSFT tiene un peso significativo del 11% en la cartera, cualquier mejora en la percepción del mercado sobre la empresa puede tener un impacto positivo moderado en el rendimiento general de la cartera.",
+          "reasoning": "El sentimiento neutral detectado por FinBERT, junto con el enfoque en la resiliencia de Microsoft, sugiere que la noticia no introduce nueva información negativa y podría ser interpretada como un respaldo a su posición en el mercado. Esto es relevante para la cartera debido al peso significativo de MSFT.",
+          "latency_s": 2.6
+        },
+        "Llama-3.3-70B (GitHub)": {
+          "event_type": "resultados_empresariales",
+          "direction": "alcista",
+          "severity": 0.6,
+          "confidence": 0.8,
+          "explanation": "La noticia sugiere que Microsoft (MSFT) mantiene una posición sólida a pesar de los desafíos, lo que podría tener un impacto positivo en la cartera del inversor debido al peso significativo de MSFT en la cartera. Esto podría influir en la confianza de los inversores y potencialmente aumentar el valor de las acciones.",
+          "reasoning": "El sentimiento neutral de la noticia y la relevancia alta sugieren un impacto moderado en la cartera.",
+          "latency_s": 4.42
+        },
+        "DeepSeek-V3 (GitHub)": {
+          "error": "Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 8 per 86400s exceeded for UserByModel",
+          "latency_s": 29.87
+        },
+        "DeepSeek-R1 (GitHub)": {
+          "error": "Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 8 per 86400s exceeded for UserByModel",
+          "latency_s": 3.63
+        }
+      }
+    },
+    {
+      "news_id": "6a3a8e7d525f8856037d29f7",
+      "title": "Atai Capital’s Update on BK Technologies Corp. (BKTI)",
+      "source": "yahoo_finance",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/atai-capital-bk-technologies-corp-122017420.html",
+      "relevance_score": 0.3176,
+      "matched_assets": [],
+      "nlp_sentiment": {
+        "sentiment": "neutral",
+        "confidence": 0.9421,
+        "probabilities": {
+          "positive": 0.0382,
+          "negative": 0.0197,
+          "neutral": 0.9421
+        }
+      },
+      "nlp_event_type": "otro",
+      "deterministic_impact": {
+        "direction": "neutral",
+        "severity": 0.2624,
+        "severity_label": "baja"
+      },
+      "model_results": {
+        "GPT-4o-mini (GitHub)": {
+          "event_type": "otro",
+          "direction": "neutral",
+          "severity": 0.2,
+          "confidence": 0.8,
+          "explanation": "La actualización de Atai Capital sobre BK Technologies Corp. no tiene un impacto directo en la cartera, ya que no hay activos relevantes mencionados. Sin embargo, la neutralidad del sentimiento sugiere que no se anticipan cambios significativos en el mercado que puedan afectar a las empresas en la cartera. Por lo tanto, el impacto es bajo y se considera neutral.",
+          "reasoning": "La noticia es sobre una empresa que no está en la cartera, y el sentimiento neutral indica que no hay expectativas de cambios que afecten a los sectores representados en la cartera.",
+          "latency_s": 3.8
+        },
+        "GPT-4o (GitHub)": {
+          "event_type": "otro",
+          "direction": "neutral",
+          "severity": 0.2,
+          "confidence": 0.85,
+          "explanation": "La noticia sobre BK Technologies Corp. no tiene un impacto directo en los activos de esta cartera, ya que no hay coincidencias sectoriales o geográficas significativas. BKTI opera en un nicho diferente al de las empresas tecnológicas y financieras presentes en la cartera.",
+          "reasoning": "Dado que BK Technologies Corp. no está directamente relacionado con los sectores o geografías de los activos de la cartera, y el sentimiento detectado es neutral, el impacto es mínimo. La relevancia previa también es baja, lo que refuerza la evaluación de un impacto limitado.",
+          "latency_s": 2.36
+        },
+        "Llama-3.3-70B (GitHub)": {
+          "event_type": "otro",
+          "direction": "neutral",
+          "severity": 0.1,
+          "confidence": 0.9,
+          "explanation": "La noticia sobre Atai Capital’s Update on BK Technologies Corp. (BKTI) no tiene un impacto directo en la cartera del inversor, ya que no hay activos con match directo en la noticia. Además, el sentimiento detectado es neutral, lo que sugiere que la noticia no tiene un efecto significativo en el mercado. Por lo tanto, se considera un impacto neutral y de baja severidad para esta cartera.",
+          "reasoning": "La noticia es específica de una empresa (BKTI) que no está en la cartera, y el sentimiento neutral sugiere un impacto mínimo en el mercado en general.",
+          "latency_s": 3.41
+        },
+        "DeepSeek-V3 (GitHub)": {
+          "error": "Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 8 per 86400s exceeded for UserByModel",
+          "latency_s": 38.02
+        },
+        "DeepSeek-R1 (GitHub)": {
+          "error": "Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 8 per 86400s exceeded for UserByModel",
+          "latency_s": 3.27
+        }
+      }
+    },
+    {
+      "news_id": "6a3a8e92525f8856037d2bef",
+      "title": "Orderful’s $35M Series C targets the service model that has defined EDI for decades",
+      "source": "freightwaves",
+      "url": "https://www.freightwaves.com/news/orderful-35m-series-c-edi",
+      "relevance_score": 0.4064,
+      "matched_assets": [],
+      "nlp_sentiment": {
+        "sentiment": "neutral",
+        "confidence": 0.828,
+        "probabilities": {
+          "positive": 0.1105,
+          "negative": 0.0614,
+          "neutral": 0.828
+        }
+      },
+      "nlp_event_type": "otro",
+      "deterministic_impact": {
+        "direction": "neutral",
+        "severity": 0.2712,
+        "severity_label": "baja"
+      },
+      "model_results": {
+        "GPT-4o-mini (GitHub)": {
+          "event_type": "otro",
+          "direction": "neutral",
+          "severity": 0.2,
+          "confidence": 0.7,
+          "explanation": "La noticia sobre la inversión de Orderful en el modelo de EDI no tiene un impacto directo en la cartera, ya que los activos presentes son de sectores diferentes y no están directamente relacionados con EDI o la logística. Sin embargo, la evolución en el sector de servicios de datos podría tener un efecto indirecto en la tecnología y la eficiencia operativa de las empresas en la cartera a largo plazo.",
+          "reasoning": "Aunque la noticia es interesante y muestra un cambio potencial en el sector de EDI, su relevancia para la cartera es baja, ya que no afecta directamente a las empresas que se poseen. La severidad se mantiene baja debido a la falta de conexión directa con los activos de la cartera.",
+          "latency_s": 3.63
+        },
+        "GPT-4o (GitHub)": {
+          "event_type": "fusion_adquisicion",
+          "direction": "neutral",
+          "severity": 0.2,
+          "confidence": 0.8,
+          "explanation": "La noticia sobre la ronda de financiación de Orderful y su enfoque en modernizar el modelo EDI tiene un impacto limitado en esta cartera. Aunque podría influir en empresas tecnológicas que operan en el ámbito de la digitalización de procesos empresariales, ninguna de las compañías en la cartera tiene una exposición directa al mercado de EDI. Por lo tanto, el impacto es marginal.",
+          "reasoning": "La noticia no menciona directamente a ninguna de las empresas en la cartera, y el sector EDI no tiene una correlación significativa con las actividades principales de las compañías incluidas. Sin embargo, dado que algunas empresas como Microsoft tienen intereses en soluciones empresariales, existe una relevancia indirecta mínima.",
+          "latency_s": 2.64
+        },
+        "Llama-3.3-70B (GitHub)": {
+          "event_type": "otro",
+          "direction": "neutral",
+          "severity": 0.2,
+          "confidence": 0.8,
+          "explanation": "La noticia sobre la inversión en Orderful para innovar en el modelo de EDI no tiene un impacto directo en los activos de esta cartera, ya que no menciona empresas específicas dentro de la cartera. Sin embargo, la innovación en el sector tecnológico podría tener efectos indirectos en empresas como Microsoft o NVIDIA, pero en este caso, el impacto es mínimo debido a la falta de conexión directa.",
+          "reasoning": "La noticia se centra en la innovación en el sector de EDI, que no está directamente relacionado con las empresas en la cartera. La relevancia indirecta por sector o geografía es baja, lo que sugiere un impacto mínimo en la cartera.",
+          "latency_s": 5.06
+        },
+        "DeepSeek-V3 (GitHub)": {
+          "error": "Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 1 per 60s exceeded for UserByModelByM",
+          "latency_s": 35.05
+        },
+        "DeepSeek-R1 (GitHub)": {
+          "error": "Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 8 per 86400s exceeded for UserByModel",
+          "latency_s": 2.4
+        }
+      }
+    },
+    {
+      "news_id": "6a3a8e86525f8856037d2ad3",
+      "title": "Hyundai backs ioneer’s Nevada lithium-boron project",
+      "source": "mining_com",
+      "url": "https://www.mining.com/hyundai-backs-ioneers-nevada-lithium-boron-project/",
+      "relevance_score": 0.6937,
+      "matched_assets": [
+        "AMD"
+      ],
+      "nlp_sentiment": {
+        "sentiment": "positive",
+        "confidence": 0.9508,
+        "probabilities": {
+          "positive": 0.9508,
+          "negative": 0.0218,
+          "neutral": 0.0274
+        }
+      },
+      "nlp_event_type": "otro",
+      "deterministic_impact": {
+        "direction": "alcista",
+        "severity": 0.2997,
+        "severity_label": "baja"
+      },
+      "model_results": {
+        "GPT-4o-mini (GitHub)": {
+          "event_type": "fusion_adquisicion",
+          "direction": "neutral",
+          "severity": 0.2,
+          "confidence": 0.7,
+          "explanation": "La noticia sobre el respaldo de Hyundai al proyecto de litio de Ioneer no tiene un impacto directo en la cartera, ya que los activos principales son empresas tecnológicas y de servicios financieros. Sin embargo, el aumento en la producción de litio podría beneficiar indirectamente a empresas como AMD, que dependen de materiales para la fabricación de semiconductores, aunque el efecto es limitado en este momento.",
+          "reasoning": "El evento es positivo para el sector de litio, pero su relevancia para la cartera es baja, ya que no afecta directamente a las empresas tecnológicas en la que se invierte.",
+          "latency_s": 3.38
+        },
+        "GPT-4o (GitHub)": {
+          "event_type": "fusion_adquisicion",
+          "direction": "neutral",
+          "severity": 0.2,
+          "confidence": 0.85,
+          "explanation": "La noticia sobre el respaldo de Hyundai al proyecto de ioneer en Nevada no tiene un impacto directo en los activos de esta cartera. Aunque el proyecto está relacionado con la producción de litio, un componente clave en la fabricación de baterías y semiconductores, el impacto en AMD y otras empresas de semiconductores de la cartera es limitado en el corto plazo. Sin embargo, a largo plazo, un aumento en la oferta de litio podría influir en los costos de producción de semiconductores, pero esto es especulativo en este momento.",
+          "reasoning": "El proyecto de ioneer está en una etapa temprana y no afecta directamente a los ingresos o costos de AMD ni de otras empresas de semiconductores en la cartera. La conexión con el sector de semiconductores es indirecta y de largo plazo, lo que reduce la severidad del impacto.",
+          "latency_s": 2.94
+        },
+        "Llama-3.3-70B (GitHub)": {
+          "event_type": "otro",
+          "direction": "neutral",
+          "severity": 0.2,
+          "confidence": 0.8,
+          "explanation": "La noticia sobre el proyecto de litio y borato de ioneer en Nevada, respaldado por Hyundai, tiene un impacto indirecto en la cartera del inversor, ya que AMD es una empresa de semiconductores que podría beneficiarse de la disponibilidad de materiales críticos para la producción de baterías, pero el efecto es limitado y no directo.",
+          "reasoning": "El proyecto de ioneer puede tener un impacto positivo en la cadena de suministro de materiales críticos para la producción de baterías, lo que podría beneficiar indirectamente a AMD, pero el peso de AMD en la cartera es del 11% y el impacto de la noticia es limitado.",
+          "latency_s": 4.28
+        },
+        "DeepSeek-V3 (GitHub)": {
+          "error": "Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 8 per 86400s exceeded for UserByModel",
+          "latency_s": 35.66
+        },
+        "DeepSeek-R1 (GitHub)": {
+          "error": "Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 8 per 86400s exceeded for UserByModel",
+          "latency_s": 3.23
+        }
+      }
+    },
+    {
+      "news_id": "6a3a6e4a4e639986032405fe",
+      "title": "Vedanta’s CopperTech Metals targets $3.6 billion valuation in US IPO",
+      "source": "investing_com",
+      "url": "https://www.investing.com/news/stock-market-news/vedantas-coppertech-metals-targets-36-billion-valuation-in-us-ipo-4755166",
+      "relevance_score": 0.3007,
+      "matched_assets": [],
+      "nlp_sentiment": {
+        "sentiment": "neutral",
+        "confidence": 0.911,
+        "probabilities": {
+          "positive": 0.0799,
+          "negative": 0.0091,
+          "neutral": 0.911
+        }
+      },
+      "nlp_event_type": "otro",
+      "deterministic_impact": {
+        "direction": "neutral",
+        "severity": 0.2608,
+        "severity_label": "baja"
+      },
+      "model_results": {
+        "GPT-4o-mini (GitHub)": {
+          "event_type": "otro",
+          "direction": "neutral",
+          "severity": 0.2,
+          "confidence": 0.8,
+          "explanation": "La noticia sobre la valoración de Vedanta’s CopperTech Metals en su IPO no tiene un impacto directo en la cartera, ya que los activos presentes son principalmente del sector tecnológico y financiero. Sin embargo, la valoración de nuevas empresas en el sector de metales puede influir indirectamente en la percepción del mercado sobre la inversión en sectores relacionados, aunque el efecto es limitado.",
+          "reasoning": "La relevancia de la noticia es baja para la cartera, ya que no hay activos directamente afectados y el impacto en el sector tecnológico y financiero es mínimo.",
+          "latency_s": 3.52
+        },
+        "GPT-4o (GitHub)": {
+          "event_type": "fusion_adquisicion",
+          "direction": "neutral",
+          "severity": 0.2,
+          "confidence": 0.85,
+          "explanation": "La noticia sobre la IPO de CopperTech Metals, una subsidiaria de Vedanta, tiene un impacto limitado en esta cartera. Aunque podría influir en el sector de metales y minería, no hay exposición directa ni indirecta significativa en la cartera, que está centrada en tecnología, servicios financieros e industriales.",
+          "reasoning": "La cartera no incluye activos relacionados con metales o minería, y la IPO de CopperTech no afecta directamente a las industrias representadas. La relevancia sectorial y geográfica es baja, lo que justifica la neutralidad del impacto.",
+          "latency_s": 2.43
+        },
+        "Llama-3.3-70B (GitHub)": {
+          "event_type": "otro",
+          "direction": "neutral",
+          "severity": 0.2,
+          "confidence": 0.8,
+          "explanation": "La noticia sobre la IPO de CopperTech Metals no tiene un impacto directo en la cartera del inversor, ya que no hay activos con un match directo en la noticia. Sin embargo, el sector de la tecnología y los semiconductores podría verse indirectamente afectado por la entrada de una nueva empresa en el mercado, aunque el efecto sería mínimo en esta cartera diversificada.",
+          "reasoning": "La cartera tiene una diversificación sectorial y geográfica, lo que reduce el impacto de eventos específicos en un sector o empresa.",
+          "latency_s": 2.95
+        },
+        "DeepSeek-V3 (GitHub)": {
+          "error": "Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 1 per 60s exceeded for UserByModelByM",
+          "latency_s": 39.23
+        },
+        "DeepSeek-R1 (GitHub)": {
+          "error": "Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 8 per 86400s exceeded for UserByModel",
+          "latency_s": 2.4
+        }
+      }
+    }
+  ]
+}

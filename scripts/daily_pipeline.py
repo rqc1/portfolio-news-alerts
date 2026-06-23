@@ -33,8 +33,8 @@ logging.basicConfig(
 logger = logging.getLogger("daily_pipeline")
 
 # ID de la cartera de validación (creada por setup_portfolio.py)
-PORTFOLIO_ID = "69f2027828b140aeb16398e3"
-USER_ID = "rquerol"
+PORTFOLIO_ID = "69fc7d75f62888639d7bb02f"
+USER_ID = "default_user"
 
 
 async def load_models():
@@ -74,9 +74,11 @@ async def run_pipeline():
     logger.info("─" * 70)
     logger.info("FASE 1: INGESTA DE NOTICIAS")
     logger.info("─" * 70)
+    portfolio_tickers = portfolio.get_tickers()
+    ingest_query = " OR ".join(portfolio_tickers)
     stats = await IngestionService.ingest_all(
-        query="Visa OR Nvidia OR gold",
-        tickers=["V", "NVDA", "GLD"],
+        query=ingest_query,
+        tickers=portfolio_tickers,
     )
     logger.info("Ingesta completada: %s", stats)
 
@@ -210,8 +212,38 @@ async def run_pipeline():
     else:
         logger.info("")
         logger.info("  ⚠️  No se generaron alertas hoy. Posibles razones:")
-        logger.info("      - Las noticias no son relevantes para V, NVDA, GLD")
+        logger.info("      - Las noticias no son relevantes para %s", portfolio.get_tickers())
         logger.info("      - No superaron los umbrales de severidad/relevancia")
+
+    # Registrar en el documento histórico de resultados experimentales
+    try:
+        from scripts.experiment_log import append_experiment
+
+        lines = [
+            "**Script:** `python -m scripts.daily_pipeline`.",
+            f"**Cartera:** {portfolio.name} ({', '.join(portfolio.get_tickers())}).",
+            "**Artefacto:** `scripts/last_run_results.json` + persistencia en MongoDB.",
+            "",
+            f"**Ingesta:** {stats}.",
+            f"**Procesamiento:** {len(news_items)} noticias → **{len(alerts_generated)} alertas** "
+            f"({discarded} descartadas, {duplicates} duplicadas, {errors} errores).",
+        ]
+        if alerts_generated:
+            lines += [
+                "",
+                "| # | Noticia | Activos | Evento | Dir. | Sev. | Conf. | Rel. |",
+                "|---|---|---|---|---|---|---|---|",
+            ]
+            for n, a in enumerate(alerts_generated, 1):
+                lines.append(
+                    f"| {n} | {a.news_title[:70]} | {', '.join(a.matched_assets)} | "
+                    f"{a.event_type} | {a.direction} | {a.severity_label} ({a.severity:.2f}) | "
+                    f"{a.confidence:.0%} | {a.relevance_score:.2f} |"
+                )
+        doc = append_experiment("Pipeline diario", "\n".join(lines))
+        logger.info("Registrado en documento experimental: %s", doc)
+    except Exception as e:
+        logger.warning("No se pudo registrar en RESULTADOS_EXPERIMENTALES.md: %s", e)
 
     logger.info("")
     logger.info("═" * 70)

@@ -19,17 +19,17 @@
 
 | Componente | Prioridad | Descripción |
 |------------|-----------|-------------|
-| **Tests unitarios** | ✅ Hecho | 121 tests con pytest cubriendo portfolio, nlp, relevance, events, impact, alerts, llm, ingestion, notifications, scheduler, market, analytics |
+| **Tests unitarios** | ✅ Hecho | +200 tests con pytest cubriendo portfolio, nlp, relevance, events, impact, alerts, llm, ingestion, notifications, scheduler, market, analytics, evaluation, backtest y security |
 | **Tests de integración** | Alta | Test end-to-end del pipeline completo: noticia → alerta |
 | **Modelo spaCy multilingüe** | Media | Ahora solo se carga `en_core_web_sm`. Se traduce ES→EN con `deep-translator` antes del pipeline NLP. Falta routing por idioma para cargar `es_core_news_sm` como mejora futura |
 | **Scheduler de ingesta** | ✅ Hecho | Implementado con APScheduler en `modules/scheduler/`. Ingesta RSS+CNMV cada 15min, alertas cada 20min, limpieza diaria. Configurable via env vars |
-| **Logging estructurado** | Media | Ahora se usa `logging` básico. Faltaría configurar rotación de logs, formato JSON y niveles por módulo |
-| **Autenticación API** | Baja (prototipo) | No hay autenticación. Para producción, añadir JWT o API keys |
+| **Logging estructurado** | ✅ Hecho | `structlog` con formato JSON, niveles configurables y `request-id` propagado por contexto en `modules/security/logging_config.py`. Activable via `LOG_JSON`/`LOG_LEVEL` |
+| **Autenticación API** | ✅ Hecho | JWT (HS256, `python-jose`) + hash de contraseñas con `bcrypt` en `modules/security/auth.py`. Endpoints `/api/auth/register|login|me`. Protege backtest/calibración. Modo anónimo configurable (`AUTH_ENABLED`, default false) para no romper frontend/tests |
 | **Caché de embeddings** | Media | Los embeddings de la cartera se recalculan en cada petición. Cachear en MongoDB o Redis. Nota: la deduplicación ahora sí persiste embeddings en MongoDB (`dedup_embeddings` con TTL) |
 | **Caché de resultados LLM** | Media | Las respuestas LLM no se cachean. Para noticias similares, cachear por content_hash ahorraría tokens |
-| **Corpus etiquetado** | Alta | El documento del TFM prevé un dataset anotado manualmente. Falta crear la estructura de anotación y el script de etiquetado |
-| **Evaluación NLP** | Alta | No hay scripts de evaluación (F1, precision, recall, matrices de confusión). Crear `evaluation/` |
-| **Event study financiero** | Alta | No hay módulo de evaluación financiera. Implementar una versión simplificada con ventanas temporales y comparación vs. baselines |
+| **Corpus etiquetado** | ✅ Hecho | `evaluation/dataset.jsonl` (40 noticias bilingües) + `portfolios.json` (3 carteras de referencia), esquema validado con Pydantic (`evaluation/schema.py`) |
+| **Evaluación NLP** | ✅ Hecho | Paquete `evaluation/`: métricas en Python puro (`metrics.py`), estudio de ablación de 4 variantes (`run_ablation.py`, resultados en `results/`) y acuerdo inter-anotador (`agreement.py`, κ de Cohen / κ ponderado / α de Krippendorff) |
+| **Event study financiero** | ✅ Hecho | `modules/backtest/event_study.py` calcula AR/CAR (metodología MacKinlay, 1997) en ventanas alrededor de cada alerta; `modules/backtest/service.py` añade backtesting y autocalibración de umbrales. Endpoints `/api/backtest/{id}` y `/api/backtest/{id}/calibrate` |
 | **Pipeline de reentrenamiento** | Baja | No hay flujo para reentrenar modelos con datos nuevos |
 | **Docker Compose** | ✅ Hecho | `Dockerfile` multi-stage + `docker-compose.yml` (MongoDB + API + Frontend) + `frontend/Dockerfile`. Levantar con `docker-compose up --build` |
 | **Datos de mercado (yfinance)** | ✅ Hecho | `modules/market/` — lookup de activos, precios actuales, histórico OHLCV. 4 endpoints API. Auto-fill en frontend |
@@ -54,11 +54,11 @@
 | Mejora | Impacto | Complejidad | Detalle |
 |--------|---------|-------------|---------|
 | **Modelo NER financiero especializado** | Alto | Media | Cambiar spaCy genérico por un NER entrenado en textos financieros (ej. `flair/ner-english-ontonotes-large` o entrenar propio con SENTiVENT) |
-| **Resolución de entidades** | Alto | Alta | Vincular menciones textuales a entidades canónicas (ej. "Apple", "AAPL", "Apple Inc." → misma entidad). Usar Wikidata o un grafo de conocimiento financiero |
+| **Resolución de entidades** | Alto | Alta | ✅ **IMPLEMENTADO**: `modules/nlp/entity_resolver.py` vincula menciones textuales a entidades canónicas ("Apple", "AAPL", "Apple Inc." → misma entidad) mediante alias normalizados y mapeo a ticker |
 | **Clasificación zero-shot de eventos** | Alto | Baja | ✅ **IMPLEMENTADO**: `facebook/bart-large-mnli` reemplaza al LLM para esta tarea. Sin coste API, offline, ~200ms |
 | **Multilingüe nativo** | Medio | Media | Cambiar `all-MiniLM-L6-v2` por `paraphrase-multilingual-MiniLM-L12-v2` para soportar noticias en español sin traducir. Actualmente se traduce ES→EN con `deep-translator` |
 | **Summarization** | Medio | Baja | Resumir noticias largas antes de clasificar para mejorar calidad del input a los modelos |
-| **Calibración de probabilidades** | Alto | Media | Aplicar Platt scaling o isotonic regression al score de confianza para que sea interpretable como probabilidad real |
+| **Calibración de probabilidades** | Alto | Media | ✅ **IMPLEMENTADO (severidad)**: `modules/impact/calibration.py` aprende una correspondencia severidad-estimada → severidad-real a partir de las etiquetas, corrigiendo sesgos. Pendiente extender a Platt/isotonic sobre el score de confianza |
 | **Ventana temporal de contexto** | Medio | Media | Incorporar noticias previas del mismo activo para contextualizar (ej. "segunda alerta sobre AAPL en 48h") |
 
 ### 2.2 Mejoras del Motor de Alertas
@@ -68,9 +68,9 @@
 | **Agrupación de alertas** | Cuando múltiples noticias se refieren al mismo evento, agruparlas en un "cluster de evento" con timeline |
 | **Priorización dinámica** | Ajustar umbrales según la hora del día, la volatilidad reciente o el volumen de noticias |
 | **Alertas por email/Telegram** | ✅ Implementado en `modules/notifications/`. Email SMTP (HTML profesional + plaintext) + Webhook HTTP POST (Slack/Discord/Telegram). Se disparan automáticamente al generar una alerta |
-| **Feedback del usuario** | Botones "útil/no útil" en cada alerta para reentrenamiento futuro |
+| **Feedback del usuario** | Parcial | Bucle de retroalimentación implementado: el endpoint `/api/backtest/{id}/calibrate` reajusta umbrales de relevancia/severidad con la evidencia acumulada (AR/CAR). Pendiente la UI de botones "útil/no útil" |
 | **Score compuesto configurable** | Permitir al usuario ajustar los pesos de relevancia vs. severidad vs. confianza |
-| **Modo histórico / backtest** | Ejecutar el pipeline sobre noticias pasadas para evaluar calidad retrospectiva |
+| **Modo histórico / backtest** | ✅ Implementado en `modules/backtest/`. Ejecuta el pipeline sobre el historial de alertas y mide la capacidad direccional agregada (`/api/backtest/{id}`) |
 | **Comparativa LLM vs. determinista** | Registrar ambos análisis (LLM y determinista) para cada alerta y comparar calidad en evaluación |
 
 ### 2.3 Mejoras de Arquitectura
@@ -80,18 +80,18 @@
 | **Cola de mensajes** | Usar RabbitMQ o Redis Streams para desacoplar ingesta y procesamiento |
 | **Procesamiento asíncrono** | Mover el pipeline NLP pesado (FinBERT + embeddings) a workers con Celery |
 | **Caché de modelos** | Los modelos de Hugging Face se cargan en memoria. Compartir instancia entre workers |
-| **Monitorización** | Prometheus + Grafana para métricas de latencia, throughput y errores |
+| **Monitorización** | ✅ Métricas Prometheus implementadas en `modules/security/metrics.py` (latencia/volumen HTTP, consumo de tokens y coste LLM), expuestas en `/metrics`. Pendiente el panel Grafana |
 | **Versionado de modelos** | MLflow o Weights & Biases para trackear experimentos y versiones de clasificadores |
 
 ### 2.4 Mejoras para la Evaluación Académica
 
 | Mejora | Detalle |
 |--------|---------|
-| **Ablation study** | Medir el impacto individual de cada módulo (¿cuánto aporta la semántica vs. solo reglas?) |
+| **Ablation study** | ✅ Implementado: `evaluation/run_ablation.py` mide 4 variantes (reglas / híbrida / híbrida+NLI / completa). Resultados en `evaluation/results/ablation_summary.json` |
 | **Comparación de baselines** | Baseline 1: solo keywords. Baseline 2: solo FinBERT. Baseline 3: sistema completo sin LLM. Baseline 4: sistema completo con LLM |
 | **Análisis de falsos positivos** | Documentar alertas erróneas y clasificar el tipo de error |
-| **Event study simplificado** | Medir CAR (Cumulative Abnormal Return) en ventanas [-1, +3] días alrededor de las alertas |
-| **Inter-annotator agreement** | Si el corpus se etiqueta con más de una persona, medir Cohen's kappa |
+| **Event study simplificado** | ✅ Implementado: `modules/backtest/event_study.py` mide CAR en ventanas alrededor de las alertas |
+| **Inter-annotator agreement** | ✅ Implementado: `evaluation/agreement.py` calcula κ de Cohen, κ ponderado (severidad) y α de Krippendorff. Resultados: relevancia κ=0,86; evento κ=1,0; dirección κ=0,88; severidad κ-pond=0,82; α global=0,91 |
 | **LLM vs. determinista A/B test** | Comparar calidad de alertas con y sin LLM contextual en el mismo corpus |
 
 ---
@@ -283,13 +283,51 @@ Para un prototipo académico viable, se recomienda priorizar así:
 | 1 | Instalar MongoDB y dependencias Python | Infraestructura | 🔴 Alta |
 | 2 | Definir universo de 15-20 activos (S&P 500 + IBEX 35) | Datos | 🔴 Alta |
 | 3 | Primera ingesta real y verificar pipeline E2E | Validación | 🔴 Alta |
-| 4 | Crear corpus etiquetado (50-100 noticias) para evaluación | Datos | 🔴 Alta |
+| 4 | ~~Crear corpus etiquetado (40 noticias) para evaluación~~ | Datos | ✅ Hecho |
 | 5 | Implementar routing multilingüe spaCy (EN/ES) | NLP | 🟡 Media |
 | 6 | Cambiar embeddings a multilingüe | NLP | 🟡 Media |
 | 7 | ~~Escribir tests unitarios para módulos core~~ | Testing | ✅ Hecho |
 | 8 | ~~Implementar scheduler automático de ingesta~~ | Arquitectura | ✅ Hecho |
-| 9 | Scripts de evaluación NLP (F1, confusion matrix) | Evaluación | 🔴 Alta |
-| 10 | Event study simplificado con datos de precios | Evaluación | 🟡 Media |
+| 9 | ~~Scripts de evaluación NLP (F1, confusion matrix)~~ | Evaluación | ✅ Hecho |
+| 10 | ~~Event study simplificado con datos de precios~~ | Evaluación | ✅ Hecho |
+| 11 | ~~Acuerdo inter-anotador (Cohen's kappa)~~ | Evaluación | ✅ Hecho |
+| 12 | ~~Capa de producción (JWT, logs, métricas, rate limit)~~ | Arquitectura | ✅ Hecho |
 
 > **Para la hoja de ruta completa de producción** (autenticación, Docker, CI/CD, escalabilidad,
 > monetización), ver [`ROADMAP.md`](ROADMAP.md).
+
+---
+
+## 6. Capa de Producción: Seguridad y Observabilidad
+
+El paquete `modules/security/` añade la capa operativa necesaria para un despliegue
+seguro y observable. Todos sus componentes siguen el principio de **degradación elegante**:
+están desactivados o en modo permisivo por defecto y se habilitan via variables de entorno,
+de modo que el sistema sigue siendo ejecutable en local sin infraestructura adicional.
+
+| Componente | Archivo | Detalle |
+|------------|---------|---------|
+| **Autenticación JWT** | `auth.py` | Tokens HS256 (`python-jose`) + hash `bcrypt`. Endpoints `/api/auth/register|login|me`. Modo anónimo si `AUTH_ENABLED=false` |
+| **Logging estructurado** | `logging_config.py` | `structlog` con `request-id` por contexto; salida JSON (`LOG_JSON`) o consola |
+| **Métricas Prometheus** | `metrics.py` | Latencia/volumen HTTP, peticiones/tokens/coste LLM; expuestas en `/metrics` |
+| **Rate limiting** | `main.py` (slowapi) | Límite por IP (`RATE_LIMIT_DEFAULT`), configurable |
+| **CORS restringido** | `main.py` | `CORS_ORIGINS` explícitos en lugar de comodín |
+| **Health probes** | `main.py` | `/health/live`, `/health/ready` (503 si DB caída), `/health/db` |
+
+### Decisión de diseño: bcrypt directo en lugar de passlib
+
+`passlib 1.7.4` es **incompatible con `bcrypt 5.0.0`** (lee el atributo eliminado
+`bcrypt.__about__` y lanza `ValueError` con contraseñas de más de 72 bytes). Por ello
+`auth.py` usa la librería `bcrypt` **directamente**, truncando explícitamente la contraseña
+a 72 bytes UTF-8 antes de `hashpw`/`checkpw`. Así se evita la dependencia rota sin sacrificar
+seguridad.
+
+### Variables de configuración añadidas (`config.py`)
+
+`CORS_ORIGINS`, `AUTH_ENABLED` (default `false`), `JWT_SECRET`, `JWT_ALGORITHM` (HS256),
+`JWT_EXPIRE_MINUTES` (1440), `RATE_LIMIT_DEFAULT` (`120/minute`), `RATE_LIMIT_AUTH`
+(`10/minute`), `RATE_LIMIT_ENABLED`, `LOG_JSON`, `LOG_LEVEL`, `METRICS_ENABLED`,
+`LLM_COST_PER_1K_PROMPT`, `LLM_COST_PER_1K_COMPLETION`, `SEVERITY_CALIBRATOR_PATH`.
+
+> ⚠️ **Seguridad**: el archivo `.env` contiene credenciales reales (SMTP, claves API).
+> Asegúrate de que está en `.gitignore` y rota cualquier secreto que se haya compartido.

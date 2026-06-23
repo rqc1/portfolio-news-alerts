@@ -8,12 +8,15 @@ import asyncio
 import concurrent.futures
 import logging
 import sys
+import time
+import uuid
 from contextlib import asynccontextmanager
 from typing import Optional
 
 from bson import ObjectId
-from fastapi import FastAPI, BackgroundTasks, HTTPException, Query
+from fastapi import FastAPI, BackgroundTasks, HTTPException, Query, Depends, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel
 
 # Asegurar que el directorio raíz está en el path
@@ -31,8 +34,26 @@ from modules.advisor.service import AdvisorService
 from modules.advisor.models import QuestionnaireAnswer
 from modules.market.service import MarketService
 from modules.analytics.service import AnalyticsService
+from modules.backtest.service import (
+    AlertBacktestService,
+    AlertFeedback,
+    FeedbackService,
+)
+from modules.security.auth import (
+    AuthService,
+    CurrentUser,
+    TokenResponse,
+    UserCreate,
+    UserPublic,
+    create_access_token,
+    get_current_user,
+)
+from modules.security.logging_config import configure_logging
+from modules.security import metrics as obs_metrics
 
-logging.basicConfig(level=logging.INFO)
+# Logging estructurado (JSON en producción si LOG_JSON=true).
+configure_logging(json_logs=config.LOG_JSON, level=config.LOG_LEVEL)
+logging.basicConfig(level=getattr(logging, config.LOG_LEVEL, logging.INFO))
 logger = logging.getLogger(__name__)
 
 # Singleton del motor de alertas
@@ -80,13 +101,87 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# --- Rate limiting (slowapi) ---
+from slowapi import Limiter
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
+
+limiter = Limiter(
+    key_func=get_remote_address,
+    default_limits=[config.RATE_LIMIT_DEFAULT] if config.RATE_LIMIT_ENABLED else [],
+    enabled=config.RATE_LIMIT_ENABLED,
+)
+app.state.limiter = limiter
+
+
+async def _rate_limit_handler(request: Request, exc: RateLimitExceeded):
+    return Response(
+        content='{"detail":"Rate limit exceeded"}',
+        status_code=429,
+        media_type="application/json",
+    )
+
+
+app.add_exception_handler(RateLimitExceeded, _rate_limit_handler)
+app.add_middleware(SlowAPIMiddleware)
+
+# --- CORS desde configuración (restringible por entorno) ---
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=config.CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+# --- Middleware de observabilidad: request_id + logging + métricas ---
+@app.middleware("http")
+async def observability_middleware(request: Request, call_next):
+    request_id = request.headers.get("X-Request-ID", str(uuid.uuid4()))
+    start = time.perf_counter()
+    try:
+        import structlog
+        structlog.contextvars.bind_contextvars(
+            request_id=request_id,
+            method=request.method,
+            path=request.url.path,
+        )
+    except Exception:  # noqa: BLE001
+        pass
+
+    status_code = 500
+    try:
+        response = await call_next(request)
+        status_code = response.status_code
+        response.headers["X-Request-ID"] = request_id
+        return response
+    finally:
+        duration = time.perf_counter() - start
+        # Usar la plantilla de ruta para evitar explosión de cardinalidad.
+        route = request.scope.get("route")
+        path_label = getattr(route, "path", request.url.path)
+        if config.METRICS_ENABLED:
+            try:
+                obs_metrics.record_http(request.method, path_label, status_code, duration)
+            except Exception:  # noqa: BLE001
+                pass
+        logger.info(
+            "request",
+            extra={
+                "request_id": request_id,
+                "method": request.method,
+                "path": request.url.path,
+                "status": status_code,
+                "duration_ms": round(duration * 1000, 2),
+            },
+        )
+        try:
+            import structlog
+            structlog.contextvars.clear_contextvars()
+        except Exception:  # noqa: BLE001
+            pass
 
 
 # ---------------------------------------------------------------------------
@@ -127,6 +222,13 @@ class AdvisorSubmission(BaseModel):
     user_id: str
     portfolio_id: str
     answers: list[AdvisorAnswerItem]
+
+
+class AlertFeedbackRequest(BaseModel):
+    alert_id: str
+    useful: bool
+    user_id: str = "default"
+    comment: str = ""
 
 
 # ---------------------------------------------------------------------------
@@ -319,6 +421,106 @@ async def alert_stats(portfolio_id: str = Query("")):
 
 
 # ---------------------------------------------------------------------------
+# Endpoints – Feedback loop & Backtesting (validación predictiva)
+# ---------------------------------------------------------------------------
+@app.post("/api/alerts/feedback", tags=["Backtesting"])
+async def submit_alert_feedback(req: AlertFeedbackRequest):
+    """Registra la valoración del usuario (útil / no útil) sobre una alerta.
+
+    Estas señales alimentan el bucle de mejora continua: medir la precisión
+    percibida y, a futuro, reentrenar / recalibrar el sistema.
+    """
+    feedback = AlertFeedback(
+        alert_id=req.alert_id,
+        user_id=req.user_id,
+        useful=req.useful,
+        comment=req.comment,
+    )
+    await FeedbackService.record(feedback)
+    return {"status": "ok"}
+
+
+@app.get("/api/alerts/feedback/stats", tags=["Backtesting"])
+async def get_feedback_stats(portfolio_id: str = Query("")):
+    """Estadísticos agregados del feedback (tasa de utilidad)."""
+    return await FeedbackService.stats(portfolio_id)
+
+
+@app.post("/api/backtest/{portfolio_id}", tags=["Backtesting"])
+async def run_backtest(
+    portfolio_id: str,
+    limit: int = Query(100, ge=1, le=500),
+    persist: bool = Query(True),
+    current: CurrentUser = Depends(get_current_user),
+):
+    """Backtesting de las alertas almacenadas contra el retorno anormal real.
+
+    Para cada alerta con ticker y fecha, ejecuta un estudio de eventos (CAR)
+    y agrega: hit-rate direccional, CAR medio y CAR por severidad. Operación
+    potencialmente lenta (descarga precios de mercado).
+    """
+    try:
+        result = await AlertBacktestService.backtest(
+            portfolio_id=portfolio_id, limit=limit, persist=persist
+        )
+    except Exception as exc:  # noqa: BLE001 — frontera de sistema
+        logger.exception("Backtest failed")
+        raise HTTPException(status_code=500, detail=f"Backtest error: {exc}")
+    # No exponer los pares internos de calibración.
+    result.pop("_calibration_pairs", None)
+    return result
+
+
+@app.post("/api/backtest/{portfolio_id}/calibrate", tags=["Backtesting"])
+async def fit_severity_calibrator(
+    portfolio_id: str,
+    limit: int = Query(500, ge=1, le=1000),
+    current: CurrentUser = Depends(get_current_user),
+):
+    """Ajusta el calibrador de severidad con datos empíricos de backtesting.
+
+    Recolecta pares (severidad predicha, |CAR| observado) y ajusta una
+    regresión isotónica que ancla la severidad al movimiento real de precio.
+    """
+    try:
+        result = await AlertBacktestService.fit_calibrator(
+            portfolio_id=portfolio_id,
+            limit=limit,
+            save_path=config.SEVERITY_CALIBRATOR_PATH,
+        )
+    except Exception as exc:  # noqa: BLE001 — frontera de sistema
+        logger.exception("Calibrator fit failed")
+        raise HTTPException(status_code=500, detail=f"Calibration error: {exc}")
+    return result
+
+
+# ---------------------------------------------------------------------------
+# Endpoints – Autenticación
+# ---------------------------------------------------------------------------
+@app.post("/api/auth/register", tags=["Auth"], response_model=UserPublic)
+async def register_user(data: UserCreate):
+    """Registra un nuevo usuario (email + contraseña hasheada con bcrypt)."""
+    return await AuthService.register(data)
+
+
+@app.post("/api/auth/login", tags=["Auth"], response_model=TokenResponse)
+async def login(form: OAuth2PasswordRequestForm = Depends()):
+    """Autentica y emite un JWT. `username` = email."""
+    user = await AuthService.authenticate(form.username, form.password)
+    if user is None:
+        raise HTTPException(status_code=401, detail="Credenciales inválidas")
+    token, expires_in = create_access_token(str(user["_id"]), user.get("email", ""))
+    return TokenResponse(access_token=token, expires_in=expires_in)
+
+
+@app.get("/api/auth/me", tags=["Auth"])
+async def whoami(current: CurrentUser = Depends(get_current_user)):
+    """Devuelve la identidad autenticada (o anónima si AUTH_ENABLED=false)."""
+    return current.model_dump()
+
+
+
+# ---------------------------------------------------------------------------
 # Endpoints – Advisor (Asesor de inversiones)
 # ---------------------------------------------------------------------------
 @app.get("/api/advisor/questions", tags=["Advisor"])
@@ -435,11 +637,57 @@ async def get_portfolio_analytics(
 
 
 # ---------------------------------------------------------------------------
-# Health
+# Health & Observabilidad
 # ---------------------------------------------------------------------------
 @app.get("/health")
 async def health():
     return {"status": "ok"}
+
+
+@app.get("/health/live", tags=["System"])
+async def health_live():
+    """Liveness probe: el proceso responde."""
+    return {"status": "alive"}
+
+
+@app.get("/health/ready", tags=["System"])
+async def health_ready():
+    """Readiness probe: dependencias críticas (DB) disponibles."""
+    db_ok = await _db_ping()
+    status_code = 200 if db_ok else 503
+    return Response(
+        content='{"status":"%s","db":%s}' % ("ready" if db_ok else "not_ready",
+                                             "true" if db_ok else "false"),
+        status_code=status_code,
+        media_type="application/json",
+    )
+
+
+@app.get("/health/db", tags=["System"])
+async def health_db():
+    """Comprueba la conectividad con MongoDB."""
+    db_ok = await _db_ping()
+    if not db_ok:
+        raise HTTPException(status_code=503, detail="Database unavailable")
+    return {"status": "ok", "db": "up"}
+
+
+async def _db_ping() -> bool:
+    try:
+        await MongoDB._client.admin.command("ping")
+        return True
+    except Exception:  # noqa: BLE001
+        logger.warning("DB ping failed", exc_info=True)
+        return False
+
+
+@app.get("/metrics", tags=["System"])
+async def metrics():
+    """Métricas en formato de exposición Prometheus."""
+    if not config.METRICS_ENABLED:
+        raise HTTPException(status_code=404, detail="Metrics disabled")
+    payload, content_type = obs_metrics.render_latest()
+    return Response(content=payload, media_type=content_type)
 
 
 # ---------------------------------------------------------------------------
@@ -509,6 +757,31 @@ async def system_status():
         "scheduler": get_scheduler_status(),
         "notifications": NotificationService.get_status(),
     }
+
+
+# ---------------------------------------------------------------------------
+# Endpoints – Model Comparison
+# ---------------------------------------------------------------------------
+@app.get("/api/comparisons", tags=["Comparisons"])
+async def get_model_comparisons(limit: int = Query(5)):
+    """Devuelve las últimas comparaciones multi-modelo."""
+    col = MongoDB.db()["model_comparisons"]
+    cursor = col.find({}, {"results": 0}).sort("timestamp", -1).limit(limit)
+    docs = await cursor.to_list(length=limit)
+    for d in docs:
+        d["_id"] = str(d["_id"])
+    return docs
+
+
+@app.get("/api/comparisons/latest", tags=["Comparisons"])
+async def get_latest_comparison():
+    """Devuelve la comparación más reciente con detalle completo."""
+    col = MongoDB.db()["model_comparisons"]
+    doc = await col.find_one(sort=[("timestamp", -1)])
+    if not doc:
+        raise HTTPException(status_code=404, detail="No comparisons found")
+    doc["_id"] = str(doc["_id"])
+    return doc
 
 
 if __name__ == "__main__":

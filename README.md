@@ -118,11 +118,12 @@ TFE/
 │   │
 │   ├── nlp/                           # Módulo 3 — Preprocesado NLP
 │   │   ├── README.md
-│   │   └── preprocessing.py          #   Limpieza, NER, detección de idioma, traducción ES→EN
+│   │   ├── preprocessing.py          #   Limpieza, NER, detección de idioma, traducción ES→EN
+│   │   └── entity_resolver.py        #   Resolución canónica de entidades (alias → ticker)
 │   │
 │   ├── relevance/                     # Módulo 4 — Relevancia por cartera
 │   │   ├── README.md
-│   │   └── service.py                #   Reglas explícitas (word-boundary matching) + similitud semántica
+│   │   └── service.py                #   Reglas explícitas (word-boundary matching) + similitud semántica por activo
 │   │
 │   ├── events/                        # Módulo 5 — Clasificación de eventos
 │   │   ├── README.md
@@ -130,7 +131,8 @@ TFE/
 │   │
 │   ├── impact/                        # Módulo 6 — Estimación de impacto
 │   │   ├── README.md
-│   │   └── estimator.py              #   Determinista + merge con análisis LLM contextual
+│   │   ├── estimator.py              #   Determinista + guardrails + merge con análisis LLM contextual
+│   │   └── calibration.py            #   Calibración de severidad a partir de etiquetas
 │   │
 │   ├── llm/                           # Módulo transversal — LLM multi-proveedor
 │   │   ├── README.md
@@ -162,11 +164,22 @@ TFE/
 │   │   ├── README.md
 │   │   └── service.py                 #   MarketService: lookup, precios, histórico OHLCV
 │   │
-│   └── analytics/                     # Módulo 11 — Métricas de cartera (quantstats)
+│   ├── analytics/                     # Módulo 11 — Métricas de cartera (quantstats)
+│   │   ├── README.md
+│   │   └── service.py                 #   AnalyticsService: Sharpe, Sortino, VaR, drawdown, alpha/beta
+│   │
+│   ├── backtest/                      # Módulo — Validación financiera + feedback
+│   │   ├── README.md
+│   │   ├── event_study.py             #   Estudio de evento: AR/CAR (MacKinlay, 1997)
+│   │   └── service.py                 #   Backtesting de alertas + autocalibración de umbrales
+│   │
+│   └── security/                      # Módulo — Capa de producción
 │       ├── README.md
-│       └── service.py                 #   AnalyticsService: Sharpe, Sortino, VaR, drawdown, alpha/beta
+│       ├── auth.py                    #   JWT + bcrypt + AuthService + get_current_user
+│       ├── logging_config.py          #   structlog (logging estructurado JSON)
+│       └── metrics.py                 #   Métricas Prometheus (HTTP + LLM)
 │
-├── tests/                             # Suite de tests (121 tests, pytest)
+├── tests/                             # Suite de tests (+200 tests, pytest)
 │   ├── conftest.py                    #   Fixtures compartidos
 │   ├── test_portfolio.py              #   Tests de modelos Portfolio/Asset
 │   ├── test_nlp.py                    #   Tests de preprocesado y NER
@@ -179,7 +192,14 @@ TFE/
 │   ├── test_notifications.py          #   Tests de notificaciones
 │   ├── test_scheduler.py              #   Tests del scheduler
 │   ├── test_market.py                 #   Tests de datos de mercado (yfinance)
-│   └── test_analytics.py             #   Tests de métricas de cartera (quantstats)
+│   ├── test_analytics.py             #   Tests de métricas de cartera (quantstats)
+│   ├── test_evaluation.py            #   Tests del marco de evaluación (métricas, IAA)
+│   ├── test_agreement.py             #   Tests de acuerdo inter-anotador (κ, α)
+│   ├── test_entity_resolver.py       #   Tests de resolución canónica de entidades
+│   ├── test_calibration.py           #   Tests de calibración de severidad
+│   ├── test_event_study.py           #   Tests de estudio de evento (AR/CAR)
+│   ├── test_backtest.py              #   Tests de backtesting y feedback
+│   └── test_security.py             #   Tests de auth, logging y métricas
 │
 ├── pytest.ini                         # Configuración de pytest
 ├── ROADMAP.md                         # Hoja de ruta: Tier 1-4, MVP vendible
@@ -297,7 +317,7 @@ mientras se descargan los ~2.1 GB de modelos ML.
 pytest tests/ -v
 ```
 
-121 tests cubriendo todos los módulos del pipeline. Ver `ROADMAP.md` para el detalle.
++200 tests cubriendo todos los módulos del pipeline. Ver `ROADMAP.md` para el detalle.
 
 ---
 
@@ -490,35 +510,73 @@ El sistema clasifica cada noticia en una de **12 categorías** de evento financi
 |--------|------|-------------|
 | `GET` | `/api/analytics/{portfolio_id}?period=1y&benchmark=SPY` | Métricas completas de cartera |
 
-### Sistema
+### Backtesting y validación financiera
+
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| `POST` | `/api/backtest/{portfolio_id}` | Estudio de evento (AR/CAR) + métricas de backtest de las alertas |
+| `POST` | `/api/backtest/{portfolio_id}/calibrate` | Recalibrar umbrales a partir del feedback acumulado |
+
+### Autenticación (capa de producción)
+
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| `POST` | `/api/auth/register` | Registrar usuario (JWT + bcrypt) |
+| `POST` | `/api/auth/login` | Obtener token de acceso |
+| `GET` | `/api/auth/me` | Datos del usuario autenticado |
+
+> La autenticación se controla con `AUTH_ENABLED` (por defecto `false` para desarrollo).
+
+### Sistema y observabilidad
 
 | Método | Ruta | Descripción |
 |--------|------|-------------|
 | `GET` | `/api/system/status` | Estado del scheduler, próximas ejecuciones, notificaciones |
+| `GET` | `/metrics` | Métricas en formato Prometheus (HTTP + LLM) |
+| `GET` | `/health/live` | Liveness probe |
+| `GET` | `/health/ready` | Readiness probe |
+| `GET` | `/health/db` | Comprobación de conexión a MongoDB |
 
 ---
 
-## Evaluación Prevista
+## Evaluación
 
-El sistema se evalúa en **dos planos** independientes:
+El sistema se evalúa en **tres planos** complementarios. Los resultados completos
+están en `evaluation/results/` y se reproducen con `python -m evaluation.run_ablation`.
 
-### Plano NLP (por módulo)
+### Plano 1 — Fiabilidad del corpus (acuerdo inter-anotador)
 
-| Métrica | Módulo evaluado | Propósito |
-|---------|----------------|-----------|
-| Precision, Recall, F1 | Clasificación de eventos | ¿Clasifica correctamente el tipo de evento? |
-| Accuracy | Sentiment (FinBERT) | ¿Detecta correctamente la polaridad? |
-| Calibración (Platt / isotonic) | Score de confianza | ¿El 0.8 de confianza real = 80% acierto? |
-| Confusion matrix | Evento + dirección | ¿Dónde se equivoca más? |
+Doble anotación independiente sobre el corpus de evaluación (`evaluation/agreement.py`):
 
-### Plano Financiero (utilidad de la señal)
+| Dimensión | Métrica | Valor | Interpretación (Landis y Koch, 1977) |
+|-----------|---------|:-----:|--------------------------------------|
+| Relevancia | κ de Cohen | 0,86 | Casi perfecto |
+| Tipo de evento | κ de Cohen | 1,00 | Perfecto |
+| Dirección | κ de Cohen | 0,88 | Casi perfecto |
+| Severidad | κ ponderado | 0,82 | Casi perfecto |
+| **Global** | **α de Krippendorff** | **0,91** | **Casi perfecto** |
+
+### Plano 2 — Calidad predictiva (estudio de ablación)
+
+Cuatro variantes del pipeline (`evaluation/results/ablation_summary.json`):
+
+| Variante | Relevancia F1 | Evento F1 macro | Dirección Acc | Severidad MAE | Severidad ±1 |
+|----------|:-------------:|:---------------:|:-------------:|:-------------:|:------------:|
+| `rules` (solo reglas) | 0,935 | — | — | — | — |
+| `hybrid` (reglas + semántica) | 0,900 | — | — | — | — |
+| `hybrid_nli` (+ NLI zero-shot) | 0,900 | 0,735 | 0,926 | 0,593 | 0,889 |
+| `full` (+ LLM contextual) | 0,935 | 0,810 | 0,897 | 1,034 | 0,724 |
+
+### Plano 3 — Validez financiera (estudio de evento)
+
+Estudio de evento sobre las alertas (`modules/backtest/event_study.py`, MacKinlay 1997):
 
 | Métrica | Descripción |
 |---------|-------------|
 | **CAR** (Cumulative Abnormal Return) | Retorno anormal acumulado en ventana [-1, +3] días tras la alerta |
-| **Comparación vs. baselines** | Baseline 1: solo keywords · Baseline 2: solo FinBERT · Baseline 3: sistema completo |
-| **Tasa de falsos positivos** | % de alertas sin movimiento real del activo |
-| **Tasa de cobertura** | % de eventos reales detectados por el sistema |
+| **AR** (Abnormal Return) | Retorno diario respecto al modelo de mercado estimado |
+| **Tasa de falsos positivos** | % de alertas sin movimiento anormal real del activo |
+| **Backtesting + feedback** | Autocalibración de umbrales vía `/api/backtest/{id}/calibrate` |
 
 ---
 
@@ -556,6 +614,14 @@ El sistema se evalúa en **dos planos** independientes:
 | `SMTP_FROM` | No | — | Dirección remitente de emails |
 | `NOTIFICATION_EMAIL_TO` | No | — | Emails destinatarios (separados por coma) |
 | `NOTIFICATION_WEBHOOK_URL` | No | — | URL webhook (Slack/Discord/Telegram/custom) |
+| `AUTH_ENABLED` | No | `false` | Activar autenticación JWT en los endpoints |
+| `JWT_SECRET` | Sí** | `dev-insecure-secret-change-me` | **Cámbiala en producción**. Clave de firma HS256 |
+| `JWT_ALGORITHM` | No | `HS256` | Algoritmo de firma del token |
+| `JWT_EXPIRE_MINUTES` | No | `1440` | Caducidad del token de acceso (minutos, 24 h) |
+| `CORS_ORIGINS` | No | `*` | Orígenes permitidos para CORS (separados por coma) |
+| `RATE_LIMIT_ENABLED` | No | `true` | Activar/desactivar el rate limiting |
+| `RATE_LIMIT_DEFAULT` | No | `120/minute` | Límite por defecto de peticiones |
+| `RATE_LIMIT_AUTH` | No | `10/minute` | Límite específico para endpoints de autenticación |
 
 ---
 

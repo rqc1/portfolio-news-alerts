@@ -1,11 +1,8 @@
 {
-  "timestamp": "2026-05-14T07:32:14.486368+00:00",
-  "news_ingested": 451,
-  "total_news_in_db": 2127,
-  "news_processed": 100,
-  "alerts_generated": 4,
-  "total_alerts_in_db": 7,
-  "portfolio_tickers": [
+  "timestamp": "2026-06-11T09:00:07.271129+00:00",
+  "portfolio": "Mi Cartera",
+  "portfolio_id": "69fc7d75f62888639d7bb02f",
+  "tickers": [
     "MSFT",
     "V",
     "TLN.MC",
@@ -16,51 +13,86 @@
     "AMD",
     "AVGO"
   ],
+  "news_ingested_this_run": 461,
+  "total_news_in_db": 2940,
+  "news_processed": 100,
+  "alerts_generated": 5,
+  "duplicates": 0,
+  "discarded": 95,
+  "errors": 0,
+  "total_alerts_in_db": 36,
   "alerts": [
     {
-      "title": "Cerebras’s massive IPO will be a fresh test of investor excitement for AI infrastructure",
-      "severity": "alta",
+      "title": "FreightWaves Today: Broad rail traffic gains show growing industrial economy",
+      "severity": "media",
       "direction": "alcista",
-      "event_type": "fusion_adquisicion",
-      "matched_assets": [
-        "TSM"
-      ],
-      "confidence": 0.8,
-      "url": "https://www.marketwatch.com/story/cerebrass-ipo-will-be-fresh-a-test-of-investor-excitement-for-ai-infrastructure-3499a2a5?mod=mw_rss_topstories"
-    },
-    {
-      "title": "Microsoft feared being too dependent on OpenAI, Musk-Altman trial testimony reveals",
-      "severity": "alta",
-      "direction": "bajista",
-      "event_type": "regulacion",
-      "matched_assets": [
-        "MSFT",
-        "V"
-      ],
-      "confidence": 0.8,
-      "url": "https://www.cnbc.com/2026/05/13/microsoft-feared-openai-reliance-musk-altman-trial-testimony-reveals.html"
-    },
-    {
-      "title": "AI-driven cyberattacks will start to be the 'new norm' in months, Palo Alto warns",
-      "severity": "alta",
-      "direction": "bajista",
-      "event_type": "ciberincidente",
-      "matched_assets": [
-        "TSM"
-      ],
-      "confidence": 0.8,
-      "url": "https://www.cnbc.com/2026/05/13/palo-alto-ai-cyberattacks-mythos-gpt.html"
-    },
-    {
-      "title": "Ioneer, Lithium Americas defend Nevada projects as Amnesty flags Indigenous consent gap",
-      "severity": "alta",
-      "direction": "bajista",
-      "event_type": "regulacion",
+      "event_type": "incidencia_operativa",
       "matched_assets": [
         "AMD"
       ],
-      "confidence": 0.8,
-      "url": "https://www.mining.com/ioneer-lithium-americas-defend-nevada-projects-as-amnesty-flags-indigenous-consent-gap/"
+      "confidence": 0.6828,
+      "relevance": 0.7053,
+      "sentiment": "neutral",
+      "source": "freightwaves",
+      "url": "https://www.freightwaves.com/news/freightwaves-today-broad-rail-traffic-gains-show-growing-industrial-economy"
+    },
+    {
+      "title": "Upstart chipmakers keep challenging Nvidia. This time it's Microsoft-backed D-Matrix",
+      "severity": "media",
+      "direction": "bajista",
+      "event_type": "fusion_adquisicion",
+      "matched_assets": [
+        "MSFT",
+        "NVDA"
+      ],
+      "confidence": 0.6939,
+      "relevance": 0.805,
+      "sentiment": "neutral",
+      "source": "cnbc_tech",
+      "url": "https://www.cnbc.com/2026/06/09/nvidia-d-matrix-chip-production-microsoft.html"
+    },
+    {
+      "title": "Microsoft Patches Exploited Exchange Server Vulnerability",
+      "severity": "media",
+      "direction": "bajista",
+      "event_type": "ciberincidente",
+      "matched_assets": [
+        "MSFT"
+      ],
+      "confidence": 0.6459,
+      "relevance": 0.7225,
+      "sentiment": "negative",
+      "source": "security_week",
+      "url": "https://www.securityweek.com/microsoft-patches-exploited-exchange-server-vulnerability/"
+    },
+    {
+      "title": "CaixaBank gana cuota de mercado en todas las líneas de crédito y en nóminas",
+      "severity": "media",
+      "direction": "alcista",
+      "event_type": "regulacion",
+      "matched_assets": [
+        "V",
+        "NU"
+      ],
+      "confidence": 0.7446,
+      "relevance": 0.8,
+      "sentiment": "positive",
+      "source": "expansion",
+      "url": "https://www.expansion.com/empresas/banca/2026/06/11/6a29b1bce5fdea8a3d8b457e.html"
+    },
+    {
+      "title": "Microsoft fixes BitLocker recovery bug on Windows Server 2025",
+      "severity": "media",
+      "direction": "bajista",
+      "event_type": "otro",
+      "matched_assets": [
+        "MSFT"
+      ],
+      "confidence": 0.6628,
+      "relevance": 0.7005,
+      "sentiment": "negative",
+      "source": "bleeping_computer",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-fixes-bitlocker-recovery-bug-on-windows-server-2025/"
     }
   ]
 }

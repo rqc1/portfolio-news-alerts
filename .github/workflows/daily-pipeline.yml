@@ -1,0 +1,40 @@
+name: Daily pipeline trigger
+
+# Dispara el pipeline diario de InvestAIlert.
+# Hace un POST a /api/trigger-pipeline en el backend de Render, lo que:
+#   1. Despierta el servicio (Render Free duerme tras 15 min de inactividad)
+#   2. Ejecuta ingesta RSS -> alertas -> emails en background
+#
+# Requiere un secret de repositorio llamado CRON_SECRET con el mismo valor
+# que la variable de entorno CRON_SECRET configurada en Render.
+
+on:
+  schedule:
+    # 08:00 Europe/Madrid = 06:00 UTC (horario de verano CEST, UTC+2)
+    - cron: "0 6 * * *"
+  workflow_dispatch: {}  # permite lanzarlo manualmente desde la pestaña Actions
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger pipeline (with wake-up retry)
+        env:
+          BASE_URL: https://portfolio-news-alerts.onrender.com
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          set -e
+          echo "Despertando el backend (puede tardar ~60s si está dormido)..."
+          # Reintenta hasta 5 veces dando tiempo al cold start de Render
+          for i in 1 2 3 4 5; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 120 \
+              -X POST "$BASE_URL/api/trigger-pipeline?token=$CRON_SECRET" || true)
+            echo "Intento $i -> HTTP $code"
+            if [ "$code" = "200" ] || [ "$code" = "202" ]; then
+              echo "Pipeline disparado correctamente."
+              exit 0
+            fi
+            sleep 30
+          done
+          echo "No se pudo disparar el pipeline tras 5 intentos."
+          exit 1

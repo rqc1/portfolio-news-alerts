@@ -31,9 +31,9 @@ PROVIDER_CONFIGS = {
         "default_model": "gpt-4o-mini",
     },
     "github": {
-        "base_url": "https://models.inference.ai.azure.com",
+        "base_url": "https://models.github.ai/inference",
         "api_key_env": "GITHUB_TOKEN",
-        "default_model": "gpt-4o-mini",
+        "default_model": "openai/gpt-4o-mini",
     },
     "huggingface": {
         "base_url": "https://api-inference.huggingface.co/v1",

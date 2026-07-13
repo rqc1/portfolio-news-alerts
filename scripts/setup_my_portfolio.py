@@ -3,13 +3,14 @@ Script para crear/actualizar la cartera personal en InvestAIlert.
 Añade los activos y verifica persistencia en MongoDB Atlas.
 """
 import asyncio
+import os
 from datetime import datetime, timezone
 
 from motor.motor_asyncio import AsyncIOMotorClient
 
-MONGO_URI = "mongodb+srv://ruben:ruben@clusteinvesailert.gniynvm.mongodb.net/"
-DB_NAME = "portfolio_alerts"
-USER_ID = "ruben"
+MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017")
+DB_NAME = os.getenv("MONGO_DB_NAME", "portfolio_alerts")
+USER_ID = os.getenv("PORTFOLIO_USER_ID", "default_user")
 
 ASSETS = [
     {"ticker": "MSFT", "name": "Microsoft Corporation", "sector": "Technology", "industry": "Software", "country": "US", "weight": 0.11, "aliases": ["Microsoft"]},

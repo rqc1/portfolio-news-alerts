@@ -59,7 +59,7 @@ y explicabilidad de la información que recibe.
 └──────────────────┘    └──────────────────────────────────────────────────────┘
 ```
 
-Cada módulo tiene su propia documentación detallada en `modules/<módulo>/README.md`.
+Cada módulo se documenta mediante docstrings en su código fuente (`modules/<módulo>/`).
 
 ---
 
@@ -102,12 +102,10 @@ TFE/
 │
 ├── modules/
 │   ├── portfolio/                     # Módulo 1 — Modelado de cartera
-│   │   ├── README.md
 │   │   ├── models.py                  #   Schemas: Asset, Portfolio
 │   │   └── service.py                 #   CRUD sobre MongoDB
 │   │
 │   ├── ingestion/                     # Módulo 2 — Adquisición de noticias
-│   │   ├── README.md
 │   │   ├── models.py                  #   Schema: NewsItem
 │   │   ├── rss_feeds.py              #   22 feeds RSS (finanzas, macro, cyber, supply chain)
 │   │   ├── sec_edgar.py              #   SEC EDGAR API (8-K, 10-K, 10-Q)
@@ -117,32 +115,26 @@ TFE/
 │   │   └── service.py                #   Orquestador: ingesta + dedup por hash + persistencia
 │   │
 │   ├── nlp/                           # Módulo 3 — Preprocesado NLP
-│   │   ├── README.md
 │   │   ├── preprocessing.py          #   Limpieza, NER, detección de idioma, traducción ES→EN
 │   │   └── entity_resolver.py        #   Resolución canónica de entidades (alias → ticker)
 │   │
 │   ├── relevance/                     # Módulo 4 — Relevancia por cartera
-│   │   ├── README.md
 │   │   └── service.py                #   Reglas explícitas (word-boundary matching) + similitud semántica por activo
 │   │
 │   ├── events/                        # Módulo 5 — Clasificación de eventos
-│   │   ├── README.md
 │   │   └── classifier.py             #   FinBERT + zero-shot NLI + keyword fallback
 │   │
 │   ├── impact/                        # Módulo 6 — Estimación de impacto
-│   │   ├── README.md
 │   │   ├── estimator.py              #   Determinista + guardrails + merge con análisis LLM contextual
 │   │   └── calibration.py            #   Calibración de severidad a partir de etiquetas
 │   │
 │   ├── llm/                           # Módulo transversal — LLM multi-proveedor
-│   │   ├── README.md
 │   │   ├── __init__.py
 │   │   ├── providers.py              #   Cliente unificado: OpenAI, GitHub Models, HF, Ollama
 │   │   ├── prompts.py                #   Prompt templates para análisis contextual
 │   │   └── analyzer.py               #   ContextualAnalyzer + RelevanceChecker
 │   │
 │   ├── alerts/                        # Módulo 7 — Motor de alertas
-│   │   ├── README.md
 │   │   ├── engine.py                  #   Pipeline completo + LLM contextual + anti-spam
 │   │   ├── deduplication.py           #   Deduplicación semántica 2 niveles (memoria + MongoDB con TTL)
 │   │   └── explainer.py              #   Explicaciones LLM contextualizadas (+ template fallback)
@@ -154,27 +146,24 @@ TFE/
 │   │   └── service.py                 #   Email SMTP (HTML) + Webhook HTTP (Slack/Discord/Telegram)
 │   │
 │   ├── advisor/                       # Módulo — Asesor de inversiones
-│   │   ├── README.md
 │   │   ├── models.py                  #   Enums + modelos: RiskProfile, InvestorProfile, AdvisorReport
 │   │   ├── questionnaire.py           #   10 preguntas MiFID + scoring ponderado
 │   │   ├── analyzer.py                #   Análisis de cartera: HHI, concentración, diversificación
 │   │   └── service.py                 #   Orquestación LLM (CFA/CAIA/CFP) + fallback determinista
 │   │
 │   ├── market/                        # Módulo 10 — Datos de mercado (yfinance)
-│   │   ├── README.md
+
 │   │   └── service.py                 #   MarketService: lookup, precios, histórico OHLCV
 │   │
 │   ├── analytics/                     # Módulo 11 — Métricas de cartera (quantstats)
-│   │   ├── README.md
+
 │   │   └── service.py                 #   AnalyticsService: Sharpe, Sortino, VaR, drawdown, alpha/beta
 │   │
 │   ├── backtest/                      # Módulo — Validación financiera + feedback
-│   │   ├── README.md
 │   │   ├── event_study.py             #   Estudio de evento: AR/CAR (MacKinlay, 1997)
 │   │   └── service.py                 #   Backtesting de alertas + autocalibración de umbrales
 │   │
 │   └── security/                      # Módulo — Capa de producción
-│       ├── README.md
 │       ├── auth.py                    #   JWT + bcrypt + AuthService + get_current_user
 │       ├── logging_config.py          #   structlog (logging estructurado JSON)
 │       └── metrics.py                 #   Métricas Prometheus (HTTP + LLM)
@@ -201,11 +190,7 @@ TFE/
 │   ├── test_backtest.py              #   Tests de backtesting y feedback
 │   └── test_security.py             #   Tests de auth, logging y métricas
 │
-├── pytest.ini                         # Configuración de pytest
-├── ROADMAP.md                         # Hoja de ruta: Tier 1-4, MVP vendible
-├── NOTAS_TECNICAS.md                  # Pendientes, mejoras, decisiones de diseño
-├── TFM_alertas_inversion_estado_de_la_cuestion.pdf
-└── TFM_alertas_inversion_estado_de_la_cuestion.docx
+└── pytest.ini                         # Configuración de pytest
 ```
 
 ---
@@ -317,7 +302,7 @@ mientras se descargan los ~2.1 GB de modelos ML.
 pytest tests/ -v
 ```
 
-+200 tests cubriendo todos los módulos del pipeline. Ver `ROADMAP.md` para el detalle.
++200 tests cubriendo todos los módulos del pipeline.
 
 ---
 
@@ -553,8 +538,14 @@ Doble anotación independiente sobre el corpus de evaluación (`evaluation/agree
 | Relevancia | κ de Cohen | 0,86 | Casi perfecto |
 | Tipo de evento | κ de Cohen | 1,00 | Perfecto |
 | Dirección | κ de Cohen | 0,88 | Casi perfecto |
-| Severidad | κ ponderado | 0,82 | Casi perfecto |
-| **Global** | **α de Krippendorff** | **0,91** | **Casi perfecto** |
+| Severidad | κ ponderado (cuadrático) | 0,82 | Casi perfecto |
+| Severidad (ordinal) | α de Krippendorff | 0,91 | Casi perfecto |
+
+> **Nota metodológica**: el acuerdo exacto en severidad es bajo (0,56) por ser la
+> dimensión más subjetiva, pero los desacuerdos son casi siempre entre categorías
+> adyacentes (alta vs muy_alta). Por eso se reportan κ ponderado y α ordinal, que
+> penalizan menos los desacuerdos cercanos. Escala de interpretación: Landis y
+> Koch (1977).
 
 ### Plano 2 — Calidad predictiva (estudio de ablación)
 
@@ -565,7 +556,7 @@ Cuatro variantes del pipeline (`evaluation/results/ablation_summary.json`):
 | `rules` (solo reglas) | 0,935 | — | — | — | — |
 | `hybrid` (reglas + semántica) | 0,900 | — | — | — | — |
 | `hybrid_nli` (+ NLI zero-shot) | 0,900 | 0,735 | 0,926 | 0,593 | 0,889 |
-| `full` (+ LLM contextual) | 0,935 | 0,810 | 0,897 | 1,034 | 0,724 |
+| `full` (+ LLM contextual) | 0,935 | 0,893 | 0,931 | 0,621 | 1,000 |
 
 ### Plano 3 — Validez financiera (estudio de evento)
 
@@ -625,22 +616,69 @@ Estudio de evento sobre las alertas (`modules/backtest/event_study.py`, MacKinla
 
 ---
 
-## Documentación Adicional
+## Reproducibilidad de la evaluación
 
-| Documento | Contenido |
-|-----------|-----------|
-| [`NOTAS_TECNICAS.md`](NOTAS_TECNICAS.md) | Pendientes, posibles mejoras, selección de modelos, detalle de fuentes |
-| [`modules/portfolio/README.md`](modules/portfolio/README.md) | Módulo 1 — Modelado de cartera |
-| [`modules/ingestion/README.md`](modules/ingestion/README.md) | Módulo 2 — Adquisición de noticias |
-| [`modules/nlp/README.md`](modules/nlp/README.md) | Módulo 3 — Preprocesado NLP |
-| [`modules/relevance/README.md`](modules/relevance/README.md) | Módulo 4 — Relevancia por cartera |
-| [`modules/events/README.md`](modules/events/README.md) | Módulo 5 — Clasificación de eventos (NLI + FinBERT) |
-| [`modules/impact/README.md`](modules/impact/README.md) | Módulo 6 — Estimación de impacto (determinista + LLM) |
-| [`modules/llm/README.md`](modules/llm/README.md) | Módulo transversal — LLM multi-proveedor |
-| [`modules/alerts/README.md`](modules/alerts/README.md) | Módulo 7 — Motor de alertas |
-| [`modules/market/README.md`](modules/market/README.md) | Módulo 10 — Datos de mercado (yfinance) |
-| [`modules/analytics/README.md`](modules/analytics/README.md) | Módulo 11 — Métricas de cartera (quantstats) |
-| [`ROADMAP.md`](ROADMAP.md) | Hoja de ruta: de prototipo a producción (Tier 1-4, Tier 2 completado) |
+```bash
+# Estudio de ablación completo (rules → hybrid → hybrid_nli → full)
+python -m evaluation.run_ablation
+
+# Solo variantes concretas
+python -m evaluation.run_ablation --variants rules hybrid
+
+# Acuerdo inter-anotador (κ de Cohen, α de Krippendorff)
+python -m evaluation.run_agreement
+
+# Tests del marco de evaluación
+pytest tests/test_evaluation.py tests/test_agreement.py -v
+```
+
+- Corpus: `evaluation/dataset.jsonl` (40 noticias, 3 carteras, 21 EN + 19 ES,
+  los 12 tipos de evento cubiertos, 5 negativos deliberados y hard cases de
+  relevancia indirecta como TSMC→AAPL o algodón→Inditex).
+- Doble anotación independiente de 25 ítems en `evaluation/dataset_annotator2.jsonl`.
+- Resultados en `evaluation/results/` (`<variante>_predictions.jsonl`,
+  `<variante>_metrics.json`, `ablation_summary.json`, `agreement.json`).
+- **Metodología train/test**: los modelos (FinBERT, BART-MNLI, embeddings) se
+  usan preentrenados/zero-shot, sin fine-tuning, y las reglas se definieron a
+  priori; el corpus completo actúa como conjunto de test no visto, por lo que
+  no existe contaminación entre entrenamiento y evaluación.
+- Las variantes `hybrid_nli` y `full` cargan FinBERT + BART-MNLI +
+  sentence-transformers (~3 GB RAM, minutos por variante en CPU). `full` cae
+  automáticamente a `hybrid_nli` si no hay API key de LLM configurada.
+
+### Esquema de etiquetado
+
+```json
+{
+  "id": "ev001",
+  "portfolio_id": "tech_us",
+  "title": "...", "summary": "...", "content": "...",
+  "labels": {
+    "is_relevant": true,
+    "matched_assets": ["AAPL"],
+    "event_type": "resultados_empresariales",
+    "direction": "alcista",
+    "severity_label": "alta"
+  }
+}
+```
+
+---
+
+## Base de datos (MongoDB)
+
+Capa async sobre MongoDB con **Motor** (`database/mongodb.py`, clase `MongoDB`:
+`connect()`/`close()` + helpers `insert_one`/`find`).
+
+| Colección | Contenido | Índices (creados en `connect()`) |
+|-----------|-----------|----------------------------------|
+| `portfolios` | Carteras (activos, sectores, pesos) | — |
+| `news` | Noticias ingestadas | `url` (unique), text index `title`+`summary`, `published_at` desc |
+| `alerts` | Alertas generadas | `portfolio_id`, `created_at` desc |
+| `events` | Eventos clasificados (auditoría) | `created_at` desc |
+
+Configuración vía `MONGO_URI` (default `mongodb://localhost:27017`) y
+`MONGO_DB_NAME` (default `portfolio_alerts`).
 
 ---
 

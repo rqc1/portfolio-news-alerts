@@ -1,9 +1,13 @@
 import asyncio
+import os
 from motor.motor_asyncio import AsyncIOMotorClient
 
+MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017")
+DB_NAME = os.getenv("MONGO_DB_NAME", "portfolio_alerts")
+
 async def main():
-    client = AsyncIOMotorClient("mongodb+srv://ruben:ruben@clusteinvesailert.gniynvm.mongodb.net/")
-    db = client["portfolio_alerts"]
+    client = AsyncIOMotorClient(MONGO_URI)
+    db = client[DB_NAME]
 
     portfolios = await db.portfolios.find({}).to_list(100)
     print(f"Total carteras: {len(portfolios)}")

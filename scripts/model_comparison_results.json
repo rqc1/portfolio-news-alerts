@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-06-23T14:04:13.537023+00:00",
+  "timestamp": "2026-07-01T12:51:09.353802+00:00",
   "portfolio": "Mi Cartera",
   "tickers": [
     "MSFT",
@@ -20,671 +20,840 @@
     "DeepSeek-R1 (GitHub)"
   ],
   "total_news": 100,
-  "relevant_news": 12,
-  "elapsed_seconds": 692.2,
+  "relevant_news": 15,
+  "elapsed_seconds": 900.5,
   "agreement_metrics": {
     "DeepSeek-R1 (GitHub) vs DeepSeek-V3 (GitHub)": {
-      "n": 7,
-      "event_agreement": 0.714,
-      "direction_agreement": 0.714,
-      "severity_mae": 0.1
+      "n": 8,
+      "event_agreement": 1.0,
+      "direction_agreement": 1.0,
+      "severity_mae": 0.0
     },
     "DeepSeek-R1 (GitHub) vs GPT-4o (GitHub)": {
-      "n": 7,
-      "event_agreement": 0.571,
-      "direction_agreement": 0.571,
-      "severity_mae": 0.0857
+      "n": 8,
+      "event_agreement": 0.875,
+      "direction_agreement": 0.875,
+      "severity_mae": 0.0625
     },
     "DeepSeek-R1 (GitHub) vs GPT-4o-mini (GitHub)": {
-      "n": 7,
-      "event_agreement": 0.714,
-      "direction_agreement": 0.714,
-      "severity_mae": 0.0857
+      "n": 8,
+      "event_agreement": 0.875,
+      "direction_agreement": 0.875,
+      "severity_mae": 0.125
     },
     "DeepSeek-R1 (GitHub) vs Llama-3.3-70B (GitHub)": {
-      "n": 7,
-      "event_agreement": 0.714,
-      "direction_agreement": 0.714,
-      "severity_mae": 0.0714
+      "n": 4,
+      "event_agreement": 1.0,
+      "direction_agreement": 1.0,
+      "severity_mae": 0.025
     },
     "DeepSeek-V3 (GitHub) vs GPT-4o (GitHub)": {
-      "n": 7,
-      "event_agreement": 0.571,
-      "direction_agreement": 0.714,
-      "severity_mae": 0.1143
+      "n": 8,
+      "event_agreement": 0.875,
+      "direction_agreement": 0.875,
+      "severity_mae": 0.0625
     },
     "DeepSeek-V3 (GitHub) vs GPT-4o-mini (GitHub)": {
-      "n": 7,
-      "event_agreement": 0.714,
-      "direction_agreement": 0.571,
-      "severity_mae": 0.1429
+      "n": 8,
+      "event_agreement": 0.875,
+      "direction_agreement": 0.875,
+      "severity_mae": 0.125
     },
     "DeepSeek-V3 (GitHub) vs Llama-3.3-70B (GitHub)": {
-      "n": 7,
+      "n": 4,
       "event_agreement": 1.0,
-      "direction_agreement": 0.571,
-      "severity_mae": 0.0714
+      "direction_agreement": 1.0,
+      "severity_mae": 0.025
     },
     "GPT-4o (GitHub) vs GPT-4o-mini (GitHub)": {
-      "n": 12,
-      "event_agreement": 0.667,
-      "direction_agreement": 0.75,
-      "severity_mae": 0.05
+      "n": 15,
+      "event_agreement": 0.867,
+      "direction_agreement": 0.733,
+      "severity_mae": 0.0867
     },
     "GPT-4o (GitHub) vs Llama-3.3-70B (GitHub)": {
-      "n": 12,
-      "event_agreement": 0.417,
-      "direction_agreement": 0.833,
-      "severity_mae": 0.1
+      "n": 9,
+      "event_agreement": 0.778,
+      "direction_agreement": 1.0,
+      "severity_mae": 0.0667
     },
     "GPT-4o-mini (GitHub) vs Llama-3.3-70B (GitHub)": {
-      "n": 12,
+      "n": 9,
       "event_agreement": 0.667,
-      "direction_agreement": 0.917,
-      "severity_mae": 0.1
+      "direction_agreement": 0.667,
+      "severity_mae": 0.1222
     }
   },
   "model_summaries": {
     "GPT-4o-mini (GitHub)": {
-      "total": 12,
+      "total": 15,
       "errors": 0,
-      "avg_severity": 0.375,
-      "avg_confidence": 0.7458,
+      "avg_severity": 0.2867,
+      "avg_confidence": 0.74,
       "directions": {
         "alcista": 2,
-        "bajista": 4,
-        "neutral": 6
+        "bajista": 2,
+        "neutral": 11
       },
       "event_distribution": {
-        "otro": 10,
-        "cadena_suministro": 1,
-        "fusion_adquisicion": 1
+        "regulacion": 2,
+        "otro": 12,
+        "cambio_directivo": 1
       }
     },
     "GPT-4o (GitHub)": {
-      "total": 12,
+      "total": 15,
       "errors": 0,
-      "avg_severity": 0.375,
-      "avg_confidence": 0.8275,
+      "avg_severity": 0.2533,
+      "avg_confidence": 0.83,
       "directions": {
-        "alcista": 2,
-        "bajista": 4,
-        "neutral": 6
+        "alcista": 3,
+        "bajista": 1,
+        "neutral": 11
       },
       "event_distribution": {
-        "otro": 7,
-        "fusion_adquisicion": 4,
+        "regulacion": 3,
+        "otro": 10,
+        "cambio_directivo": 1,
         "incidencia_operativa": 1
       }
     },
     "Llama-3.3-70B (GitHub)": {
-      "total": 12,
-      "errors": 0,
-      "avg_severity": 0.3417,
-      "avg_confidence": 0.7917,
+      "total": 15,
+      "errors": 6,
+      "avg_severity": 0.2444,
+      "avg_confidence": 0.8222,
       "directions": {
-        "alcista": 3,
-        "bajista": 4,
-        "neutral": 5
+        "alcista": 2,
+        "bajista": 1,
+        "neutral": 6
       },
       "event_distribution": {
-        "otro": 10,
-        "resultados_empresariales": 2
+        "resultados_empresariales": 1,
+        "otro": 7,
+        "regulacion": 1
       }
     },
     "DeepSeek-V3 (GitHub)": {
-      "total": 12,
-      "errors": 5,
-      "avg_severity": 0.3571,
-      "avg_confidence": 0.8071,
+      "total": 15,
+      "errors": 7,
+      "avg_severity": 0.1875,
+      "avg_confidence": 0.8937,
       "directions": {
         "alcista": 1,
-        "bajista": 2,
-        "neutral": 4
+        "bajista": 0,
+        "neutral": 7
       },
       "event_distribution": {
-        "otro": 6,
-        "resultados_empresariales": 1
+        "regulacion": 1,
+        "resultados_empresariales": 1,
+        "cambio_directivo": 1,
+        "otro": 5
       }
     },
     "DeepSeek-R1 (GitHub)": {
-      "total": 12,
-      "errors": 5,
-      "avg_severity": 0.4286,
-      "avg_confidence": 0.7357,
+      "total": 15,
+      "errors": 7,
+      "avg_severity": 0.1875,
+      "avg_confidence": 0.8375,
       "directions": {
-        "alcista": 3,
-        "bajista": 2,
-        "neutral": 2
+        "alcista": 1,
+        "bajista": 0,
+        "neutral": 7
       },
       "event_distribution": {
-        "otro": 4,
-        "resultados_empresariales": 2,
-        "cadena_suministro": 1
+        "regulacion": 1,
+        "resultados_empresariales": 1,
+        "cambio_directivo": 1,
+        "otro": 5
       }
     }
   },
   "results": [
     {
-      "news_id": "6a3a8e83525f8856037d2a97",
-      "title": "Nvidia announces liquid cooling system that runs ‘hotter than a hot tub’ — promises to reduce electricity consumption and cut water use by up to 100%, but sustainability challenges remain",
-      "source": "tomshardware",
-      "url": "https://www.tomshardware.com/tech-industry/data-centers/nvidia-announces-liquid-cooling-system-that-runs-hotter-than-a-hot-tub-promises-to-reduce-electricity-consumption-and-cut-water-use-by-up-to-100-percent-but-sustainability-challenges-remain",
-      "relevance_score": 0.7576,
+      "news_id": "6a4506093926162e12bc99c2",
+      "title": "Taiwan Passes Sweeping Crypto Law With Licensing, Stablecoin Rules",
+      "source": "yahoo_finance",
+      "url": "https://finance.yahoo.com/markets/crypto/articles/taiwan-passes-sweeping-crypto-law-120033842.html",
+      "relevance_score": 0.6723,
       "matched_assets": [
-        "NVDA"
+        "TSM"
       ],
       "nlp_sentiment": {
         "sentiment": "positive",
-        "confidence": 0.869,
+        "confidence": 0.6201,
         "probabilities": {
-          "positive": 0.869,
-          "negative": 0.0113,
-          "neutral": 0.1196
+          "positive": 0.6201,
+          "negative": 0.013,
+          "neutral": 0.3669
         }
       },
-      "nlp_event_type": "otro",
+      "nlp_event_type": "regulacion",
       "deterministic_impact": {
         "direction": "alcista",
-        "severity": 0.306,
-        "severity_label": "baja"
+        "severity": 0.5861,
+        "severity_label": "media"
       },
       "model_results": {
         "GPT-4o-mini (GitHub)": {
-          "event_type": "otro",
-          "direction": "alcista",
-          "severity": 0.7,
-          "confidence": 0.8,
-          "explanation": "La noticia sobre el nuevo sistema de refrigeración de Nvidia es positiva para la cartera, ya que Nvidia representa un 12% de la misma. La innovación en la reducción del consumo eléctrico y del uso de agua puede mejorar la eficiencia operativa y la sostenibilidad de sus productos, lo que podría traducirse en un aumento de la demanda y, por ende, en un crecimiento de ingresos. Sin embargo, los desafíos de sostenibilidad mencionados podrían limitar el impacto a largo plazo.",
-          "reasoning": "La noticia es relevante para Nvidia, que tiene un peso significativo en la cartera, y sugiere un avance tecnológico que podría beneficiar a la empresa y, por extensión, a los inversores.",
-          "latency_s": 4.47
-        },
-        "GPT-4o (GitHub)": {
-          "event_type": "otro",
+          "event_type": "regulacion",
           "direction": "alcista",
           "severity": 0.6,
-          "confidence": 0.85,
-          "explanation": "La noticia sobre el nuevo sistema de refrigeración líquida de Nvidia es positiva para la acción de NVDA, que representa un 12% de la cartera. Este avance tecnológico refuerza su liderazgo en innovación dentro del sector de semiconductores, lo que podría traducirse en una ventaja competitiva frente a rivales como AMD y TSM, también presentes en la cartera. Sin embargo, el impacto en estos competidores es limitado, ya que el anuncio no afecta directamente a sus productos actuales.",
-          "reasoning": "El desarrollo de un sistema de refrigeración más eficiente puede reducir costos operativos y mejorar la sostenibilidad, lo que es atractivo para los inversores. Dado que Nvidia tiene un peso significativo en la cartera, el impacto es moderadamente alcista. La confianza es alta debido al liderazgo de Nvidia en el sector y la relevancia de la noticia.",
-          "latency_s": 2.82
-        },
-        "Llama-3.3-70B (GitHub)": {
-          "event_type": "otro",
-          "direction": "alcista",
-          "severity": 0.6,
-          "confidence": 0.8,
-          "explanation": "La noticia sobre el sistema de enfriamiento líquido de Nvidia, que promete reducir el consumo de electricidad y agua, puede tener un impacto positivo en el valor de las acciones de NVDA, lo que a su vez puede beneficiar a esta cartera debido al peso significativo de NVDA en la misma.",
-          "reasoning": "Innovación tecnológica con beneficios ambientales y de costos",
-          "latency_s": 2.97
-        },
-        "DeepSeek-V3 (GitHub)": {
-          "event_type": "otro",
-          "direction": "alcista",
-          "severity": 0.6,
-          "confidence": 0.8,
-          "explanation": "La noticia sobre el nuevo sistema de refrigeración líquida de Nvidia es positiva para la cartera, especialmente para NVDA, que representa el 12% de la misma. Este avance tecnológico podría mejorar la eficiencia energética y reducir costos, lo que podría impulsar la valoración de la empresa. Además, dado que la cartera también incluye otras empresas de tecnología como AMD y AVGO, podría haber un efecto indirecto positivo en el sector de semiconductores en general.",
-          "reasoning": "El anuncio de Nvidia es relevante para su posición en la cartera y tiene implicaciones positivas para el sector de semiconductores, lo que justifica una dirección alcista y una severidad moderada.",
-          "latency_s": 3.21
-        },
-        "DeepSeek-R1 (GitHub)": {
-          "event_type": "otro",
-          "direction": "alcista",
-          "severity": 0.6,
-          "confidence": 0.85,
-          "explanation": "El anuncio de Nvidia (12% de la cartera) sobre su sistema de refrigeración podría fortalecer su posición en semiconductores para centros de datos, beneficiando su ventaja competitiva. Sin embargo, el impacto en otros holdings tecnológicos (AMD, AVGO, TSM) es indirecto y limitado, mientras que los activos de otros sectores (V, TLN.MC, KAP.L, NU) no se ven afectados directamente.",
-          "reasoning": "Impacto directo positivo en NVDA por innovación en eficiencia energética, relevante para su segmento. Efecto neutro/menor en competidores semiconductores (AMD/AVGO/TSM) al no mencionar desplazamiento de mercado. Cartera concentrada en tech (56%) con NVDA como mayor posición.",
-          "latency_s": 9.55
-        }
-      }
-    },
-    {
-      "news_id": "6a3a8e7e525f8856037d2a11",
-      "title": "Gorilla Technology surges after $2.5B AI compute infrastructure contract",
-      "source": "seeking_alpha",
-      "url": "https://seekingalpha.com/news/4606107-gorilla-technology-surges-after-25b-ai-compute-infrastructure-contract?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
-      "relevance_score": 0.3883,
-      "matched_assets": [],
-      "nlp_sentiment": {
-        "sentiment": "positive",
-        "confidence": 0.9223,
-        "probabilities": {
-          "positive": 0.9223,
-          "negative": 0.0272,
-          "neutral": 0.0505
-        }
-      },
-      "nlp_event_type": "otro",
-      "deterministic_impact": {
-        "direction": "alcista",
-        "severity": 0.2694,
-        "severity_label": "baja"
-      },
-      "model_results": {
-        "GPT-4o-mini (GitHub)": {
-          "event_type": "otro",
-          "direction": "alcista",
-          "severity": 0.4,
           "confidence": 0.7,
-          "explanation": "La noticia sobre el contrato de $2.5B de Gorilla Technology en infraestructura de computación AI puede tener un impacto positivo indirecto en la cartera, especialmente en las acciones de NVIDIA, AMD y Broadcom, que son actores clave en el sector de semiconductores y tecnología. Este tipo de contratos puede aumentar la demanda de sus productos y servicios, lo que podría traducirse en un crecimiento en sus ingresos y beneficios a largo plazo.",
-          "reasoning": "Aunque Gorilla Technology no está directamente en la cartera, el crecimiento en la infraestructura de AI puede beneficiar a las empresas de semiconductores que suministran tecnología a este sector.",
-          "latency_s": 3.69
+          "explanation": "La aprobación de una ley de criptomonedas en Taiwán puede ser positiva para TSM, ya que podría facilitar la adopción de tecnologías relacionadas con blockchain y criptomonedas, beneficiando a la industria de semiconductores en la que opera. Esto podría traducirse en un aumento en la demanda de sus productos, especialmente si se considera que Taiwán es un centro tecnológico clave. Además, la regulación clara puede atraer inversiones en el sector, lo que también beneficiaría indirectamente a otras empresas tecnológicas en la cartera.",
+          "reasoning": "La noticia es relevante para TSM, que tiene un peso significativo en la cartera, y la regulación positiva en el sector de criptomonedas puede impulsar la demanda de semiconductores, lo que es favorable para la empresa.",
+          "latency_s": 5.86
         },
         "GPT-4o (GitHub)": {
-          "event_type": "fusion_adquisicion",
-          "direction": "bajista",
-          "severity": 0.4,
-          "confidence": 0.8,
-          "explanation": "El contrato de $2.5B de Gorilla Technology para infraestructura de computación en IA podría aumentar la competencia en el sector tecnológico, especialmente en áreas relacionadas con la inteligencia artificial y la computación avanzada. Esto podría presionar a empresas como NVIDIA, AMD y Broadcom, que tienen una fuerte exposición al mercado de semiconductores y hardware para IA, al enfrentar un nuevo jugador con un contrato significativo. Aunque el impacto directo es limitado, la noticia podría generar preocupaciones sobre la cuota de mercado a largo plazo.",
-          "reasoning": "La noticia no menciona directamente a las empresas de la cartera, pero la entrada de un competidor con un contrato relevante en el ámbito de la IA puede afectar indirectamente a los actores establecidos en el sector tecnológico. La severidad es moderada debido a la incertidumbre sobre el impacto real de Gorilla Technology en el mercado.",
-          "latency_s": 3.13
+          "event_type": "regulacion",
+          "direction": "alcista",
+          "severity": 0.6,
+          "confidence": 0.85,
+          "explanation": "La aprobación de una ley integral sobre criptomonedas en Taiwán, que incluye licencias y regulación de stablecoins, es positiva para TSM, ya que refuerza la estabilidad y el marco regulatorio del ecosistema tecnológico y financiero del país. Esto podría atraer más inversiones en tecnología avanzada, beneficiando indirectamente a TSM como líder en semiconductores, un sector clave para la infraestructura tecnológica.",
+          "reasoning": "El marco regulatorio más claro en Taiwán puede fomentar la inversión en tecnología y criptomonedas, sectores que dependen de los semiconductores. Dado que TSM es un actor clave en este ámbito, se espera que se beneficie de un entorno más favorable, aunque el impacto directo es moderado.",
+          "latency_s": 3.56
         },
         "Llama-3.3-70B (GitHub)": {
-          "event_type": "otro",
-          "direction": "alcista",
-          "severity": 0.2,
-          "confidence": 0.8,
-          "explanation": "La noticia sobre el contrato de $2.5B de Gorilla Technology para infraestructura de cómputo de inteligencia artificial puede tener un impacto indirecto positivo en la cartera, especialmente en los activos de tecnología como NVDA, AMD, AVGO y TSM, que se benefician del crecimiento de la demanda de soluciones de inteligencia artificial y cómputo de alto rendimiento.",
-          "reasoning": "Impacto indirecto en el sector tecnológico",
-          "latency_s": 2.37
+          "error": "JSON parse failed",
+          "raw": "```json\n{\n  \"event_type\": \"regulacion\",\n  \"direction\": \"neutral\",\n  \"severity\": 0.2,\n  \"confidence\": 0.8,\n  \"explanation\": \"La noticia sobre la regulación criptográfica en Taiwán puede tener un impacto limitado en la cartera, ya que solo afecta directamente a TSM, y la regulación puede ser positiva ",
+          "latency_s": 27.72
         },
         "DeepSeek-V3 (GitHub)": {
-          "event_type": "otro",
+          "event_type": "regulacion",
           "direction": "neutral",
-          "severity": 0.1,
-          "confidence": 0.8,
-          "explanation": "La noticia sobre Gorilla Technology no tiene un impacto directo en los activos de la cartera, ya que ninguno de ellos está directamente relacionado con la empresa mencionada. Aunque el sector tecnológico podría verse indirectamente afectado por el aumento de competencia en infraestructura de IA, el impacto en esta cartera es mínimo debido a la diversificación y la falta de exposición directa.",
-          "reasoning": "No hay activos directos afectados; impacto indirecto en el sector tecnológico es bajo y no específico para esta cartera.",
-          "latency_s": 33.91
+          "severity": 0.2,
+          "confidence": 0.7,
+          "explanation": "La nueva regulación de criptomonedas en Taiwán no tiene un impacto directo significativo en la cartera, ya que solo TSM está expuesto en el país y su negocio principal no está directamente relacionado con criptomonedas. Sin embargo, podría haber un impacto indirecto positivo si la regulación fomenta la innovación tecnológica en la región.",
+          "reasoning": "TSM es la única empresa en la cartera con exposición directa a Taiwán, pero su negocio principal no está directamente relacionado con criptomonedas. La regulación podría tener un impacto indirecto positivo en el ecosistema tecnológico de Taiwán, pero el efecto en la cartera es mínimo.",
+          "latency_s": 3.22
         },
         "DeepSeek-R1 (GitHub)": {
-          "event_type": "resultados_empresariales",
-          "direction": "alcista",
-          "severity": 0.35,
-          "confidence": 0.75,
-          "explanation": "El contrato de infraestructura AI de Gorilla podría beneficiar indirectamente a los semiconductores (NVDA, AMD, AVGO, TSM) al reforzar la demanda de hardware especializado, aunque el impacto directo es limitado al no ser proveedores directos mencionados.",
-          "reasoning": "Contrato AI impulsa narrativa tecnológica, beneficiando a proveedores de semiconductores clave en cartera. Exposición indirecta moderada con alta correlación sectorial.",
-          "latency_s": 8.54
+          "event_type": "regulacion",
+          "direction": "neutral",
+          "severity": 0.2,
+          "confidence": 0.7,
+          "explanation": "La nueva regulación cripto en Taiwán afecta principalmente a TSM (11% de la cartera) por su ubicación geográfica, pero su modelo de negocio en semiconductores no está directamente vinculado a criptoactivos. Para el resto de la cartera (empresas de tecnología globales y servicios financieros sin exposición relevante a cripto en Taiwán), el impacto es marginal. Podría haber efectos indirectos positivos por mayor estabilidad regulatoria en el ecosistema tecnológico taiwanés.",
+          "reasoning": "TSM opera en semiconductores sin exposición directa a cripto. Otras holdings tienen operaciones globales/regionales no afectadas por regulación cripto taiwanesa. Impacto mínimo real en fundamentales.",
+          "latency_s": 5.92
         }
       }
     },
     {
-      "news_id": "6a3a8e81525f8856037d2a51",
-      "title": "Meta announces new smart glasses starting at $299, as Zuckerberg keeps pushing wearables",
-      "source": "cnbc_tech",
-      "url": "https://www.cnbc.com/2026/06/23/meta-glasses-are-new-smart-glasses-starting-at-299.html",
-      "relevance_score": 0.6573,
+      "news_id": "6a45060c3926162e12bc99c8",
+      "title": "Micron, Intel, AMD stock surge Q2 2026 AI chip rally",
+      "source": "yahoo_finance",
+      "url": "https://finance.yahoo.com/technology/ai/articles/micron-intel-amd-stock-surge-115828932.html",
+      "relevance_score": 0.84,
       "matched_assets": [
         "AMD"
       ],
       "nlp_sentiment": {
         "sentiment": "positive",
-        "confidence": 0.6888,
+        "confidence": 0.5005,
         "probabilities": {
-          "positive": 0.6888,
-          "negative": 0.0092,
-          "neutral": 0.302
+          "positive": 0.5005,
+          "negative": 0.0364,
+          "neutral": 0.4631
         }
       },
       "nlp_event_type": "otro",
       "deterministic_impact": {
         "direction": "alcista",
-        "severity": 0.2692,
+        "severity": 0.2856,
         "severity_label": "baja"
       },
       "model_results": {
         "GPT-4o-mini (GitHub)": {
           "event_type": "otro",
-          "direction": "bajista",
-          "severity": 0.4,
-          "confidence": 0.7,
-          "explanation": "La introducción de las nuevas gafas inteligentes de Meta podría intensificar la competencia en el sector de tecnología, especialmente en el ámbito de los dispositivos portátiles. Esto podría afectar negativamente a empresas como AMD, que dependen de la innovación en semiconductores para mantenerse competitivas. Aunque la noticia es positiva para Meta, su impacto en la cartera es bajista debido a la presión competitiva que podría generar en el mercado de semiconductores.",
-          "reasoning": "La noticia resalta un avance significativo de Meta en un área donde AMD también podría estar involucrada indirectamente, lo que puede llevar a una mayor competencia y presión sobre los márgenes de beneficio en el sector tecnológico.",
-          "latency_s": 4.49
+          "direction": "alcista",
+          "severity": 0.7,
+          "confidence": 0.8,
+          "explanation": "La noticia sobre el aumento en las acciones de Micron, Intel y AMD debido a un rally en chips de IA es positiva para la cartera, especialmente para AMD, que tiene un peso del 11%. Este aumento en el interés por los chips de IA puede impulsar la demanda y los precios de las acciones de AMD, beneficiando directamente a la cartera. Además, el crecimiento en el sector de semiconductores puede tener un efecto positivo en otras posiciones tecnológicas como NVDA y AVGO.",
+          "reasoning": "El rally en el sector de semiconductores, impulsado por la IA, tiene un impacto directo en AMD y potencialmente en otras acciones tecnológicas de la cartera, lo que sugiere un efecto alcista general.",
+          "latency_s": 4.34
         },
         "GPT-4o (GitHub)": {
           "event_type": "otro",
-          "direction": "neutral",
-          "severity": 0.2,
-          "confidence": 0.8,
-          "explanation": "El anuncio de Meta sobre sus nuevas gafas inteligentes no tiene un impacto directo significativo en esta cartera. Aunque AMD podría beneficiarse indirectamente si Meta incrementa la demanda de chips avanzados para sus dispositivos, el efecto es especulativo y a largo plazo. Por ahora, el impacto en la cartera es limitado.",
-          "reasoning": "La noticia está relacionada con un producto de Meta y no menciona directamente a AMD ni a otros activos de la cartera. Sin embargo, AMD podría ser un proveedor potencial de hardware para Meta, lo que justifica una leve relevancia.",
-          "latency_s": 2.52
+          "direction": "alcista",
+          "severity": 0.7,
+          "confidence": 0.85,
+          "explanation": "El rally en las acciones de AMD, junto con otras empresas de semiconductores como Micron e Intel, es positivo para la cartera debido a la exposición directa a AMD (11% del peso) y la correlación positiva esperada con otros activos del sector, como NVIDIA y TSM. Este evento refuerza la tendencia alcista en el segmento de semiconductores impulsada por la demanda de chips para IA.",
+          "reasoning": "La noticia destaca un aumento en el precio de las acciones de AMD, un componente directo de la cartera, lo que tiene un impacto positivo inmediato. Además, el rally en el sector de semiconductores beneficia indirectamente a NVIDIA y TSM, que también tienen un peso significativo en la cartera. La severidad se modera ligeramente debido a la diversificación de la cartera en otros sectores.",
+          "latency_s": 3.62
         },
         "Llama-3.3-70B (GitHub)": {
-          "event_type": "otro",
-          "direction": "bajista",
-          "severity": 0.4,
-          "confidence": 0.7,
-          "explanation": "La noticia sobre los nuevos smart glasses de Meta puede tener un impacto indirecto en la cartera, especialmente en AMD, ya que Meta es un competidor en el mercado de tecnología y wearables, lo que podría afectar las ventas y el crecimiento de AMD en este sector. Sin embargo, el impacto es moderado debido a que AMD tiene una diversificación en diferentes áreas de tecnología.",
-          "reasoning": "Competencia en el mercado de wearables y tecnología",
-          "latency_s": 3.2
+          "event_type": "resultados_empresariales",
+          "direction": "alcista",
+          "severity": 0.6,
+          "confidence": 0.8,
+          "explanation": "La noticia sobre el aumento en las acciones de AMD debido a la rally de chips de inteligencia artificial en el segundo trimestre de 2026 puede tener un impacto positivo en la cartera del inversor, ya que AMD es uno de los activos que componen la cartera y su aumento puede influir en el valor total de la cartera.",
+          "reasoning": "El aumento en el valor de AMD puede generar un efecto alcista en la cartera debido a su peso significativo en la misma.",
+          "latency_s": 17.23
         },
         "DeepSeek-V3 (GitHub)": {
-          "event_type": "otro",
-          "direction": "neutral",
-          "severity": 0.2,
+          "event_type": "resultados_empresariales",
+          "direction": "alcista",
+          "severity": 0.7,
           "confidence": 0.8,
-          "explanation": "La noticia sobre los nuevos lentes inteligentes de Meta no tiene un impacto directo en la cartera del inversor, ya que ninguna de las empresas en la cartera está directamente involucrada en este lanzamiento. Aunque AMD está en el sector tecnológico, su enfoque principal no está en wearables, por lo que el impacto es mínimo.",
-          "reasoning": "La cartera no tiene exposición significativa a empresas directamente afectadas por el lanzamiento de Meta, y el impacto en AMD es marginal.",
-          "latency_s": 34.37
+          "explanation": "La noticia sobre el rally de chips de IA en Q2 2026, que menciona directamente a AMD (11% de la cartera), es alcista para la cartera dado el peso significativo de empresas de tecnología y semiconductores como NVDA, TSM, y AVGO. Este sector se beneficia de la creciente demanda de soluciones de IA.",
+          "reasoning": "AMD es un componente directo de la cartera y el sector de semiconductores está bien representado, lo que amplifica el impacto positivo.",
+          "latency_s": 22.27
         },
         "DeepSeek-R1 (GitHub)": {
-          "event_type": "otro",
+          "event_type": "resultados_empresariales",
           "direction": "alcista",
-          "severity": 0.3,
+          "severity": 0.7,
           "confidence": 0.7,
-          "explanation": "El lanzamiento de Meta podría beneficiar indirectamente a AMD (11% de la cartera) como proveedor de componentes para wearables, aunque el impacto inmediato es limitado. El resto de la cartera (semiconductores NVDA, TSM, AVGO) podría verse levemente favorecida por el impulso al sector tecnológico, mientras que los activos financieros y de otros sectores no se ven afectados.",
-          "reasoning": "Meta's wearable push signals growth in tech hardware, benefiting semiconductor suppliers. AMD's direct exposure and sector-wide optimism justify mild bullishness, but low severity due to early-stage product and portfolio diversification.",
-          "latency_s": 8.6
+          "explanation": "La noticia sobre el rally de chips de IA en 2026 impacta positivamente a AMD (11% de la cartera) y refuerza el entorno alcista para el sector de semiconductores, donde la cartera tiene exposición significativa (NVDA 12%, TSM 11%, AVGO 11%). Sin embargo, el horizonte temporal lejano (2026) y la ausencia de datos concretos moderan el impacto inmediato.",
+          "reasoning": "Exposición directa a AMD + sinergias sectoriales en semiconductores. Evento futuro reduce severidad/confianza.",
+          "latency_s": 13.13
         }
       }
     },
     {
-      "news_id": "6a3a8e92525f8856037d2bee",
-      "title": "CSX officially opens $495 Baltimore intermodal rail tunnel project",
-      "source": "freightwaves",
-      "url": "https://www.freightwaves.com/news/csx-officially-opens-495-baltimore-intermodal-rail-tunnel-project",
-      "relevance_score": 0.3641,
+      "news_id": "6a45029f4fc6434fc6eb4cb1",
+      "title": "Pictet Wealth Management names Kelvin Tay as CIO for Asia",
+      "source": "yahoo_finance",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/pictet-wealth-management-names-kelvin-115340845.html",
+      "relevance_score": 0.3535,
       "matched_assets": [],
       "nlp_sentiment": {
-        "sentiment": "positive",
-        "confidence": 0.8665,
+        "sentiment": "neutral",
+        "confidence": 0.9451,
         "probabilities": {
-          "positive": 0.8665,
-          "negative": 0.0098,
-          "neutral": 0.1237
+          "positive": 0.0376,
+          "negative": 0.0174,
+          "neutral": 0.9451
         }
       },
       "nlp_event_type": "otro",
       "deterministic_impact": {
-        "direction": "alcista",
-        "severity": 0.267,
+        "direction": "neutral",
+        "severity": 0.266,
         "severity_label": "baja"
       },
       "model_results": {
         "GPT-4o-mini (GitHub)": {
-          "event_type": "cadena_suministro",
+          "event_type": "cambio_directivo",
           "direction": "neutral",
           "severity": 0.2,
           "confidence": 0.7,
-          "explanation": "La apertura del túnel intermodal de CSX en Baltimore es un desarrollo positivo para el sector ferroviario y la logística, pero no tiene un impacto directo en los activos de esta cartera, que están más centrados en tecnología y servicios financieros. Sin embargo, podría beneficiar indirectamente a empresas como Talgo S.A. en el sector ferroviario, aunque el efecto es limitado y no afecta significativamente a la mayoría de los activos en la cartera.",
-          "reasoning": "El evento es positivo para el sector logístico, pero la relevancia para la cartera es baja debido a la falta de exposición directa a CSX o al sector ferroviario en general.",
-          "latency_s": 3.92
+          "explanation": "La designación de Kelvin Tay como CIO para Asia en Pictet Wealth Management es un evento que, aunque relevante en el ámbito de la gestión de activos, no tiene un impacto directo significativo en la cartera actual. Dado que los activos en la cartera están más centrados en tecnología y servicios financieros en otras regiones, el efecto es limitado y se considera neutral. Sin embargo, podría haber un impacto indirecto en la percepción del mercado sobre la gestión de activos en Asia, lo que podría influir en el sector financiero a largo plazo.",
+          "reasoning": "La noticia es relevante para el sector de gestión de activos, pero su impacto en la cartera es indirecto y de baja severidad, dado que no afecta directamente a las empresas específicas en la cartera.",
+          "latency_s": 4.96
         },
         "GPT-4o (GitHub)": {
-          "event_type": "incidencia_operativa",
+          "event_type": "cambio_directivo",
           "direction": "neutral",
           "severity": 0.2,
-          "confidence": 0.8,
-          "explanation": "La noticia sobre la apertura del túnel intermodal de CSX en Baltimore tiene un impacto limitado en esta cartera, ya que no hay exposición directa a CSX ni a empresas del sector ferroviario de EE. UU. Sin embargo, podría haber un efecto positivo marginal en Talgo (TLN.MC), dado que opera en la industria ferroviaria, aunque su enfoque principal está en Europa y no en EE. UU.",
-          "reasoning": "El evento tiene una relevancia indirecta para Talgo debido a su participación en la industria ferroviaria, pero la geografía y el enfoque de negocio limitan el impacto. No hay efectos materiales para los otros activos de la cartera.",
-          "latency_s": 3.04
+          "confidence": 0.9,
+          "explanation": "El nombramiento de un nuevo CIO para Asia en Pictet Wealth Management no tiene un impacto directo en los activos de esta cartera, ya que no hay coincidencias directas ni una relación clara con las empresas o sectores representados. Sin embargo, podría tener un impacto marginal en el sector financiero global, lo que afecta indirectamente a Visa, Nu Holdings y Kapital VCT, aunque de forma muy limitada.",
+          "reasoning": "El evento es un cambio directivo en una firma de gestión de patrimonios con enfoque en Asia, lo que tiene una relevancia baja para una cartera centrada en tecnología y servicios financieros con exposición global. La severidad es baja debido a la falta de conexión directa.",
+          "latency_s": 3.05
         },
         "Llama-3.3-70B (GitHub)": {
+          "error": "JSON parse failed",
+          "raw": "```",
+          "latency_s": 2.5
+        },
+        "DeepSeek-V3 (GitHub)": {
+          "event_type": "cambio_directivo",
+          "direction": "neutral",
+          "severity": 0.1,
+          "confidence": 0.9,
+          "explanation": "La noticia sobre el nombramiento de Kelvin Tay como CIO para Asia en Pictet Wealth Management no tiene un impacto directo en los activos de la cartera, ya que ninguno está relacionado con Pictet o su gestión de activos. Aunque Pictet es una entidad financiera, su enfoque en Asia y la gestión de patrimonios no afecta directamente a las empresas tecnológicas o de servicios financieros en la cartera.",
+          "reasoning": "El cambio directivo en una firma de gestión de patrimonios en Asia no tiene conexión directa con las empresas tecnológicas y de servicios financieros en la cartera, lo que resulta en un impacto neutro y de baja severidad.",
+          "latency_s": 30.18
+        },
+        "DeepSeek-R1 (GitHub)": {
+          "event_type": "cambio_directivo",
+          "direction": "neutral",
+          "severity": 0.1,
+          "confidence": 0.7,
+          "explanation": "El nombramiento de un nuevo CIO en Pictet Wealth Management para Asia podría indicar cambios estratégicos en la gestión de activos en la región, pero no existe conexión directa con los activos de la cartera. Los holdings en tecnología (NVDA, TSM, AMD, AVGO) y servicios financieros (V, KAP.L, NU) podrían verse afectados indirectamente si la nueva dirección altera asignaciones sectoriales, pero la noticia no proporciona detalles operativos concretos.",
+          "reasoning": "Cambio de liderazgo en gestora sin exposición directa en cartera. Impacto potencial indirecto vía preferencias de inversión regional/sectorial, pero sin información específica que vincule con los activos actuales.",
+          "latency_s": 8.37
+        }
+      }
+    },
+    {
+      "news_id": "6a4502a14fc6434fc6eb4cef",
+      "title": "Form 4 Stellar Bancorp Inc For: 1 July",
+      "source": "investing_com",
+      "url": "https://www.investing.com/news/filings/form-4-stellar-bancorp-inc-for-1-july-93CH-4770223",
+      "relevance_score": 0.3112,
+      "matched_assets": [],
+      "nlp_sentiment": {
+        "sentiment": "neutral",
+        "confidence": 0.9492,
+        "probabilities": {
+          "positive": 0.0276,
+          "negative": 0.0232,
+          "neutral": 0.9492
+        }
+      },
+      "nlp_event_type": "cambio_directivo",
+      "deterministic_impact": {
+        "direction": "neutral",
+        "severity": 0.4363,
+        "severity_label": "media"
+      },
+      "model_results": {
+        "GPT-4o-mini (GitHub)": {
           "event_type": "otro",
           "direction": "neutral",
           "severity": 0.2,
           "confidence": 0.8,
-          "explanation": "La noticia sobre la apertura del túnel ferroviario de Baltimore no tiene un impacto directo en las empresas de la cartera, ya que ninguna de ellas está directamente relacionada con CSX o el sector ferroviario. Sin embargo, el aumento en la capacidad de tráfico de contenedores y la mejora en la infraestructura podrían tener efectos indirectos positivos en la economía en general, lo que podría beneficiar a las empresas de la cartera a largo plazo.",
-          "reasoning": "La cartera está compuesta por empresas de tecnología, servicios financieros y semiconductores, sin una conexión directa con el sector ferroviario o la infraestructura de transporte.",
-          "latency_s": 4.45
+          "explanation": "La noticia sobre el Form 4 de Stellar Bancorp Inc. no tiene un impacto directo en la cartera, ya que los activos presentes son de diferentes sectores y no están relacionados con Stellar Bancorp. La relevancia de la noticia es baja y no se anticipan efectos significativos en las empresas que componen la cartera.",
+          "reasoning": "La noticia es neutral y no afecta directamente a las empresas en la cartera, lo que justifica una severidad baja en el impacto.",
+          "latency_s": 3.97
+        },
+        "GPT-4o (GitHub)": {
+          "event_type": "otro",
+          "direction": "neutral",
+          "severity": 0.1,
+          "confidence": 0.9,
+          "explanation": "La noticia sobre el Form 4 de Stellar Bancorp Inc. no tiene un impacto material directo en la cartera, ya que ninguna de las empresas incluidas está relacionada directamente con Stellar Bancorp ni con su sector específico. Además, el sentimiento neutral y la baja relevancia detectada refuerzan la falta de implicaciones significativas.",
+          "reasoning": "Stellar Bancorp opera en un segmento financiero específico que no tiene conexión directa con los activos de la cartera, que están diversificados en tecnología, servicios financieros y transporte. La baja relevancia y el sentimiento neutral indican que no hay un impacto relevante.",
+          "latency_s": 2.72
+        },
+        "Llama-3.3-70B (GitHub)": {
+          "error": "JSON parse failed",
+          "raw": "```json/epl.json/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl/epl",
+          "latency_s": 4.12
         },
         "DeepSeek-V3 (GitHub)": {
           "event_type": "otro",
           "direction": "neutral",
           "severity": 0.1,
-          "confidence": 0.8,
-          "explanation": "La noticia sobre la apertura del túnel ferroviario de CSX en Baltimore no tiene un impacto directo en los activos de la cartera, ya que no hay empresas relacionadas con el sector ferroviario o logístico en la misma. Aunque el proyecto podría beneficiar a la economía regional, su efecto en las empresas tecnológicas y financieras de la cartera es marginal.",
-          "reasoning": "La cartera está compuesta principalmente por empresas de tecnología y servicios financieros, sin exposición directa al sector ferroviario o logístico. Por lo tanto, el impacto es mínimo y neutral.",
-          "latency_s": 27.95
+          "confidence": 0.95,
+          "explanation": "La noticia sobre el Form 4 de Stellar Bancorp Inc no tiene impacto directo en los activos de la cartera, ya que no hay coincidencias directas y el sector financiero representado en la cartera (Visa, Nu Holdings) no está directamente relacionado con Stellar Bancorp.",
+          "reasoning": "La noticia es neutral y no afecta a los activos de la cartera, ya que no hay conexión directa o indirecta relevante.",
+          "latency_s": 34.02
         },
         "DeepSeek-R1 (GitHub)": {
-          "event_type": "cadena_suministro",
+          "event_type": "otro",
           "direction": "neutral",
-          "severity": 0.2,
-          "confidence": 0.4,
-          "explanation": "La mejora en infraestructura ferroviaria de CSX podría beneficiar marginalmente a Talgo (11% de la cartera) al reforzar inversiones en el sector, pero su enfoque en trenes de alta velocidad (vs. transporte de carga de CSX) y localización geográfica (España vs. EEUU) limitan el impacto directo. Para el resto de la cartera (tecnología y servicios financieros), el efecto es remoto salvo por posibles externalidades positivas en actividad económica regional.",
-          "reasoning": "TLN.MC opera en sector relacionado pero con modelo de negocio/geografía divergente. Otros activos no tienen exposición significativa a logística portuaria o transporte intermodal en I-95. Impacto indirecto mínimo en cadena de suministro global de semiconductores o fintech.",
-          "latency_s": 10.37
+          "severity": 0.1,
+          "confidence": 0.9,
+          "explanation": "La noticia sobre transacciones de insiders en Stellar Bancorp (sector financiero) no tiene conexión directa con los activos de la cartera, que se concentran en tecnología, semiconductores y servicios crediticios internacionales. El impacto indirecto es mínimo dado que: 1) No hay exposición a bancos regionales estadounidenses 2) Los movimientos de insiders en una entidad no cotizada en la cartera raramente afectan a competidores indirectos como Visa o Nu Holdings 3) La relevancia previa de 0.31 confirma la baja materialidad.",
+          "reasoning": "Form 4 filings son eventos rutinarios sin implicaciones estratégicas. Cartera carece de exposición a bancos comerciales. Sector financiero de la cartera (V, NU, KAP.L) opera en segmentos diferentes (crédito, fintech, asset management).",
+          "latency_s": 9.49
         }
       }
     },
     {
-      "news_id": "6a3a8e7b525f8856037d29d7",
-      "title": "Nvidia, Micron, Alphabet lead tech sell-off as AI trade cools",
-      "source": "yahoo_finance",
-      "url": "https://finance.yahoo.com/markets/stocks/article/nvidia-micron-alphabet-lead-tech-sell-off-as-ai-trade-cools-125946422.html",
-      "relevance_score": 0.8077,
-      "matched_assets": [
-        "NVDA"
-      ],
+      "news_id": "6a4502a14fc6434fc6eb4cf0",
+      "title": "Form 4 Stellar Bancorp Inc For: 1 July",
+      "source": "investing_com",
+      "url": "https://www.investing.com/news/filings/form-4-stellar-bancorp-inc-for-1-july-93CH-4770222",
+      "relevance_score": 0.3112,
+      "matched_assets": [],
       "nlp_sentiment": {
-        "sentiment": "negative",
-        "confidence": 0.7034,
+        "sentiment": "neutral",
+        "confidence": 0.9492,
         "probabilities": {
-          "positive": 0.1306,
-          "negative": 0.7034,
-          "neutral": 0.166
+          "positive": 0.0276,
+          "negative": 0.0232,
+          "neutral": 0.9492
         }
       },
-      "nlp_event_type": "otro",
+      "nlp_event_type": "cambio_directivo",
       "deterministic_impact": {
-        "direction": "bajista",
-        "severity": 0.2827,
-        "severity_label": "baja"
+        "direction": "neutral",
+        "severity": 0.4363,
+        "severity_label": "media"
       },
       "model_results": {
         "GPT-4o-mini (GitHub)": {
           "event_type": "otro",
-          "direction": "bajista",
-          "severity": 0.7,
+          "direction": "neutral",
+          "severity": 0.2,
           "confidence": 0.8,
-          "explanation": "La noticia sobre la venta masiva en el sector tecnológico, liderada por Nvidia, impacta negativamente a la cartera, especialmente debido a la alta exposición a Nvidia (12.0%) y otros semiconductores como AMD y TSM. La disminución del interés en el comercio de IA puede afectar las expectativas de crecimiento y los precios de las acciones de estas empresas, lo que podría traducirse en una caída en el valor de la cartera.",
-          "reasoning": "La noticia es relevante y afecta directamente a Nvidia, que tiene un peso significativo en la cartera, lo que justifica un impacto bajista y severo.",
-          "latency_s": 3.48
+          "explanation": "La noticia sobre el Form 4 de Stellar Bancorp Inc. no tiene un impacto directo en los activos de la cartera, ya que no hay coincidencias directas con las empresas que se poseen. Sin embargo, dado que se trata de una entidad del sector financiero, podría tener un efecto indirecto muy limitado en la percepción del sector, pero no se espera que afecte significativamente a las acciones de Microsoft, Visa, o cualquier otra empresa en la cartera.",
+          "reasoning": "La noticia es neutral y de baja relevancia, lo que sugiere que no hay cambios significativos en el entorno de inversión que afecten a la cartera.",
+          "latency_s": 4.31
         },
         "GPT-4o (GitHub)": {
           "event_type": "otro",
-          "direction": "bajista",
-          "severity": 0.7,
-          "confidence": 0.85,
-          "explanation": "La noticia sobre la caída de las acciones de Nvidia y otras empresas tecnológicas debido al enfriamiento del interés en el comercio relacionado con la IA tiene un impacto bajista en esta cartera. Nvidia representa un 12% del peso de la cartera, siendo el activo con mayor exposición, y su desempeño puede influir significativamente en el rendimiento general. Además, otros activos tecnológicos como AMD, TSM y AVGO, que también están expuestos al sector de semiconductores y la narrativa de la IA, podrían verse afectados indirectamente.",
-          "reasoning": "El enfriamiento del interés en la IA afecta directamente a Nvidia, que lidera el sector, y potencialmente a otras empresas tecnológicas relacionadas en la cartera. La alta exposición al sector tecnológico amplifica el impacto negativo.",
-          "latency_s": 2.67
+          "direction": "neutral",
+          "severity": 0.1,
+          "confidence": 0.9,
+          "explanation": "La noticia sobre el Form 4 de Stellar Bancorp Inc. no tiene un impacto directo en los activos de esta cartera, ya que no hay coincidencias directas ni una relación significativa con los sectores o geografías de las empresas incluidas. Por lo tanto, el efecto es neutral y de baja severidad.",
+          "reasoning": "Stellar Bancorp opera en el sector financiero, pero no tiene una relación directa con las empresas de servicios financieros en la cartera (Visa, Kapital VCT, Nu Holdings). Además, el evento reportado (Form 4) es de naturaleza administrativa y no implica cambios fundamentales que afecten a la cartera.",
+          "latency_s": 2.93
         },
         "Llama-3.3-70B (GitHub)": {
           "event_type": "otro",
-          "direction": "bajista",
-          "severity": 0.6,
-          "confidence": 0.8,
-          "explanation": "La noticia sobre la caída de las acciones de Nvidia, Micron y Alphabet debido al enfriamiento del comercio de inteligencia artificial puede tener un impacto negativo en la cartera del inversor, especialmente considerando el peso significativo de NVDA en la cartera. Esto podría afectar negativamente el valor de la cartera.",
-          "reasoning": "El peso de NVDA en la cartera es del 12%, lo que hace que la noticia tenga un impacto directo en el valor de la cartera.",
-          "latency_s": 3.48
+          "direction": "neutral",
+          "severity": 0.1,
+          "confidence": 0.9,
+          "explanation": "La noticia sobre Stellar Bancorp Inc no tiene un impacto directo en los activos de esta cartera, y su relevancia es baja. Por lo tanto, no se espera un efecto significativo en el valor de la cartera.",
+          "reasoning": "La noticia no menciona ninguna empresa específica de la cartera, y el sector financiero solo está representado por Visa Inc, Nu Holdings Ltd y Kapital VCT plc, pero no hay una conexión directa con Stellar Bancorp Inc.",
+          "latency_s": 4.66
         },
         "DeepSeek-V3 (GitHub)": {
           "event_type": "otro",
-          "direction": "bajista",
-          "severity": 0.6,
-          "confidence": 0.8,
-          "explanation": "La noticia sobre el enfriamiento del sector tecnológico, especialmente en acciones relacionadas con IA como Nvidia, podría generar un impacto negativo en la cartera debido a la exposición significativa a empresas de tecnología y semiconductores como NVDA, AMD, AVGO y TSM. Aunque Microsoft no está directamente mencionada, su sector podría verse afectado indirectamente por el sentimiento negativo.",
-          "reasoning": "La cartera tiene un alto peso en tecnología y semiconductores, sectores sensibles a cambios en el sentimiento del mercado, especialmente en IA.",
-          "latency_s": 32.68
+          "direction": "neutral",
+          "severity": 0.1,
+          "confidence": 0.95,
+          "explanation": "La noticia sobre el Form 4 de Stellar Bancorp Inc no tiene impacto directo en los activos de la cartera, ya que no hay coincidencias directas y el sector financiero representado en la cartera (Visa, Nu Holdings) no está directamente relacionado con Stellar Bancorp.",
+          "reasoning": "La noticia es neutral y no afecta a los activos de la cartera, ya que no hay relación directa o indirecta significativa.",
+          "latency_s": 32.24
         },
         "DeepSeek-R1 (GitHub)": {
           "event_type": "otro",
-          "direction": "bajista",
-          "severity": 0.75,
-          "confidence": 0.85,
-          "explanation": "La venta masiva en acciones tecnológicas relacionadas con IA impacta directamente al 45% de la cartera (NVDA 12%, TSM 11%, AMD 11%, AVGO 11%), todas expuestas al sector de semiconductores clave para la IA. Microsoft (11%) podría verse indirectamente afectado por correlación sectorial, mientras Visa, Talgo y Nu tienen menor exposición.",
-          "reasoning": "Alto peso en semiconductores (45% cartera) vinculados a IA. NVDA líder en ventas, efecto contagio sectorial. Confianza alta por exposición directa y relevancia previa 0.81.",
-          "latency_s": 9.7
+          "direction": "neutral",
+          "severity": 0.1,
+          "confidence": 0.95,
+          "explanation": "La noticia sobre el Form 4 de Stellar Bancorp (trámite rutinario de información de insiders) no tiene relación directa con los activos de la cartera. Los holdings en servicios financieros (V, NU, KAP.L) operan en segmentos distintos (crédito, fintech, gestión de activos) sin exposición relevante a bancos regionales estadounidenses. Los componentes tecnológicos (MSFT, NVDA, AMD, etc.) y el industrial (Talgo) tampoco se ven afectados. La naturaleza administrativa del evento y la diversificación sectorial de la cartera limitan cualquier impacto.",
+          "reasoning": "Form 4 es un trámite regulatorio rutinario sin implicaciones operativas. Cartera diversificada sin exposición a bancos regionales US. Activos financieros presentes operan en nichos distintos. Severidad mínima por irrelevancia material.",
+          "latency_s": 8.49
         }
       }
     },
     {
-      "news_id": "6a3a8e7c525f8856037d29e4",
-      "title": "Stock Market Today: Tech Futures Plunge As Micron, Nvidia, Sandisk Dive (Live Coverage)",
-      "source": "yahoo_finance",
-      "url": "https://www.investors.com/market-trend/stock-market-today/dow-jones-sp500-nasdaq-micron-nvidia-sandisk/?src=A00220&yptr=yahoo",
-      "relevance_score": 0.793,
-      "matched_assets": [
-        "NVDA"
-      ],
+      "news_id": "6a4502a14fc6434fc6eb4cf1",
+      "title": "Form 4 Stellar Bancorp Inc For: 1 July",
+      "source": "investing_com",
+      "url": "https://www.investing.com/news/filings/form-4-stellar-bancorp-inc-for-1-july-93CH-4770221",
+      "relevance_score": 0.3112,
+      "matched_assets": [],
+      "nlp_sentiment": {
+        "sentiment": "neutral",
+        "confidence": 0.9492,
+        "probabilities": {
+          "positive": 0.0276,
+          "negative": 0.0232,
+          "neutral": 0.9492
+        }
+      },
+      "nlp_event_type": "cambio_directivo",
+      "deterministic_impact": {
+        "direction": "neutral",
+        "severity": 0.4363,
+        "severity_label": "media"
+      },
+      "model_results": {
+        "GPT-4o-mini (GitHub)": {
+          "event_type": "otro",
+          "direction": "neutral",
+          "severity": 0.2,
+          "confidence": 0.8,
+          "explanation": "La noticia sobre Stellar Bancorp Inc. no tiene un impacto directo en la cartera, ya que los activos presentes son de diferentes sectores y no están relacionados con la entidad mencionada. La relevancia es baja y, aunque puede haber implicaciones indirectas en el sector financiero, estas son mínimas y no afectan significativamente a las empresas tecnológicas y de servicios financieros que componen la cartera.",
+          "reasoning": "La noticia es neutral y de baja relevancia, lo que sugiere que no hay cambios significativos esperados en los activos de la cartera debido a este evento.",
+          "latency_s": 4.01
+        },
+        "GPT-4o (GitHub)": {
+          "event_type": "otro",
+          "direction": "neutral",
+          "severity": 0.1,
+          "confidence": 0.85,
+          "explanation": "La noticia sobre el Form 4 de Stellar Bancorp Inc. no tiene un impacto directo en los activos de la cartera, ya que no hay coincidencias directas ni una relación significativa con los sectores o geografías de las posiciones actuales. Dado que Stellar Bancorp opera en el sector financiero, podría haber un impacto indirecto mínimo en Visa o Nu Holdings, pero es insignificante en este caso.",
+          "reasoning": "El evento tiene baja relevancia para la cartera debido a la falta de conexión directa con los activos y la naturaleza neutral de la noticia según el análisis de sentimiento. La severidad se mantiene baja porque no se espera un efecto material en los sectores representados en la cartera.",
+          "latency_s": 2.6
+        },
+        "Llama-3.3-70B (GitHub)": {
+          "event_type": "otro",
+          "direction": "neutral",
+          "severity": 0.1,
+          "confidence": 0.9,
+          "explanation": "La noticia sobre Stellar Bancorp Inc no tiene un impacto directo en la cartera del inversor, ya que no hay activos de esta empresa en la cartera. Además, el sector financiero, aunque está representado en la cartera, no se ve afectado de manera significativa por esta noticia específica.",
+          "reasoning": "La noticia es neutral y no tiene relevancia directa para los activos en la cartera.",
+          "latency_s": 3.86
+        },
+        "DeepSeek-V3 (GitHub)": {
+          "event_type": "otro",
+          "direction": "neutral",
+          "severity": 0.1,
+          "confidence": 0.95,
+          "explanation": "La noticia sobre Stellar Bancorp Inc no tiene impacto directo en la cartera del inversor, ya que no hay activos relacionados con esta empresa en la cartera y el sector financiero no es el foco principal de la misma.",
+          "reasoning": "La noticia es neutral y no afecta a los activos en la cartera, que están principalmente en tecnología y servicios financieros no relacionados con Stellar Bancorp.",
+          "latency_s": 33.58
+        },
+        "DeepSeek-R1 (GitHub)": {
+          "event_type": "otro",
+          "direction": "neutral",
+          "severity": 0.1,
+          "confidence": 0.95,
+          "explanation": "La noticia sobre el Form 4 de Stellar Bancorp (trámite rutinario de información de insiders) no impacta directamente a los activos de la cartera, que carece de exposición a bancos regionales estadounidenses. Los sectores financieros presentes (Visa, Nu Holdings, Kapital VCT) operan en segmentos y geografías diferentes, y el evento no contiene información fundamental relevante para la valoración de las posiciones tecnológicas o industriales.",
+          "reasoning": "Form 4 es un trámite administrativo sin implicaciones operativas. Cartera sin exposición directa al banco ni a su sector específico. Relevancia indirecta mínima (sector financiero amplio) con impacto no material.",
+          "latency_s": 12.13
+        }
+      }
+    },
+    {
+      "news_id": "6a4502a14fc6434fc6eb4cf2",
+      "title": "Form 4 Stellar Bancorp Inc For: 1 July",
+      "source": "investing_com",
+      "url": "https://www.investing.com/news/filings/form-4-stellar-bancorp-inc-for-1-july-93CH-4770220",
+      "relevance_score": 0.3112,
+      "matched_assets": [],
+      "nlp_sentiment": {
+        "sentiment": "neutral",
+        "confidence": 0.9492,
+        "probabilities": {
+          "positive": 0.0276,
+          "negative": 0.0232,
+          "neutral": 0.9492
+        }
+      },
+      "nlp_event_type": "cambio_directivo",
+      "deterministic_impact": {
+        "direction": "neutral",
+        "severity": 0.4363,
+        "severity_label": "media"
+      },
+      "model_results": {
+        "GPT-4o-mini (GitHub)": {
+          "event_type": "otro",
+          "direction": "neutral",
+          "severity": 0.2,
+          "confidence": 0.8,
+          "explanation": "La noticia sobre el Form 4 de Stellar Bancorp Inc. no tiene un impacto directo en la cartera, ya que no se menciona ninguna de las empresas que la componen. La relevancia es baja y, aunque puede haber implicaciones indirectas en el sector financiero, estas son limitadas y no afectan significativamente a los activos en la cartera.",
+          "reasoning": "La noticia es neutral y su relevancia es baja, lo que sugiere que no hay cambios esperados en la valoración de los activos de la cartera.",
+          "latency_s": 4.82
+        },
+        "GPT-4o (GitHub)": {
+          "event_type": "otro",
+          "direction": "neutral",
+          "severity": 0.1,
+          "confidence": 0.9,
+          "explanation": "La noticia sobre el Form 4 de Stellar Bancorp Inc. no tiene un impacto directo en los activos de esta cartera, ya que no hay coincidencias directas ni una relación significativa con los sectores o geografías de las empresas incluidas. El impacto es mínimo y no afecta la estrategia de inversión actual.",
+          "reasoning": "Stellar Bancorp opera en el sector financiero, pero no tiene una relación directa con los activos financieros de la cartera (Visa, Kapital VCT, Nu Holdings). Además, el evento en cuestión parece ser administrativo y no estratégico, lo que limita su relevancia.",
+          "latency_s": 2.63
+        },
+        "Llama-3.3-70B (GitHub)": {
+          "event_type": "otro",
+          "direction": "neutral",
+          "severity": 0.1,
+          "confidence": 0.9,
+          "explanation": "La noticia sobre Stellar Bancorp Inc no tiene un impacto directo en la cartera del inversor, ya que no hay activos de esta empresa en la cartera. Además, el sector financiero, al que pertenece Stellar Bancorp, solo está representado por Visa Inc, Kapital VCT plc y Nu Holdings Ltd, pero la noticia no proporciona información relevante que pueda afectar significativamente a estas empresas o al sector en general.",
+          "reasoning": "La noticia es neutral y no proporciona información que pueda influir en la cartera del inversor de manera significativa.",
+          "latency_s": 4.48
+        },
+        "DeepSeek-V3 (GitHub)": {
+          "event_type": "otro",
+          "direction": "neutral",
+          "severity": 0.1,
+          "confidence": 0.95,
+          "explanation": "La noticia sobre el Form 4 de Stellar Bancorp Inc no tiene impacto directo en los activos de la cartera, ya que no hay coincidencias directas y el sector financiero representado en la cartera (Visa, Nu Holdings) no está directamente relacionado con Stellar Bancorp.",
+          "reasoning": "La noticia es neutral y no afecta a los activos de la cartera, ya que no hay conexión directa o indirecta relevante.",
+          "latency_s": 30.18
+        },
+        "DeepSeek-R1 (GitHub)": {
+          "event_type": "otro",
+          "direction": "neutral",
+          "severity": 0.1,
+          "confidence": 0.9,
+          "explanation": "La noticia sobre el Form 4 de Stellar Bancorp (divulgación rutinaria de transacciones de insiders) no tiene conexión directa con los activos de la cartera. Ninguna empresa del portfolio opera en banca regional estadounidense ni tiene relaciones comerciales relevantes con esta entidad. El impacto en sectores financieros indirectos (V, NU, KAP.L) es inexistente dado el carácter administrativo del anuncio.",
+          "reasoning": "Form 4 es un reporte regulatorio estándar sin implicaciones estratégicas. Cartera concentrada en tecnología/semiconductores (66%) y servicios financieros no bancarios (33%). Relevancia sectorial/geográfica mínima.",
+          "latency_s": 9.42
+        }
+      }
+    },
+    {
+      "news_id": "6a4502a14fc6434fc6eb4cf3",
+      "title": "Form 4 Stellar Bancorp Inc For: 1 July",
+      "source": "investing_com",
+      "url": "https://www.investing.com/news/filings/form-4-stellar-bancorp-inc-for-1-july-93CH-4770219",
+      "relevance_score": 0.3112,
+      "matched_assets": [],
+      "nlp_sentiment": {
+        "sentiment": "neutral",
+        "confidence": 0.9492,
+        "probabilities": {
+          "positive": 0.0276,
+          "negative": 0.0232,
+          "neutral": 0.9492
+        }
+      },
+      "nlp_event_type": "cambio_directivo",
+      "deterministic_impact": {
+        "direction": "neutral",
+        "severity": 0.4363,
+        "severity_label": "media"
+      },
+      "model_results": {
+        "GPT-4o-mini (GitHub)": {
+          "event_type": "otro",
+          "direction": "neutral",
+          "severity": 0.2,
+          "confidence": 0.8,
+          "explanation": "La noticia sobre Stellar Bancorp Inc. no tiene un impacto directo en la cartera, ya que los activos presentes son de diferentes sectores y no están relacionados con la entidad mencionada. La relevancia es baja y, aunque puede haber implicaciones indirectas en el sector financiero, estas son mínimas y no afectan significativamente a las empresas tecnológicas y de servicios financieros que componen la cartera.",
+          "reasoning": "La noticia es neutral y su relevancia es baja, lo que sugiere que no hay cambios significativos esperados en la cartera debido a este evento.",
+          "latency_s": 4.82
+        },
+        "GPT-4o (GitHub)": {
+          "event_type": "otro",
+          "direction": "neutral",
+          "severity": 0.1,
+          "confidence": 0.8,
+          "explanation": "La noticia sobre el Form 4 de Stellar Bancorp Inc. no tiene un impacto directo en los activos de esta cartera, ya que no hay coincidencias directas ni una relación significativa con los sectores o geografías relevantes. Por lo tanto, el impacto es neutral y de baja severidad.",
+          "reasoning": "Stellar Bancorp opera en el sector financiero, pero no tiene una conexión directa con los activos financieros de la cartera (Visa, Kapital VCT o Nu Holdings). Además, el evento no parece tener implicaciones amplias para el mercado financiero en general.",
+          "latency_s": 3.39
+        },
+        "Llama-3.3-70B (GitHub)": {
+          "error": "JSON parse failed",
+          "raw": "```json\n{\n  \"event_type\": \"otro\",\n  \"direction\":",
+          "latency_s": 3.48
+        },
+        "DeepSeek-V3 (GitHub)": {
+          "event_type": "otro",
+          "direction": "neutral",
+          "severity": 0.1,
+          "confidence": 0.95,
+          "explanation": "La noticia sobre Stellar Bancorp Inc no tiene impacto directo en la cartera del inversor, ya que no hay activos relacionados con bancos regionales estadounidenses. Además, el sector financiero de la cartera (Visa, Nu Holdings) no se ve afectado por esta información.",
+          "reasoning": "La noticia es neutral y no relevante para los activos en la cartera, con alta confianza en el análisis debido a la falta de conexión directa o indirecta.",
+          "latency_s": 32.15
+        },
+        "DeepSeek-R1 (GitHub)": {
+          "event_type": "otro",
+          "direction": "neutral",
+          "severity": 0.1,
+          "confidence": 0.9,
+          "explanation": "La noticia sobre transacciones de insiders en Stellar Bancorp (sector financiero) no impacta directamente a los activos de la cartera, que se concentran en tecnología, servicios crediticios y ferroviarios. Los holdings financieros de la cartera (Visa, Nu, Kapital VCT) operan en segmentos distintos al bancario regional y no muestran correlación operativa relevante con este evento.",
+          "reasoning": "Form 4 es un reporte rutinario de transacciones de ejecutivos sin implicaciones estratégicas. Cartera no tiene exposición a bancos regionales ni correlación sectorial directa. Relevancia limitada por score previo 0.31.",
+          "latency_s": 9.82
+        }
+      }
+    },
+    {
+      "news_id": "6a4502a84fc6434fc6eb4d6e",
+      "title": "Anthropic restores Claude Fable 5 as US lifts export controls — single filter now blocks prompt that could identify software vulnerabilities and write code to exploit them",
+      "source": "tomshardware",
+      "url": "https://www.tomshardware.com/tech-industry/artificial-intelligence/anthropic-restores-claude-fable-5-as-us-lifts-export-controls",
+      "relevance_score": 0.4243,
+      "matched_assets": [],
+      "nlp_sentiment": {
+        "sentiment": "neutral",
+        "confidence": 0.9032,
+        "probabilities": {
+          "positive": 0.0784,
+          "negative": 0.0184,
+          "neutral": 0.9032
+        }
+      },
+      "nlp_event_type": "guidance_profit_warning",
+      "deterministic_impact": {
+        "direction": "neutral",
+        "severity": 0.6825,
+        "severity_label": "alta"
+      },
+      "model_results": {
+        "GPT-4o-mini (GitHub)": {
+          "event_type": "regulacion",
+          "direction": "neutral",
+          "severity": 0.2,
+          "confidence": 0.7,
+          "explanation": "La restauración del acceso global a Claude Fable 5 por parte de Anthropic, tras la eliminación de controles de exportación, podría tener un impacto limitado en la cartera, ya que no afecta directamente a las empresas que la componen. Sin embargo, la noticia sugiere un entorno regulatorio más flexible que podría beneficiar indirectamente a las empresas tecnológicas como Microsoft, NVIDIA y AMD en el futuro, aunque el impacto inmediato es bajo.",
+          "reasoning": "La noticia se centra en cambios regulatorios que afectan a una empresa específica en el sector tecnológico, pero no hay un impacto directo en los activos de la cartera. La severidad se califica como baja debido a la falta de conexión directa con las empresas en la cartera.",
+          "latency_s": 4.92
+        },
+        "GPT-4o (GitHub)": {
+          "event_type": "regulacion",
+          "direction": "neutral",
+          "severity": 0.2,
+          "confidence": 0.85,
+          "explanation": "La noticia sobre el levantamiento de controles de exportación para Anthropic y la restauración de Claude Fable 5 tiene un impacto limitado en esta cartera. Aunque afecta al sector tecnológico, no hay un impacto directo en las empresas de la cartera, ya que ninguna de ellas está directamente relacionada con Anthropic o su tecnología. Sin embargo, podría haber un efecto indirecto menor en el ecosistema de inteligencia artificial y semiconductores, donde empresas como NVDA, AMD y TSM tienen presencia.",
+          "reasoning": "La noticia tiene relevancia indirecta para el sector tecnológico, pero no menciona a las empresas de la cartera ni implica cambios regulatorios o competitivos significativos que afecten directamente a sus operaciones. Por ello, el impacto es neutral y de baja severidad.",
+          "latency_s": 2.93
+        },
+        "Llama-3.3-70B (GitHub)": {
+          "event_type": "otro",
+          "direction": "neutral",
+          "severity": 0.2,
+          "confidence": 0.8,
+          "explanation": "La noticia sobre la restauración de Claude Fable 5 por Anthropic después de que EE. UU. levantara los controles de exportación tiene un impacto indirecto y limitado en la cartera, ya que no menciona directamente a ninguna de las empresas que la componen. Sin embargo, el sector tecnológico y de semiconductores podría verse ligeramente afectado por cambios en el panorama regulatorio y de exportación, aunque el efecto es probablemente mínimo para los activos específicos de esta cartera.",
+          "reasoning": "La noticia no tiene un impacto directo en las empresas de la cartera, pero cambios en el entorno regulatorio pueden influir en el sector tecnológico en general.",
+          "latency_s": 6.62
+        },
+        "DeepSeek-V3 (GitHub)": {
+          "error": "Too many requests. For more on scraping GitHub and how it may affect your rights, please review our Terms of Service (ht",
+          "latency_s": 24.29
+        },
+        "DeepSeek-R1 (GitHub)": {
+          "error": "Too many requests. For more on scraping GitHub and how it may affect your rights, please review our Terms of Service (ht",
+          "latency_s": 4.85
+        }
+      }
+    },
+    {
+      "news_id": "6a4502a04fc6434fc6eb4cdf",
+      "title": "What Medallia’s faceplant tells us about private credit",
+      "source": "financial_times",
+      "url": "https://www.ft.com/content/7db5dff0-7b8a-4920-8676-8bd12e2649b4",
+      "relevance_score": 0.3774,
+      "matched_assets": [],
       "nlp_sentiment": {
         "sentiment": "negative",
-        "confidence": 0.9564,
+        "confidence": 0.5131,
         "probabilities": {
-          "positive": 0.0079,
-          "negative": 0.9564,
-          "neutral": 0.0358
+          "positive": 0.0368,
+          "negative": 0.5131,
+          "neutral": 0.4501
         }
       },
       "nlp_event_type": "guidance_profit_warning",
       "deterministic_impact": {
         "direction": "bajista",
-        "severity": 0.7738,
+        "severity": 0.6099,
         "severity_label": "alta"
       },
       "model_results": {
         "GPT-4o-mini (GitHub)": {
           "event_type": "otro",
           "direction": "bajista",
-          "severity": 0.7,
-          "confidence": 0.85,
-          "explanation": "La caída en los futuros tecnológicos, especialmente con la fuerte baja de Nvidia, impacta directamente en la cartera, ya que Nvidia representa el 12% de la misma. Esto puede generar una presión bajista en el precio de las acciones de Nvidia y, por ende, afectar negativamente el rendimiento de la cartera. Además, la tendencia negativa en el sector tecnológico puede influir en la percepción del mercado sobre otras acciones tecnológicas en la cartera, como Microsoft, AMD y Broadcom.",
-          "reasoning": "La noticia indica un descenso significativo en el sector tecnológico, lo que afecta directamente a Nvidia y, por extensión, a otras acciones tecnológicas en la cartera. La severidad se considera alta debido a la exposición directa a Nvidia y la correlación con el sentimiento del mercado hacia el sector.",
-          "latency_s": 4.25
+          "severity": 0.4,
+          "confidence": 0.7,
+          "explanation": "La noticia sobre la caída de Medallia y su impacto en el crédito privado puede generar preocupaciones sobre la estabilidad del sector financiero, lo que podría afectar indirectamente a las empresas de servicios financieros en la cartera, como Visa y Nu Holdings. La percepción negativa del mercado podría llevar a una mayor aversión al riesgo, afectando la valoración de estas acciones.",
+          "reasoning": "Aunque no hay un impacto directo en las empresas de la cartera, la noticia sugiere un entorno financiero más complicado que podría influir en la confianza de los inversores en el sector financiero, lo que justifica una dirección bajista y una severidad moderada.",
+          "latency_s": 4.1
         },
         "GPT-4o (GitHub)": {
           "event_type": "otro",
-          "direction": "bajista",
-          "severity": 0.8,
-          "confidence": 0.9,
-          "explanation": "La noticia destaca una caída significativa en los futuros tecnológicos, con un impacto directo en NVIDIA, que representa el 12% de la cartera. Esto podría generar una presión bajista considerable en el valor de la cartera, especialmente dado el peso de otros activos del sector de semiconductores como AMD, TSM y AVGO, que podrían verse afectados indirectamente por el sentimiento negativo hacia el sector.",
-          "reasoning": "El impacto directo en NVIDIA, combinado con el peso significativo de otros activos tecnológicos en la cartera, sugiere un efecto bajista relevante. La alta confianza en el análisis se debe a la especificidad de la noticia y su relevancia para los activos de la cartera.",
-          "latency_s": 3.14
+          "direction": "neutral",
+          "severity": 0.2,
+          "confidence": 0.7,
+          "explanation": "La noticia sobre Medallia y el impacto en el crédito privado tiene una relevancia indirecta para esta cartera, especialmente para los activos en el sector de servicios financieros como Visa y Nu Holdings. Sin embargo, el impacto es limitado ya que no hay una conexión directa con los activos de la cartera ni con el crédito privado como segmento principal.",
+          "reasoning": "Aunque la noticia refleja problemas en el crédito privado, los activos de la cartera no están directamente expuestos a este segmento. Visa y Nu Holdings podrían verse afectadas marginalmente por cambios en la percepción del riesgo crediticio, pero el impacto es bajo debido a su enfoque en servicios financieros más amplios.",
+          "latency_s": 3.19
         },
         "Llama-3.3-70B (GitHub)": {
-          "event_type": "resultados_empresariales",
-          "direction": "bajista",
-          "severity": 0.6,
-          "confidence": 0.9,
-          "explanation": "La noticia sobre el descenso de las acciones de Micron, Nvidia y Sandisk puede tener un impacto negativo en la cartera del inversor, especialmente debido a la presencia de NVDA, que es una de las acciones más pesadas en la cartera. Esto podría llevar a una disminución en el valor total de la cartera.",
-          "reasoning": "El descenso de las acciones de empresas tecnológicas como Nvidia puede influir en la percepción general del sector tecnológico, afectando a otras acciones de la cartera en ese sector.",
-          "latency_s": 3.59
+          "error": "JSON parse failed",
+          "raw": "```json\n{\n  \"event_type\": \"otro\",\n  \"direction\": \"b",
+          "latency_s": 2.09
         },
         "DeepSeek-V3 (GitHub)": {
-          "event_type": "resultados_empresariales",
-          "direction": "bajista",
-          "severity": 0.7,
-          "confidence": 0.85,
-          "explanation": "La noticia indica una caída significativa en los futuros de las acciones tecnológicas, especialmente en NVDA, que representa el 12% de la cartera. Esto podría generar un impacto negativo en el valor de la cartera debido a la exposición significativa al sector tecnológico y de semiconductores.",
-          "reasoning": "La caída en los futuros de NVDA y otras empresas tecnológicas sugiere un sentimiento negativo en el sector, lo que afectaría directamente a la cartera dada su alta concentración en tecnología y semiconductores.",
-          "latency_s": 33.32
+          "error": "Too many requests. For more on scraping GitHub and how it may affect your rights, please review our Terms of Service (ht",
+          "latency_s": 38.04
         },
         "DeepSeek-R1 (GitHub)": {
-          "event_type": "resultados_empresariales",
-          "direction": "bajista",
-          "severity": 0.65,
-          "confidence": 0.85,
-          "explanation": "La caída de futuros tecnológicos impacta directamente a NVDA (12% de la cartera) y arrastra al sector de semiconductores (TSM, AMD, AVGO suman 33% adicional). Microsoft (11%) podría verse afectado por correlación sectorial, mientras los componentes financieros (V, NU) y no-tecnológicos (TLN.MC, KAP.L) amortiguan parcialmente el impacto.",
-          "reasoning": "NVDA es mencionado directamente y representa el mayor peso. Los semiconductores (56% de la cartera) son altamente sensibles a noticias sectoriales. La confianza es alta por el match directo y la exposición concentrada en tech.",
-          "latency_s": 11.03
+          "error": "Too many requests. For more on scraping GitHub and how it may affect your rights, please review our Terms of Service (ht",
+          "latency_s": 6.13
         }
       }
     },
     {
-      "news_id": "6a3a8e84525f8856037d2a9b",
-      "title": "China's LineShine supercomputer dethrones US' El Capitan, secures first place in Top 500 list — first machine in the rankings to sustain more than 2 ExaFLOPS of double-precision performance using only CPUs",
+      "news_id": "6a4502a84fc6434fc6eb4d6f",
+      "title": "Grab a massive $464 saving on a two-year NordVPN subscription with three extra months free — 69% saving unlocks this privacy-first VPN service with scam protection, password manager, 1TB cloud storage, ad blocking and more",
       "source": "tomshardware",
-      "url": "https://www.tomshardware.com/tech-industry/supercomputers/chinas-lineshine-supercomputer-dethrones-us-el-capitan-secures-first-place-in-top-500-list-first-machine-in-the-rankings-to-sustain-more-than-2-exaflops-of-double-precision-performance-using-only-cpus",
-      "relevance_score": 0.3004,
+      "url": "https://www.tomshardware.com/software/vpn/grab-a-massive-usd464-saving-on-a-two-year-nordvpn-subscription-with-three-extra-months-free-69-percent-saving-unlocks-this-privacy-first-vpn-service-with-scam-protection-password-manager-1tb-cloud-storage-ad-blocking-and-more",
+      "relevance_score": 0.3811,
       "matched_assets": [],
       "nlp_sentiment": {
-        "sentiment": "positive",
-        "confidence": 0.9051,
-        "probabilities": {
-          "positive": 0.9051,
-          "negative": 0.0106,
-          "neutral": 0.0843
-        }
-      },
-      "nlp_event_type": "otro",
-      "deterministic_impact": {
-        "direction": "alcista",
-        "severity": 0.2607,
-        "severity_label": "baja"
-      },
-      "model_results": {
-        "GPT-4o-mini (GitHub)": {
-          "event_type": "otro",
-          "direction": "bajista",
-          "severity": 0.4,
-          "confidence": 0.7,
-          "explanation": "La noticia sobre el superordenador LineShine de China, que ha superado al El Capitan de EE. UU., puede generar preocupación en el sector tecnológico estadounidense, especialmente para empresas como NVIDIA, AMD y Broadcom, que dependen de la competitividad en el ámbito de los semiconductores. Esto podría afectar la percepción del mercado sobre la capacidad de innovación y liderazgo tecnológico de EE. UU., impactando negativamente en las acciones de estas compañías. Sin embargo, el impacto no es inmediato ni devastador, lo que justifica una severidad moderada.",
-          "reasoning": "La noticia resalta la competencia creciente de China en tecnología, lo que puede influir en la confianza de los inversores en empresas tecnológicas estadounidenses, aunque el impacto no es tan severo como para provocar una caída drástica en los precios de las acciones.",
-          "latency_s": 4.49
-        },
-        "GPT-4o (GitHub)": {
-          "event_type": "otro",
-          "direction": "bajista",
-          "severity": 0.4,
-          "confidence": 0.8,
-          "explanation": "El anuncio del superordenador LineShine de China, que supera al estadounidense El Capitan en rendimiento, podría ser considerado un desarrollo negativo para los fabricantes de semiconductores en esta cartera, como NVIDIA, AMD y Broadcom. Esto se debe a que refuerza la percepción de que China está avanzando rápidamente en tecnología de alto rendimiento, lo que podría intensificar la competencia y reducir la ventaja competitiva de las empresas estadounidenses en este segmento. Sin embargo, el impacto es moderado, ya que no hay una afectación directa a los productos o ingresos de estas empresas en el corto plazo.",
-          "reasoning": "Aunque no hay un impacto directo en los activos de la cartera, la noticia tiene implicaciones estratégicas para el sector de semiconductores, donde varias empresas de la cartera tienen una exposición significativa. La creciente competencia tecnológica de China podría influir en las perspectivas de mercado a mediano y largo plazo.",
-          "latency_s": 2.98
-        },
-        "Llama-3.3-70B (GitHub)": {
-          "event_type": "otro",
-          "direction": "bajista",
-          "severity": 0.2,
-          "confidence": 0.6,
-          "explanation": "La noticia sobre el supercomputador chino LineShine desplazando al estadounidense El Capitan en rendimiento puede tener un impacto indirecto en la cartera, especialmente en las acciones de empresas tecnológicas como NVDA, AMD y AVGO, que podrían verse afectadas por el avance tecnológico de la competencia china en el sector de semiconductores y supercomputación.",
-          "reasoning": "El avance tecnológico de China en supercomputación puede aumentar la competencia para las empresas estadounidenses en el sector tecnológico, lo que podría afectar negativamente a las acciones de NVDA, AMD y AVGO en la cartera.",
-          "latency_s": 4.98
-        },
-        "DeepSeek-V3 (GitHub)": {
-          "event_type": "otro",
-          "direction": "neutral",
-          "severity": 0.2,
-          "confidence": 0.8,
-          "explanation": "La noticia sobre el supercomputador chino LineShine no tiene un impacto directo en los activos de la cartera, ya que ninguno está directamente relacionado con la supercomputación o competencia en este ámbito. Aunque NVDA, AMD y AVGO operan en el sector de semiconductores, su exposición a este evento es mínima.",
-          "reasoning": "La noticia es relevante para el sector tecnológico pero no afecta directamente a los activos de la cartera. La competencia en supercomputación no impacta significativamente a los semiconductores o software en el corto plazo.",
-          "latency_s": 25.61
-        },
-        "DeepSeek-R1 (GitHub)": {
-          "event_type": "otro",
-          "direction": "neutral",
-          "severity": 0.15,
-          "confidence": 0.75,
-          "explanation": "El avance tecnológico chino en supercomputación podría generar preocupación competitiva indirecta para las empresas de semiconductores estadounidenses (NVDA, AMD, AVGO, TSM), pero el detalle sobre su bajo rendimiento en precisión mixta (donde destacan las GPU de NVIDIA/AMD) mitiga el impacto. Microsoft y otros componentes de la cartera no tienen exposición directa a este nicho de HPC.",
-          "reasoning": "El logro chino en CPUs podría presionar geopolíticamente a EE.UU., pero las limitaciones técnicas mencionadas refuerzan la ventaja actual de las soluciones GPU/accelerator donde dominan NVDA/AMD. Impacto indirecto y difuso en el sector.",
-          "latency_s": 9.0
-        }
-      }
-    },
-    {
-      "news_id": "6a3a8e7c525f8856037d29ee",
-      "title": "What Makes Microsoft (MSFT) a Strong Position Amid Challenges?",
-      "source": "yahoo_finance",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/makes-microsoft-msft-strong-position-124902924.html",
-      "relevance_score": 0.8552,
-      "matched_assets": [
-        "MSFT"
-      ],
-      "nlp_sentiment": {
         "sentiment": "neutral",
-        "confidence": 0.7757,
+        "confidence": 0.8855,
         "probabilities": {
-          "positive": 0.2138,
-          "negative": 0.0105,
-          "neutral": 0.7757
+          "positive": 0.1026,
+          "negative": 0.0118,
+          "neutral": 0.8855
         }
       },
       "nlp_event_type": "otro",
       "deterministic_impact": {
         "direction": "neutral",
-        "severity": 0.287,
+        "severity": 0.2687,
         "severity_label": "baja"
       },
       "model_results": {
@@ -693,277 +862,275 @@
           "direction": "neutral",
           "severity": 0.2,
           "confidence": 0.7,
-          "explanation": "La noticia sobre Microsoft destaca su posición fuerte en medio de desafíos, lo que sugiere estabilidad, pero no necesariamente un impulso significativo en el valor de la acción. Dado que la cartera tiene un peso considerable en Microsoft (11.0%), esta estabilidad podría ser vista como un factor positivo, aunque no se prevén cambios drásticos en el corto plazo.",
-          "reasoning": "El sentimiento neutral y la falta de un evento financiero específico que indique un cambio en la valoración de MSFT sugieren que el impacto en la cartera será limitado.",
-          "latency_s": 3.45
-        },
-        "GPT-4o (GitHub)": {
-          "event_type": "otro",
-          "direction": "alcista",
-          "severity": 0.4,
-          "confidence": 0.78,
-          "explanation": "La noticia destaca la fortaleza de Microsoft (MSFT) frente a desafíos, lo que puede reforzar la confianza de los inversores en la acción. Dado que MSFT tiene un peso significativo del 11% en la cartera, cualquier mejora en la percepción del mercado sobre la empresa puede tener un impacto positivo moderado en el rendimiento general de la cartera.",
-          "reasoning": "El sentimiento neutral detectado por FinBERT, junto con el enfoque en la resiliencia de Microsoft, sugiere que la noticia no introduce nueva información negativa y podría ser interpretada como un respaldo a su posición en el mercado. Esto es relevante para la cartera debido al peso significativo de MSFT.",
-          "latency_s": 2.6
-        },
-        "Llama-3.3-70B (GitHub)": {
-          "event_type": "resultados_empresariales",
-          "direction": "alcista",
-          "severity": 0.6,
-          "confidence": 0.8,
-          "explanation": "La noticia sugiere que Microsoft (MSFT) mantiene una posición sólida a pesar de los desafíos, lo que podría tener un impacto positivo en la cartera del inversor debido al peso significativo de MSFT en la cartera. Esto podría influir en la confianza de los inversores y potencialmente aumentar el valor de las acciones.",
-          "reasoning": "El sentimiento neutral de la noticia y la relevancia alta sugieren un impacto moderado en la cartera.",
-          "latency_s": 4.42
-        },
-        "DeepSeek-V3 (GitHub)": {
-          "error": "Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 8 per 86400s exceeded for UserByModel",
-          "latency_s": 29.87
-        },
-        "DeepSeek-R1 (GitHub)": {
-          "error": "Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 8 per 86400s exceeded for UserByModel",
-          "latency_s": 3.63
-        }
-      }
-    },
-    {
-      "news_id": "6a3a8e7d525f8856037d29f7",
-      "title": "Atai Capital’s Update on BK Technologies Corp. (BKTI)",
-      "source": "yahoo_finance",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/atai-capital-bk-technologies-corp-122017420.html",
-      "relevance_score": 0.3176,
-      "matched_assets": [],
-      "nlp_sentiment": {
-        "sentiment": "neutral",
-        "confidence": 0.9421,
-        "probabilities": {
-          "positive": 0.0382,
-          "negative": 0.0197,
-          "neutral": 0.9421
-        }
-      },
-      "nlp_event_type": "otro",
-      "deterministic_impact": {
-        "direction": "neutral",
-        "severity": 0.2624,
-        "severity_label": "baja"
-      },
-      "model_results": {
-        "GPT-4o-mini (GitHub)": {
-          "event_type": "otro",
-          "direction": "neutral",
-          "severity": 0.2,
-          "confidence": 0.8,
-          "explanation": "La actualización de Atai Capital sobre BK Technologies Corp. no tiene un impacto directo en la cartera, ya que no hay activos relevantes mencionados. Sin embargo, la neutralidad del sentimiento sugiere que no se anticipan cambios significativos en el mercado que puedan afectar a las empresas en la cartera. Por lo tanto, el impacto es bajo y se considera neutral.",
-          "reasoning": "La noticia es sobre una empresa que no está en la cartera, y el sentimiento neutral indica que no hay expectativas de cambios que afecten a los sectores representados en la cartera.",
-          "latency_s": 3.8
+          "explanation": "La noticia sobre la oferta de NordVPN no tiene un impacto directo en la cartera de inversión que incluye empresas como Microsoft, Visa, NVIDIA, entre otras. Aunque el sector tecnológico se beneficia de la creciente demanda de servicios de ciberseguridad, la relevancia de esta oferta específica es baja y no afecta materialmente a las acciones en la cartera. Sin embargo, es un recordatorio de la importancia de la ciberseguridad en el entorno actual.",
+          "reasoning": "La noticia es sobre una oferta de un servicio de VPN, lo que puede ser relevante para el sector tecnológico en general, pero no afecta directamente a las empresas específicas en la cartera. La severidad se considera baja debido a la falta de impacto material.",
+          "latency_s": 4.15
         },
         "GPT-4o (GitHub)": {
           "event_type": "otro",
           "direction": "neutral",
           "severity": 0.2,
-          "confidence": 0.85,
-          "explanation": "La noticia sobre BK Technologies Corp. no tiene un impacto directo en los activos de esta cartera, ya que no hay coincidencias sectoriales o geográficas significativas. BKTI opera en un nicho diferente al de las empresas tecnológicas y financieras presentes en la cartera.",
-          "reasoning": "Dado que BK Technologies Corp. no está directamente relacionado con los sectores o geografías de los activos de la cartera, y el sentimiento detectado es neutral, el impacto es mínimo. La relevancia previa también es baja, lo que refuerza la evaluación de un impacto limitado.",
-          "latency_s": 2.36
+          "confidence": 0.8,
+          "explanation": "La noticia sobre la oferta de NordVPN no tiene un impacto directo en los activos de la cartera, ya que no menciona empresas relacionadas ni afecta directamente a los sectores representados. Sin embargo, podría tener un impacto marginal en la percepción de servicios tecnológicos relacionados con la ciberseguridad, un área de interés para empresas como Microsoft y Broadcom.",
+          "reasoning": "La relevancia de la noticia es baja debido a la falta de conexión directa con las empresas de la cartera. Aunque NordVPN opera en el ámbito tecnológico, su impacto en gigantes como Microsoft o Broadcom es insignificante en este contexto.",
+          "latency_s": 2.88
         },
         "Llama-3.3-70B (GitHub)": {
           "event_type": "otro",
           "direction": "neutral",
           "severity": 0.1,
           "confidence": 0.9,
-          "explanation": "La noticia sobre Atai Capital’s Update on BK Technologies Corp. (BKTI) no tiene un impacto directo en la cartera del inversor, ya que no hay activos con match directo en la noticia. Además, el sentimiento detectado es neutral, lo que sugiere que la noticia no tiene un efecto significativo en el mercado. Por lo tanto, se considera un impacto neutral y de baja severidad para esta cartera.",
-          "reasoning": "La noticia es específica de una empresa (BKTI) que no está en la cartera, y el sentimiento neutral sugiere un impacto mínimo en el mercado en general.",
-          "latency_s": 3.41
+          "explanation": "La noticia sobre la oferta de NordVPN no tiene un impacto directo en los activos de la cartera, ya que no menciona empresas específicas incluidas en la cartera. La relevancia es indirecta y se limita al sector tecnológico, pero no es lo suficientemente significativa como para afectar materialmente el valor de la cartera.",
+          "reasoning": "La noticia se centra en una promoción de un servicio de VPN y no tiene relación directa con las empresas de la cartera, por lo que su impacto es mínimo.",
+          "latency_s": 12.75
         },
         "DeepSeek-V3 (GitHub)": {
-          "error": "Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 8 per 86400s exceeded for UserByModel",
-          "latency_s": 38.02
+          "error": "Too many requests. For more on scraping GitHub and how it may affect your rights, please review our Terms of Service (ht",
+          "latency_s": 24.34
         },
         "DeepSeek-R1 (GitHub)": {
-          "error": "Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 8 per 86400s exceeded for UserByModel",
-          "latency_s": 3.27
+          "error": "Too many requests. For more on scraping GitHub and how it may affect your rights, please review our Terms of Service (ht",
+          "latency_s": 6.41
         }
       }
     },
     {
-      "news_id": "6a3a8e92525f8856037d2bef",
-      "title": "Orderful’s $35M Series C targets the service model that has defined EDI for decades",
-      "source": "freightwaves",
-      "url": "https://www.freightwaves.com/news/orderful-35m-series-c-edi",
-      "relevance_score": 0.4064,
+      "news_id": "6a45029f4fc6434fc6eb4cc1",
+      "title": "HUHUTECH (HUHU) Wins Semiconductor Contract in Japan",
+      "source": "yahoo_finance",
+      "url": "https://finance.yahoo.com/technology/articles/huhutech-huhu-wins-semiconductor-contract-110346300.html",
+      "relevance_score": 0.3385,
       "matched_assets": [],
-      "nlp_sentiment": {
-        "sentiment": "neutral",
-        "confidence": 0.828,
-        "probabilities": {
-          "positive": 0.1105,
-          "negative": 0.0614,
-          "neutral": 0.828
-        }
-      },
-      "nlp_event_type": "otro",
-      "deterministic_impact": {
-        "direction": "neutral",
-        "severity": 0.2712,
-        "severity_label": "baja"
-      },
-      "model_results": {
-        "GPT-4o-mini (GitHub)": {
-          "event_type": "otro",
-          "direction": "neutral",
-          "severity": 0.2,
-          "confidence": 0.7,
-          "explanation": "La noticia sobre la inversión de Orderful en el modelo de EDI no tiene un impacto directo en la cartera, ya que los activos presentes son de sectores diferentes y no están directamente relacionados con EDI o la logística. Sin embargo, la evolución en el sector de servicios de datos podría tener un efecto indirecto en la tecnología y la eficiencia operativa de las empresas en la cartera a largo plazo.",
-          "reasoning": "Aunque la noticia es interesante y muestra un cambio potencial en el sector de EDI, su relevancia para la cartera es baja, ya que no afecta directamente a las empresas que se poseen. La severidad se mantiene baja debido a la falta de conexión directa con los activos de la cartera.",
-          "latency_s": 3.63
-        },
-        "GPT-4o (GitHub)": {
-          "event_type": "fusion_adquisicion",
-          "direction": "neutral",
-          "severity": 0.2,
-          "confidence": 0.8,
-          "explanation": "La noticia sobre la ronda de financiación de Orderful y su enfoque en modernizar el modelo EDI tiene un impacto limitado en esta cartera. Aunque podría influir en empresas tecnológicas que operan en el ámbito de la digitalización de procesos empresariales, ninguna de las compañías en la cartera tiene una exposición directa al mercado de EDI. Por lo tanto, el impacto es marginal.",
-          "reasoning": "La noticia no menciona directamente a ninguna de las empresas en la cartera, y el sector EDI no tiene una correlación significativa con las actividades principales de las compañías incluidas. Sin embargo, dado que algunas empresas como Microsoft tienen intereses en soluciones empresariales, existe una relevancia indirecta mínima.",
-          "latency_s": 2.64
-        },
-        "Llama-3.3-70B (GitHub)": {
-          "event_type": "otro",
-          "direction": "neutral",
-          "severity": 0.2,
-          "confidence": 0.8,
-          "explanation": "La noticia sobre la inversión en Orderful para innovar en el modelo de EDI no tiene un impacto directo en los activos de esta cartera, ya que no menciona empresas específicas dentro de la cartera. Sin embargo, la innovación en el sector tecnológico podría tener efectos indirectos en empresas como Microsoft o NVIDIA, pero en este caso, el impacto es mínimo debido a la falta de conexión directa.",
-          "reasoning": "La noticia se centra en la innovación en el sector de EDI, que no está directamente relacionado con las empresas en la cartera. La relevancia indirecta por sector o geografía es baja, lo que sugiere un impacto mínimo en la cartera.",
-          "latency_s": 5.06
-        },
-        "DeepSeek-V3 (GitHub)": {
-          "error": "Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 1 per 60s exceeded for UserByModelByM",
-          "latency_s": 35.05
-        },
-        "DeepSeek-R1 (GitHub)": {
-          "error": "Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 8 per 86400s exceeded for UserByModel",
-          "latency_s": 2.4
-        }
-      }
-    },
-    {
-      "news_id": "6a3a8e86525f8856037d2ad3",
-      "title": "Hyundai backs ioneer’s Nevada lithium-boron project",
-      "source": "mining_com",
-      "url": "https://www.mining.com/hyundai-backs-ioneers-nevada-lithium-boron-project/",
-      "relevance_score": 0.6937,
-      "matched_assets": [
-        "AMD"
-      ],
       "nlp_sentiment": {
         "sentiment": "positive",
-        "confidence": 0.9508,
+        "confidence": 0.8197,
         "probabilities": {
-          "positive": 0.9508,
-          "negative": 0.0218,
-          "neutral": 0.0274
+          "positive": 0.8197,
+          "negative": 0.0211,
+          "neutral": 0.1591
         }
       },
-      "nlp_event_type": "otro",
+      "nlp_event_type": "regulacion",
       "deterministic_impact": {
         "direction": "alcista",
-        "severity": 0.2997,
-        "severity_label": "baja"
+        "severity": 0.5731,
+        "severity_label": "media"
       },
       "model_results": {
         "GPT-4o-mini (GitHub)": {
-          "event_type": "fusion_adquisicion",
-          "direction": "neutral",
-          "severity": 0.2,
-          "confidence": 0.7,
-          "explanation": "La noticia sobre el respaldo de Hyundai al proyecto de litio de Ioneer no tiene un impacto directo en la cartera, ya que los activos principales son empresas tecnológicas y de servicios financieros. Sin embargo, el aumento en la producción de litio podría beneficiar indirectamente a empresas como AMD, que dependen de materiales para la fabricación de semiconductores, aunque el efecto es limitado en este momento.",
-          "reasoning": "El evento es positivo para el sector de litio, pero su relevancia para la cartera es baja, ya que no afecta directamente a las empresas tecnológicas en la que se invierte.",
-          "latency_s": 3.38
-        },
-        "GPT-4o (GitHub)": {
-          "event_type": "fusion_adquisicion",
-          "direction": "neutral",
-          "severity": 0.2,
-          "confidence": 0.85,
-          "explanation": "La noticia sobre el respaldo de Hyundai al proyecto de ioneer en Nevada no tiene un impacto directo en los activos de esta cartera. Aunque el proyecto está relacionado con la producción de litio, un componente clave en la fabricación de baterías y semiconductores, el impacto en AMD y otras empresas de semiconductores de la cartera es limitado en el corto plazo. Sin embargo, a largo plazo, un aumento en la oferta de litio podría influir en los costos de producción de semiconductores, pero esto es especulativo en este momento.",
-          "reasoning": "El proyecto de ioneer está en una etapa temprana y no afecta directamente a los ingresos o costos de AMD ni de otras empresas de semiconductores en la cartera. La conexión con el sector de semiconductores es indirecta y de largo plazo, lo que reduce la severidad del impacto.",
-          "latency_s": 2.94
-        },
-        "Llama-3.3-70B (GitHub)": {
           "event_type": "otro",
           "direction": "neutral",
           "severity": 0.2,
-          "confidence": 0.8,
-          "explanation": "La noticia sobre el proyecto de litio y borato de ioneer en Nevada, respaldado por Hyundai, tiene un impacto indirecto en la cartera del inversor, ya que AMD es una empresa de semiconductores que podría beneficiarse de la disponibilidad de materiales críticos para la producción de baterías, pero el efecto es limitado y no directo.",
-          "reasoning": "El proyecto de ioneer puede tener un impacto positivo en la cadena de suministro de materiales críticos para la producción de baterías, lo que podría beneficiar indirectamente a AMD, pero el peso de AMD en la cartera es del 11% y el impacto de la noticia es limitado.",
-          "latency_s": 4.28
+          "confidence": 0.7,
+          "explanation": "La victoria de HUHUTECH en un contrato de semiconductores en Japón es una noticia positiva para el sector, pero su impacto en la cartera es limitado. Aunque podría indicar un crecimiento en la demanda de semiconductores, no afecta directamente a las empresas que ya están en la cartera, como NVIDIA, AMD o TSM. La severidad se considera baja ya que no hay un impacto inmediato en los ingresos o la valoración de estos activos.",
+          "reasoning": "El evento es positivo para el sector, pero la relevancia directa para la cartera es baja, lo que justifica una dirección neutral y una severidad moderada.",
+          "latency_s": 4.07
+        },
+        "GPT-4o (GitHub)": {
+          "event_type": "otro",
+          "direction": "bajista",
+          "severity": 0.4,
+          "confidence": 0.75,
+          "explanation": "La noticia sobre HUHUTECH ganando un contrato en Japón tiene un impacto indirecto bajista para esta cartera debido a la alta exposición al sector de semiconductores (NVDA, TSM, AMD, AVGO). Este contrato podría fortalecer la posición competitiva de HUHUTECH en el mercado asiático, lo que podría aumentar la competencia para los fabricantes de semiconductores presentes en la cartera, especialmente TSM y AMD, que tienen una fuerte presencia en Asia.",
+          "reasoning": "Aunque HUHUTECH no está directamente en la cartera, su fortalecimiento en el mercado japonés podría presionar los márgenes y la cuota de mercado de los semiconductores en Asia, afectando indirectamente a los activos relacionados en la cartera.",
+          "latency_s": 2.86
+        },
+        "Llama-3.3-70B (GitHub)": {
+          "event_type": "otro",
+          "direction": "bajista",
+          "severity": 0.2,
+          "confidence": 0.6,
+          "explanation": "La noticia sobre HUHUTECH ganando un contrato de semiconductores en Japón puede tener un impacto indirecto en la cartera, especialmente en las acciones de empresas de semiconductores como NVDA, TSM y AMD, ya que podría aumentar la competencia en el sector. Sin embargo, el impacto es probablemente limitado debido a la falta de un match directo en la noticia y la diversificación de la cartera.",
+          "reasoning": "Competencia en el sector de semiconductores",
+          "latency_s": 5.28
         },
         "DeepSeek-V3 (GitHub)": {
-          "error": "Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 8 per 86400s exceeded for UserByModel",
-          "latency_s": 35.66
+          "error": "Too many requests. For more on scraping GitHub and how it may affect your rights, please review our Terms of Service (ht",
+          "latency_s": 35.51
         },
         "DeepSeek-R1 (GitHub)": {
-          "error": "Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 8 per 86400s exceeded for UserByModel",
-          "latency_s": 3.23
+          "error": "Too many requests. For more on scraping GitHub and how it may affect your rights, please review our Terms of Service (ht",
+          "latency_s": 5.17
         }
       }
     },
     {
-      "news_id": "6a3a6e4a4e639986032405fe",
-      "title": "Vedanta’s CopperTech Metals targets $3.6 billion valuation in US IPO",
-      "source": "investing_com",
-      "url": "https://www.investing.com/news/stock-market-news/vedantas-coppertech-metals-targets-36-billion-valuation-in-us-ipo-4755166",
-      "relevance_score": 0.3007,
-      "matched_assets": [],
+      "news_id": "6a4502a84fc6434fc6eb4d70",
+      "title": "The bifurcated laptop landscape of Computex 2026 – MacBook Neo competitors with 8GB of RAM, and expensive Nvidia laptops promising an agentic-focused future of Windows on Arm",
+      "source": "tomshardware",
+      "url": "https://www.tomshardware.com/laptops/the-bifurcated-laptop-landscape-of-computex-2026-macbook-neo-competitors-with-8gb-of-ram-and-expensive-nvidia-laptops-promising-an-agentic-focused-future-of-windows-on-arm",
+      "relevance_score": 0.7575,
+      "matched_assets": [
+        "NVDA"
+      ],
       "nlp_sentiment": {
         "sentiment": "neutral",
-        "confidence": 0.911,
+        "confidence": 0.921,
         "probabilities": {
-          "positive": 0.0799,
-          "negative": 0.0091,
-          "neutral": 0.911
+          "positive": 0.0532,
+          "negative": 0.0257,
+          "neutral": 0.921
         }
       },
-      "nlp_event_type": "otro",
+      "nlp_event_type": "guidance_profit_warning",
       "deterministic_impact": {
         "direction": "neutral",
-        "severity": 0.2608,
-        "severity_label": "baja"
+        "severity": 0.765,
+        "severity_label": "alta"
       },
       "model_results": {
         "GPT-4o-mini (GitHub)": {
           "event_type": "otro",
           "direction": "neutral",
           "severity": 0.2,
-          "confidence": 0.8,
-          "explanation": "La noticia sobre la valoración de Vedanta’s CopperTech Metals en su IPO no tiene un impacto directo en la cartera, ya que los activos presentes son principalmente del sector tecnológico y financiero. Sin embargo, la valoración de nuevas empresas en el sector de metales puede influir indirectamente en la percepción del mercado sobre la inversión en sectores relacionados, aunque el efecto es limitado.",
-          "reasoning": "La relevancia de la noticia es baja para la cartera, ya que no hay activos directamente afectados y el impacto en el sector tecnológico y financiero es mínimo.",
-          "latency_s": 3.52
+          "confidence": 0.7,
+          "explanation": "La noticia sobre el paisaje de laptops en Computex 2026 presenta una bifurcación en el mercado, pero no menciona lanzamientos significativos de GPUs o CPUs que puedan afectar directamente a NVIDIA. Aunque la competencia puede influir en la percepción del mercado, el impacto en la cartera es limitado y no se anticipan cambios drásticos en el rendimiento de NVDA o en el sector tecnológico en general.",
+          "reasoning": "La noticia es neutral y no presenta un impacto material significativo en la cartera, aunque se menciona a NVIDIA, no hay novedades que alteren su posición competitiva.",
+          "latency_s": 3.69
         },
         "GPT-4o (GitHub)": {
-          "event_type": "fusion_adquisicion",
-          "direction": "neutral",
-          "severity": 0.2,
-          "confidence": 0.85,
-          "explanation": "La noticia sobre la IPO de CopperTech Metals, una subsidiaria de Vedanta, tiene un impacto limitado en esta cartera. Aunque podría influir en el sector de metales y minería, no hay exposición directa ni indirecta significativa en la cartera, que está centrada en tecnología, servicios financieros e industriales.",
-          "reasoning": "La cartera no incluye activos relacionados con metales o minería, y la IPO de CopperTech no afecta directamente a las industrias representadas. La relevancia sectorial y geográfica es baja, lo que justifica la neutralidad del impacto.",
-          "latency_s": 2.43
+          "event_type": "otro",
+          "direction": "alcista",
+          "severity": 0.4,
+          "confidence": 0.8,
+          "explanation": "La noticia destaca el protagonismo de los portátiles con GPUs de Nvidia en el evento Computex 2026, lo que refuerza la percepción de liderazgo tecnológico de la compañía en el segmento de alto rendimiento. Esto podría traducirse en un aumento de la demanda de sus productos, beneficiando a Nvidia y, por ende, a la cartera, dado su peso significativo en ella.",
+          "reasoning": "Aunque no se anuncian nuevos productos, la mención positiva de Nvidia en un evento relevante como Computex refuerza su posición en el mercado. Esto tiene un impacto moderadamente alcista para la cartera, especialmente considerando el peso del activo NVDA.",
+          "latency_s": 3.18
         },
         "Llama-3.3-70B (GitHub)": {
           "event_type": "otro",
+          "direction": "alcista",
+          "severity": 0.6,
+          "confidence": 0.8,
+          "explanation": "La noticia sobre la participación de Nvidia en Computex 2026, prometiendo un futuro enfocado en Windows on Arm, podría tener un impacto positivo en el valor de las acciones de NVDA dentro de la cartera, ya que sugiere innovación y expansión en el mercado de laptops de alta gama.",
+          "reasoning": "El enfoque en Windows on Arm y la participación en Computex pueden indicar una estrategia de crecimiento para Nvidia, lo que podría beneficiar a los inversores que poseen acciones de NVDA en su cartera.",
+          "latency_s": 5.02
+        },
+        "DeepSeek-V3 (GitHub)": {
+          "error": "Too many requests. For more on scraping GitHub and how it may affect your rights, please review our Terms of Service (ht",
+          "latency_s": 33.5
+        },
+        "DeepSeek-R1 (GitHub)": {
+          "error": "Too many requests. For more on scraping GitHub and how it may affect your rights, please review our Terms of Service (ht",
+          "latency_s": 3.9
+        }
+      }
+    },
+    {
+      "news_id": "6a4502b14fc6434fc6eb4e67",
+      "title": "Microsoft fixes GIF functionality in the Windows Emoji Panel",
+      "source": "bleeping_computer",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-fixes-gif-functionality-in-the-windows-emoji-panel/",
+      "relevance_score": 0.7135,
+      "matched_assets": [
+        "MSFT"
+      ],
+      "nlp_sentiment": {
+        "sentiment": "negative",
+        "confidence": 0.8566,
+        "probabilities": {
+          "positive": 0.0127,
+          "negative": 0.8566,
+          "neutral": 0.1307
+        }
+      },
+      "nlp_event_type": "incidencia_operativa",
+      "deterministic_impact": {
+        "direction": "bajista",
+        "severity": 0.6033,
+        "severity_label": "alta"
+      },
+      "model_results": {
+        "GPT-4o-mini (GitHub)": {
+          "event_type": "otro",
+          "direction": "neutral",
+          "severity": 0.2,
+          "confidence": 0.7,
+          "explanation": "La noticia sobre la corrección de la funcionalidad GIF en el panel de emojis de Windows 11 es un evento técnico que no afecta directamente los fundamentos financieros de Microsoft. Aunque puede haber un impacto negativo en la percepción del producto, este es de poca relevancia para los inversores a largo plazo en la cartera, dado que Microsoft sigue siendo un líder en tecnología con múltiples líneas de negocio sólidas.",
+          "reasoning": "El evento es técnico y no tiene un impacto material en los ingresos o beneficios de Microsoft, lo que lleva a una evaluación de severidad baja y dirección neutral.",
+          "latency_s": 3.27
+        },
+        "GPT-4o (GitHub)": {
+          "event_type": "incidencia_operativa",
           "direction": "neutral",
           "severity": 0.2,
           "confidence": 0.8,
-          "explanation": "La noticia sobre la IPO de CopperTech Metals no tiene un impacto directo en la cartera del inversor, ya que no hay activos con un match directo en la noticia. Sin embargo, el sector de la tecnología y los semiconductores podría verse indirectamente afectado por la entrada de una nueva empresa en el mercado, aunque el efecto sería mínimo en esta cartera diversificada.",
-          "reasoning": "La cartera tiene una diversificación sectorial y geográfica, lo que reduce el impacto de eventos específicos en un sector o empresa.",
-          "latency_s": 2.95
+          "explanation": "La noticia sobre la corrección de la funcionalidad de GIF en el Panel de Emoji de Windows tiene un impacto limitado en la cartera, ya que se trata de un ajuste menor en un producto específico de Microsoft. Este evento no afecta significativamente los ingresos ni las perspectivas de crecimiento de la compañía, por lo que su relevancia para la acción de MSFT y, por ende, para la cartera, es baja.",
+          "reasoning": "El evento está relacionado con una funcionalidad menor de un producto de Microsoft que no tiene un impacto material en los ingresos o la estrategia general de la empresa. Aunque el sentimiento detectado es negativo, la naturaleza del evento no justifica un impacto significativo en la valoración de MSFT.",
+          "latency_s": 2.89
+        },
+        "Llama-3.3-70B (GitHub)": {
+          "error": "JSON parse failed",
+          "raw": "```{\n  \"event_type\": \"otro\",\n  \"direction\": \"alcista\",\n  \"severity\": 0.2,\n  \"confidence\": 0.8,\n  \"explanation\": \"La noticia sobre Microsoft solucionando la funcionalidad de GIF en el Panel de Emojis de Windows puede tener un impacto positivo en la cartera, ya que muestra la capacidad de la empresa p",
+          "latency_s": 5.57
         },
         "DeepSeek-V3 (GitHub)": {
-          "error": "Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 1 per 60s exceeded for UserByModelByM",
-          "latency_s": 39.23
+          "error": "Too many requests. For more on scraping GitHub and how it may affect your rights, please review our Terms of Service (ht",
+          "latency_s": 35.48
         },
         "DeepSeek-R1 (GitHub)": {
-          "error": "Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 8 per 86400s exceeded for UserByModel",
-          "latency_s": 2.4
+          "error": "Too many requests. For more on scraping GitHub and how it may affect your rights, please review our Terms of Service (ht",
+          "latency_s": 4.1
+        }
+      }
+    },
+    {
+      "news_id": "6a4502a84fc6434fc6eb4d71",
+      "title": "Philippine town closes all 'Pisonet' computer rental shops in wake of school shooting — incident blamed on violent video games, shops closed 'for the safety of the youth'",
+      "source": "tomshardware",
+      "url": "https://www.tomshardware.com/video-games/philippine-town-closes-all-pisonet-computer-rental-shops-in-wake-of-school-shooting-incident-blamed-on-violent-video-games-shops-closed-for-the-safety-of-the-youth",
+      "relevance_score": 0.3741,
+      "matched_assets": [],
+      "nlp_sentiment": {
+        "sentiment": "negative",
+        "confidence": 0.9432,
+        "probabilities": {
+          "positive": 0.0096,
+          "negative": 0.9432,
+          "neutral": 0.0472
+        }
+      },
+      "nlp_event_type": "regulacion",
+      "deterministic_impact": {
+        "direction": "bajista",
+        "severity": 0.5807,
+        "severity_label": "media"
+      },
+      "model_results": {
+        "GPT-4o-mini (GitHub)": {
+          "event_type": "otro",
+          "direction": "bajista",
+          "severity": 0.4,
+          "confidence": 0.7,
+          "explanation": "La noticia sobre el cierre de los 'Pisonet' en Filipinas, aunque no afecta directamente a las empresas de la cartera, puede tener un impacto indirecto en el sector tecnológico, especialmente en empresas como Microsoft, NVIDIA y AMD, que están relacionadas con el desarrollo de software y hardware para videojuegos. La creciente preocupación por la violencia asociada a los videojuegos podría llevar a una mayor regulación en el sector, afectando potencialmente la demanda de productos de estas compañías.",
+          "reasoning": "El cierre de estos establecimientos puede ser un indicativo de un cambio en la percepción pública y regulatoria hacia los videojuegos, lo que podría influir en la industria tecnológica en general.",
+          "latency_s": 4.79
+        },
+        "GPT-4o (GitHub)": {
+          "event_type": "regulacion",
+          "direction": "neutral",
+          "severity": 0.2,
+          "confidence": 0.8,
+          "explanation": "El cierre de los cibercafés en una localidad de Filipinas tiene un impacto limitado en esta cartera, ya que no afecta directamente a las operaciones de las empresas tecnológicas incluidas, como Microsoft, NVIDIA o AMD. Sin embargo, podría reflejar una tendencia regulatoria que, de escalar, podría influir en la percepción pública sobre los videojuegos y la tecnología, aunque este riesgo es actualmente bajo.",
+          "reasoning": "La noticia tiene una relevancia indirecta para las empresas tecnológicas de la cartera, ya que menciona videojuegos y tecnología, pero el impacto está limitado a una región específica y no afecta directamente a las operaciones globales de las empresas involucradas.",
+          "latency_s": 2.89
+        },
+        "Llama-3.3-70B (GitHub)": {
+          "event_type": "regulacion",
+          "direction": "neutral",
+          "severity": 0.2,
+          "confidence": 0.8,
+          "explanation": "La noticia sobre el cierre de tiendas de alquiler de computadoras en Filipinas debido a preocupaciones sobre juegos violentos tiene un impacto indirecto y limitado en la cartera, ya que no afecta directamente a las empresas que componen la cartera. Sin embargo, podría tener un efecto marginal en el sector tecnológico, especialmente en empresas como Microsoft (MSFT) y NVIDIA (NVDA), que están involucradas en la industria de los videojuegos y la tecnología.",
+          "reasoning": "La regulación en Filipinas es específica y no tiene un impacto directo en las empresas de la cartera, pero el sector tecnológico podría verse ligeramente afectado por preocupaciones regulatorias o de reputación.",
+          "latency_s": 5.17
+        },
+        "DeepSeek-V3 (GitHub)": {
+          "error": "Too many requests. For more on scraping GitHub and how it may affect your rights, please review our Terms of Service (ht",
+          "latency_s": 33.14
+        },
+        "DeepSeek-R1 (GitHub)": {
+          "error": "Too many requests. For more on scraping GitHub and how it may affect your rights, please review our Terms of Service (ht",
+          "latency_s": 5.03
         }
       }
     }

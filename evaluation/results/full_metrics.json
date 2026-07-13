@@ -27,16 +27,16 @@
   },
   "event_type": {
     "n": 29,
-    "accuracy": 0.8276,
+    "accuracy": 0.8966,
     "macro": {
-      "precision": 0.8697,
-      "recall": 0.8333,
-      "f1": 0.8096
+      "precision": 0.9167,
+      "recall": 0.9242,
+      "f1": 0.8931
     },
     "weighted": {
-      "precision": 0.8908,
-      "recall": 0.8276,
-      "f1": 0.8232
+      "precision": 0.9511,
+      "recall": 0.8966,
+      "f1": 0.9036
     },
     "per_class": {
       "cadena_suministro": {
@@ -59,14 +59,14 @@
       },
       "dividendo_recompra": {
         "precision": 1.0,
-        "recall": 0.5,
-        "f1": 0.6667,
+        "recall": 1.0,
+        "f1": 1.0,
         "support": 2
       },
       "fusion_adquisicion": {
-        "precision": 0.6,
+        "precision": 0.75,
         "recall": 1.0,
-        "f1": 0.75,
+        "f1": 0.8571,
         "support": 3
       },
       "guidance_profit_warning": {
@@ -76,27 +76,27 @@
         "support": 1
       },
       "incidencia_operativa": {
-        "precision": 0.6667,
+        "precision": 1.0,
         "recall": 1.0,
-        "f1": 0.8,
+        "f1": 1.0,
         "support": 2
       },
       "litigio": {
         "precision": 1.0,
-        "recall": 0.5,
-        "f1": 0.6667,
+        "recall": 1.0,
+        "f1": 1.0,
         "support": 2
       },
       "otro": {
-        "precision": 0.5,
+        "precision": 0.3333,
         "recall": 1.0,
-        "f1": 0.6667,
+        "f1": 0.5,
         "support": 1
       },
       "regulacion": {
-        "precision": 0.8,
+        "precision": 1.0,
         "recall": 1.0,
-        "f1": 0.8889,
+        "f1": 1.0,
         "support": 4
       },
       "resultados_empresariales": {
@@ -114,9 +114,9 @@
         "dividendo_recompra": 0,
         "fusion_adquisicion": 0,
         "guidance_profit_warning": 0,
-        "incidencia_operativa": 1,
+        "incidencia_operativa": 0,
         "litigio": 0,
-        "otro": 0,
+        "otro": 1,
         "regulacion": 0,
         "resultados_empresariales": 0
       },
@@ -150,12 +150,12 @@
         "cadena_suministro": 0,
         "cambio_directivo": 0,
         "ciberincidente": 0,
-        "dividendo_recompra": 1,
+        "dividendo_recompra": 2,
         "fusion_adquisicion": 0,
         "guidance_profit_warning": 0,
         "incidencia_operativa": 0,
         "litigio": 0,
-        "otro": 1,
+        "otro": 0,
         "regulacion": 0,
         "resultados_empresariales": 0
       },
@@ -206,9 +206,9 @@
         "fusion_adquisicion": 0,
         "guidance_profit_warning": 0,
         "incidencia_operativa": 0,
-        "litigio": 1,
+        "litigio": 2,
         "otro": 0,
-        "regulacion": 1,
+        "regulacion": 0,
         "resultados_empresariales": 0
       },
       "otro": {
@@ -242,11 +242,11 @@
         "cambio_directivo": 0,
         "ciberincidente": 0,
         "dividendo_recompra": 0,
-        "fusion_adquisicion": 2,
+        "fusion_adquisicion": 1,
         "guidance_profit_warning": 0,
         "incidencia_operativa": 0,
         "litigio": 0,
-        "otro": 0,
+        "otro": 1,
         "regulacion": 0,
         "resultados_empresariales": 4
       }
@@ -254,28 +254,28 @@
   },
   "direction": {
     "n": 29,
-    "accuracy": 0.8966,
+    "accuracy": 0.931,
     "macro": {
-      "precision": 0.9474,
-      "recall": 0.8426,
-      "f1": 0.8821
+      "precision": 0.963,
+      "recall": 0.8796,
+      "f1": 0.9132
     },
     "weighted": {
-      "precision": 0.9129,
-      "recall": 0.8966,
-      "f1": 0.8942
+      "precision": 0.9387,
+      "recall": 0.931,
+      "f1": 0.9296
     },
     "per_class": {
       "alcista": {
         "precision": 1.0,
-        "recall": 0.7778,
-        "f1": 0.875,
+        "recall": 0.8889,
+        "f1": 0.9412,
         "support": 9
       },
       "bajista": {
-        "precision": 0.8421,
+        "precision": 0.8889,
         "recall": 1.0,
-        "f1": 0.9143,
+        "f1": 0.9412,
         "support": 16
       },
       "neutral": {
@@ -287,8 +287,8 @@
     },
     "confusion_matrix": {
       "alcista": {
-        "alcista": 7,
-        "bajista": 2,
+        "alcista": 8,
+        "bajista": 1,
         "neutral": 0
       },
       "bajista": {
@@ -305,9 +305,9 @@
   },
   "severity": {
     "n": 29,
-    "mae": 1.0345,
-    "exact_match": 0.2414,
-    "off_by_one_or_less": 0.7241
+    "mae": 0.6207,
+    "exact_match": 0.3793,
+    "off_by_one_or_less": 1.0
   },
   "variant_requested": "full",
   "variant_effective": "full"

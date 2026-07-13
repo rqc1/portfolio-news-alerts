@@ -51,7 +51,7 @@ PORTFOLIO_ID = "69fc7d75f62888639d7bb02f"
 # Cada entrada: (nombre_display, provider, base_url, api_key, model_id)
 # Se construye dinámicamente según las API keys disponibles.
 
-_GITHUB_URL = "https://models.inference.ai.azure.com"
+_GITHUB_URL = "https://models.github.ai/inference"
 _OPENAI_URL = "https://api.openai.com/v1"
 _HF_URL = "https://api-inference.huggingface.co/v1"
 _OLLAMA_URL = "http://localhost:11434/v1"
@@ -75,10 +75,10 @@ def build_model_list() -> list[dict]:
     if gh_token:
         # Modelos estándar (timeout normal)
         for model_id, display in [
-            ("gpt-4o-mini", "GPT-4o-mini (GitHub)"),
-            ("gpt-4o", "GPT-4o (GitHub)"),
-            ("Llama-3.3-70B-Instruct", "Llama-3.3-70B (GitHub)"),
-            ("DeepSeek-V3-0324", "DeepSeek-V3 (GitHub)"),
+            ("openai/gpt-4o-mini", "GPT-4o-mini (GitHub)"),
+            ("openai/gpt-4o", "GPT-4o (GitHub)"),
+            ("meta/Llama-3.3-70B-Instruct", "Llama-3.3-70B (GitHub)"),
+            ("deepseek/DeepSeek-V3-0324", "DeepSeek-V3 (GitHub)"),
         ]:
             models.append({
                 "name": display,
@@ -89,7 +89,7 @@ def build_model_list() -> list[dict]:
             })
         # Modelos de razonamiento (timeout extendido, strip <think> tags)
         for model_id, display in [
-            ("DeepSeek-R1", "DeepSeek-R1 (GitHub)"),
+            ("deepseek/DeepSeek-R1", "DeepSeek-R1 (GitHub)"),
         ]:
             models.append({
                 "name": display,

@@ -48,11 +48,11 @@
     "relevance_recall": 0.8788,
     "matched_assets_f1": 0.9062,
     "matched_assets_jaccard": 0.9394,
-    "event_type_macro_f1": 0.8096,
-    "event_type_accuracy": 0.8276,
-    "direction_accuracy": 0.8966,
-    "direction_macro_f1": 0.8821,
-    "severity_mae": 1.0345,
-    "severity_off_by_one": 0.7241
+    "event_type_macro_f1": 0.8931,
+    "event_type_accuracy": 0.8966,
+    "direction_accuracy": 0.931,
+    "direction_macro_f1": 0.9132,
+    "severity_mae": 0.6207,
+    "severity_off_by_one": 1.0
   }
 ]

@@ -558,6 +558,15 @@ Cuatro variantes del pipeline (`evaluation/results/ablation_summary.json`):
 | `hybrid_nli` (+ NLI zero-shot) | 0,900 | 0,735 | 0,926 | 0,593 | 0,889 |
 | `full` (+ LLM contextual) | 0,935 | 0,893 | 0,931 | 0,621 | 1,000 |
 
+> **Alcance**: el gold standard de estas métricas es la **anotación humana** del
+> corpus (validada por doble anotación, κ = 0,86 en relevancia), no la reacción
+> del mercado. Miden la capacidad del sistema de reproducir el juicio de un
+> analista sobre qué noticias conciernen a una cartera; la validación contra el
+> movimiento real del precio corresponde al Plano 3. La precisión 1,000 refleja
+> umbrales deliberadamente conservadores (los 4 errores son falsos negativos de
+> relevancia indirecta) sobre un corpus reducido y controlado, y no debe
+> extrapolarse a un flujo abierto de noticias.
+
 ### Plano 3 — Validez financiera (estudio de evento)
 
 Estudio de evento sobre las alertas (`modules/backtest/event_study.py`, MacKinlay 1997):
@@ -568,6 +577,12 @@ Estudio de evento sobre las alertas (`modules/backtest/event_study.py`, MacKinla
 | **AR** (Abnormal Return) | Retorno diario respecto al modelo de mercado estimado |
 | **Tasa de falsos positivos** | % de alertas sin movimiento anormal real del activo |
 | **Backtesting + feedback** | Autocalibración de umbrales vía `/api/backtest/{id}/calibrate` |
+
+> El estudio de evento opera sobre **alertas generadas en producción** (con
+> fecha y activo reales, precios de yfinance). No es aplicable al corpus de
+> evaluación del Plano 2, compuesto por noticias curadas sin anclaje temporal a
+> series de precios; su explotación sistemática sobre un flujo real de alertas
+> es línea de trabajo futuro.
 
 ---
 
